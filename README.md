@@ -41,16 +41,25 @@ Ensure you meet the following requirements before using this package:
 
 - **Anaconda**: Install [Anaconda](https://www.anaconda.com/download) as it is essential for seamless integration between Python and Knime.
 
-- **iGrafx P360 Live Mining SDK**: Once Anaconda is installed, open the Anaconda Prompt and run the following command to install the necessary SDK:
+- **iGrafx P360 Live Mining SDK**: Once Anaconda is installed, the SDK must be installed. Make sure you refer to the [howto.md](link-to-howto.md) for additional explanations. Please note that the SDK version must match the platform version to ensure that all functionalities will work. To install the latest version of the SDK, open the Anaconda Prompt and run the following command to install the necessary SDK:
 
   ```shell
   pip install igrafx-mining-sdk
   ```
+If you need to install a specific version of the SDK, use the following command:
+  ```shell
+  pip install igrafx-mining-sdk==<Your Version>
+  ```
+For instance:
+  ```shell
+  pip install igrafx-mining-sdk==2.25.0
+  ```
+You can go to the [PyPi page](https://pypi.org/project/igrafx-mining-sdk/2.25.0/) of the SDK to check the different versions. You can also to the SDk's [Github page](https://github.com/igrafx/mining-python-sdk) if you need additional information about the SDK.
+
 
 These prerequisites will ensure a smooth setup and operation of the iGrafx KNIME Mining Connector.
 
 More details on how to setup Knime with Python are available in the [howto.md]().
-
 ## Documentation
 
 For comprehensive documentation, refer to the [howto.md](link-to-howto.md) file.

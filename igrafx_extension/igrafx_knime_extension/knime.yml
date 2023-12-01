@@ -1,0 +1,10 @@
+name: igrafx_extension # Will be concatenated with the group_id to an ID
+author: iGrafx
+env_yml_path: <path/to/the/conda_env.yml> # This is necessary for bundling, but not needed during development
+extension_module: igrafx_knime_extension # The .py Python module containing the nodes of your extension
+description: The iGrafx Knime Extension # Human readable bundle name / description
+long_description: The iGrafx Knime Extension contains nodes to upload data to the iGrafx platform.
+group_id: org.igx
+version: 0.1.0 # Version of this Python node extension
+vendor: KNIME AG, Zurich, Switzerland
+license_file: LICENSE.TXT # Best practice: put your LICENSE.TXT next to the knime.yml; otherwise you would need to change to path/to/LICENSE.txt

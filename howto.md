@@ -8,7 +8,7 @@ It is powered by the [iGrafx P360 Live Mining SDK](https://github.com/igrafx/min
  
 This connector simplifies the data transfer process, eliminating complexity and enhancing your workflow.
 
-To maximize the benefits of this extension, ensure you have an active iGrafx account. If you don't have one, please contact us to set up your account.
+To maximize the benefits of this extension, ensure you have an active iGrafx account. If you don't have one, please do contact us to set up your account.
 
 ***
 

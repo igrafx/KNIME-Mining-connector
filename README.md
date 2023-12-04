@@ -83,5 +83,5 @@ Your feedback and contributions are valuable to us. Feel free to actively partic
 
 ## License
 
-This Knime Extension is licensed under the MIT License. See the [LICENSE](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/LICENSE) file for more details.
+This Knime iGrafx Extension is licensed under the MIT License. See the [LICENSE](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/LICENSE) file for more details.
 

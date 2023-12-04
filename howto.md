@@ -44,7 +44,7 @@ You can download Anaconda [here](https://www.anaconda.com/download).
 
 After having downloaded Knime and Anaconda, open Knime. In the top right, you will find a small *i* icon . 
 
-![info_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/main/images/info_icon.png)
+![info_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/info_icon.png)
 
 Click on it then scroll down to **Install Extensions**. Then, click on the **Install Extensions** button.
 

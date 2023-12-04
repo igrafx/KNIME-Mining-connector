@@ -48,20 +48,20 @@ After having downloaded Knime and Anaconda, open Knime. In the top right, you wi
 
 Click on it then scroll down to **Install Extensions**. Then, click on the **Install Extensions** button.
 
-![install_extensions_button](https://github.com/igrafx/KNIME-Mining-connector/blob/main/images/install_extensions_button.png)
+![install_extensions_button](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/install_extensions_button.png)
 
 
 A **window** will pop up. In the search bar, you can search for **Python integration**. Tick the box of the corresponding extension and click on **Finish**.
 
-![python_integration](https://github.com/igrafx/KNIME-Mining-connector/blob/main/images/python_integration.png)
+![python_integration](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/python_integration.png)
 
 When that is done, configure the KNIME Python Integration. To do so, click on the **settings** icon in the top right of the window.
 
-![settings_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/main/images/settings_icon.png)
+![settings_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/settings_icon.png)
 
 When clicking on it you will see a section called **Conda**. Go to that section and browse for your **Conda Installation Directory**. When the correct path is entered, the conda version will appear underneath. The path may look like this: `C:\Users\Your Name\AppData\Local\anaconda3`.
 
-![conda_path](https://github.com/igrafx/KNIME-Mining-connector/blob/main/images/conda_path.png)
+![conda_path](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/conda_path.png)
 
 ## Using the iGrafx Knime Extension locally
 ### Cloning the iGrafx KNIME Mining Extension
@@ -360,7 +360,7 @@ More information about Columns and column mappings can be found [here](https://g
 
 You must also input your **Project ID**. It can be found in the URL, when you are in the project. Or you can get it with the Project Creator node output.
 
-![url-projectID](https://github.com/igrafx/KNIME-Mining-connector/blob/main/images/url-projectID.png)
+![url-projectID](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/url-projectID.png)
 
 Finally, the **number of rows in each sent chunk** must be set (chunk size). 
 This means that for every file that is sent, it will be cut in the chunk size value, processed and sent to the platform.

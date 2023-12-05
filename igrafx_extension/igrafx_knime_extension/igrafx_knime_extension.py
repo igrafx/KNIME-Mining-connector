@@ -11,7 +11,7 @@ igx_category = knext.category(
     path="/community",
     level_id="igrafx_extension",
     name="iGrafx Mining Extension",
-    description="The iGrafx Extension for Knime.",
+    description="The iGrafx Mining Extension for Knime.",
     icon="icons/igx_logo.png",
 )
 
@@ -20,29 +20,29 @@ igx_category = knext.category(
 @knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxAPINode:
     """Node to connect to the iGrafx Mining API.
-    The iGrafx Mining API Connection node serves as the gateway to establish a seamless connection with the iGrafx API. By providing vital credentials such as the Workgroup ID, Workgroup Private Key, API URL, and Authentication URL, this node enables users to access and utilize the iGrafx API and SDK functionalities within the KNIME environment.
+    The iGrafx Mining API Connection node serves as the gateway to establish a seamless connection with the iGrafx Mining API. By providing vital credentials such as the Workgroup ID, Workgroup Private Key, API URL, and Authentication URL, this node enables users to access and utilize the iGrafx API and SDK functionalities within the KNIME environment.
 
-    Key features of the iGrafx API Connection node include:
+    Key features of the iGrafx Mining API Connection node include:
 
-    1. Authentication Configuration: Input fields for Workgroup ID, Workgroup Private Key, API URL, and Authentication URL, allowing users to securely authenticate their access to the iGrafx API.
+    1. Authentication Configuration: Input fields for Workgroup ID, Workgroup Private Key, API URL, and Authentication URL, allowing users to securely authenticate their access to the iGrafx Mining API.
 
-    2. Seamless Integration: Facilitates the integration of iGrafx API and SDK capabilities directly into KNIME workflows, ensuring efficient data transfer and interaction with the iGrafx platform.
+    2. Seamless Integration: Facilitates the integration of iGrafx API and SDK capabilities directly into KNIME workflows, ensuring efficient data transfer and interaction with the iGrafx Mining platform.
 
-    3. Essential Connectivity: An essential prerequisite for leveraging iGrafx API features within KNIME, enabling users to perform various operations, such as data retrieval, analysis, and interaction with iGrafx resources.
+    3. Essential Connectivity: An essential prerequisite for leveraging iGrafx API features within KNIME, enabling users to perform various operations, such as data retrieval, analysis, and interaction with iGrafx Mining resources.
 
-    The iGrafx Mining API Connection node acts as a foundational element, empowering users to harness the full potential of the iGrafx API and SDK functionalities within the KNIME analytics platform, enabling seamless data flow and interaction with iGrafx resources.
+    The iGrafx Mining API Connection node acts as a foundational element, empowering users to harness the full potential of the iGrafx Mining API and SDK functionalities within the KNIME analytics platform, enabling seamless data flow and interaction with iGrafx resources.
 
     """
 
-    # Define parameters for iGrafx API connection
+    # Define parameters for iGrafx Mining API connection
     workgroup_id = knext.StringParameter("Workgroup ID", "The ID of the workgroup You are working with.")
     workgroup_key = knext.StringParameter("Workgroup Key", "The Private Key of the workgroup you are working with.")
-    api_url = knext.StringParameter("API URL", "The URL of the iGrafx API platform you are using.")
-    auth_url = knext.StringParameter("Authentication URL", "The authentication URL of the iGrafx platform.")
+    api_url = knext.StringParameter("API URL", "The URL of the iGrafx Mining API platform you are using.")
+    auth_url = knext.StringParameter("Authentication URL", "The authentication URL of the iGrafx Mining platform.")
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration
-        configure_context.set_warning("Connecting to iGrafx API")
+        configure_context.set_warning("Connecting to iGrafx Mining API")
 
     def execute(self, exec_context, input_data):
         # Get the input data and convert to Pandas DataFrame
@@ -90,7 +90,7 @@ class iGrafxProjectCreationNode:
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration
-        configure_context.set_warning("Creating iGrafx Project")
+        configure_context.set_warning("Creating iGrafx Mining Project")
         
 
     def execute(self, exec_context, input_data):
@@ -179,20 +179,20 @@ class ColumnMappingStatusNode:
 @knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
 @knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxFileUploadNode:
-    """Node to upload a CSV file to the iGrafx platform.
-    The iGrafx Mining File Upload node serves as a pivotal tool within the KNIME environment, enabling users to seamlessly upload files to the iGrafx platform. By providing essential parameters such as the Project ID, Column Mapping in JSON format, and the Workgroup Object, users can establish a secure connection to the iGrafx API and transfer files efficiently.
+    """Node to upload a CSV file to the iGrafx Mining platform.
+    The iGrafx Mining File Upload node serves as a pivotal tool within the KNIME environment, enabling users to seamlessly upload files to the iGrafx Mining platform. By providing essential parameters such as the Project ID, Column Mapping in JSON format, and the Workgroup Object, users can establish a secure connection to the iGrafx Mining API and transfer files efficiently.
 
     Key Features:
 
-    - Efficient File Upload: Simplifies the process of uploading files to the iGrafx platform directly from KNIME, ensuring a streamlined workflow.
+    - Efficient File Upload: Simplifies the process of uploading files to the iGrafx Mining platform directly from KNIME, ensuring a streamlined workflow.
 
     - Project ID Integration: Allows users to specify the target project by providing the unique Project ID, ensuring that the uploaded files are associated with the correct project.
 
     - Column Mapping Support: Accommodates the transmission of column mapping details in JSON format, facilitating structured and organized data transfer.
     
-    - Workgroup Object Connectivity: Establishes a secure connection to the iGrafx API by utilizing the Workgroup Object, ensuring authentication and access permissions.
+    - Workgroup Object Connectivity: Establishes a secure connection to the iGrafx Mining API by utilizing the Workgroup Object, ensuring authentication and access permissions.
 
-    This node empowers users to seamlessly integrate file upload functionalities into their KNIME workflows, enabling efficient data transfer and synchronization with the iGrafx platform. By leveraging this node, users can ensure the accurate and secure uploading of files while maintaining structured data organization within the iGrafx ecosystem.
+    This node empowers users to seamlessly integrate file upload functionalities into their KNIME workflows, enabling efficient data transfer and synchronization with the iGrafx Mining platform. By leveraging this node, users can ensure the accurate and secure uploading of files while maintaining structured data organization within the iGrafx ecosystem.
     """
     # Define parameters for file upload
     column_dict = knext.StringParameter("Column Mapping", "The column mapping of the file you want to upload in JSON format.",)

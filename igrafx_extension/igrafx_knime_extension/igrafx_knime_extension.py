@@ -234,7 +234,6 @@ class iGrafxFileUploadNode:
         
         my_project = wg.project_from_id(project_id)
 
-        my_project.reset()
         file_structure = igx.FileStructure(file_type=igx.FileType.csv)
 
         column_mapping = igx.ColumnMapping.from_json(column_dict)
@@ -263,6 +262,8 @@ class iGrafxFileUploadNode:
 
             # Wait for the upload to complete
             time.sleep(180)
+
+            temp_csv_file.close()
 
             exec_context.flow_variables["chunk_size"] = chunk_size
 

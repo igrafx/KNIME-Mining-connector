@@ -121,7 +121,7 @@ and the node development API [knime-extension](https://anaconda.org/knime/knime-
 
 To do this, open **Anaconda prompt** and copy the following command:
 ```shell
-conda create -n <Your Environment Name> python=3.9 knime-python-base=4.7 knime-extension=4.7 -c knime -c conda-forge
+conda create -n <Your Environment Name> python=3.9.16 knime-python-base=4.7 knime-extension=4.7 -c knime -c conda-forge
 ```
 
 If you would like to install the packages into an environment that already exists you can run the following command from within that environment:
@@ -234,6 +234,8 @@ org.igx.igrafx_extension: # {group_id}.{name} from the knime.yml
 Replace the `src` field as to specify the path to the `igrafx_knime_extension` folder.
 For instance, it could look like ``C:/Users/iGrafx/igrafx_extension/igrafx_knime_extension``.
 
+**Please double check the paths as the most common errors stem from incorrect paths.**
+
 Similarly, the ``conda_env_path`` field should specify the path to the conda/Python environment created earlier.
 To get this path, run the following command in your Terminal/Anaconda Prompt,
 and copy the path displayed next to the appropriate environment.
@@ -255,6 +257,14 @@ and modify it to have the correct path to the ``config.yml``:
 ````
 
 **Please note that the forward slash ``/`` has to be used on all OS, including Windows.**
+
+**On MacOS**,  to locate ``knime.ini``, open **Finder** and navigate to your
+installed Applications. Next, **right click** the KNIME application, select **Show
+Package Contents** in the menu, and navigate to **Contents → Eclipse**.
+
+The ``knime.ini`` file can be edited with any plaintext editor, such as **Notepad** (Windows),
+**TextEdit** (MacOS) or **gedit** (Linux).
+
 
 You can now relaunch Knime. If you type ``iGrafx`` in the node Repository, you should find the iGrafx nodes. 
 

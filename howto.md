@@ -177,7 +177,11 @@ It is possible that `Pyarrow` and `Numpy` packages are in conflict.
 That is because the **iGrafx SDK Package** was installed with **pip**.
 If so, to fix this, they must be reinstalled with conda.
 
-First, check the version of both packages with the following commands:
+![conflicts](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/conflicts.png)
+
+Note that these conflicts can differ, and you should follow the following instructions no matter the package.
+
+First, check the version of both packages with the following commands. If you are on MACOS or Linux, replace `findstr` with `grep`:
 ````shell
 conda list | findstr pyarrow
 ````
@@ -186,13 +190,32 @@ conda list | findstr pyarrow
 conda list | findstr numpy
 ````
 
-Then reinstall the packages with the following commands:
+They will return you something like this, respectively:
+````shell
+pyarrow                   9.0.0           py39hca4e8af_45_cpu    conda-forge
+````
+
+````shell
+numpy                     1.21.6           py39h6331f09_0    conda-forge
+````
+
+The problematic packages will not have `conda-forge` written but they will have something else.
+
+Then reinstall the packages with the following commands using the versions that were found with the commands above:
 ````shell
 conda install -c conda-forge numpy=<Version that was found>
 ````
 ````shell
 conda install -c conda-forge pyarrow=<Version that was found>
 ````
+For instance: 
+````shell
+conda install -c conda-forge numpy=1.21.6 
+````
+````shell
+conda install -c conda-forge pyarrow=9.0.0
+````
+If there are other packages that are problematic, **use the same commands but change the name of the package**.
 
 Afterwards, restart Knime. Go to the **Python Tab** in **Settings**.
 Reselect the correct environment. If the Python Version is shown, the environment has been set successfully!
@@ -308,8 +331,11 @@ Please note that the flow variables of each node vary depending on the order the
 ## Using the iGrafx Column Mapping Status Node
 
 The Column Mapping Status node allows you to check if a column mapping exists.
+A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
 
-To use it, you can either place the node after the **iGrafx Project Creation** node or the **iGrafx File Upload** node
+Further documentation on the column mapping and file structure can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
+
+To use the node, you can either place the node after the **iGrafx Project Creation** node or the **iGrafx File Upload** node
 to automatically get the project ID, or you can manually set it by double clicking on the node.
 Please note that if you set the project ID by double clicking the node, it is prioritized over the project ID connection.
 
@@ -339,24 +365,31 @@ else it does not.
 
 ## Using the iGrafx File Upload Node
 
-The iGrafx File Upload Node is the node that will allow you to upload you file by simply entering a column mapping, a Project ID and a chunk size value.
+The iGrafx File Upload Node is the node that will allow you to upload you file by simply entering a [column mapping](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data), a Project ID and a chunk size value.
+A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
+
 
 To use it, double click on it and enter the  column mapping of the file you wish to upload.
 This has to be done in a JSON format. 
 In this JSON, for each column, there is a column number (for instance *"col1"*).
 It is then followed by the column's name, its index number and the column type.
-For date columns, you have to set a format. 
+For date columns, you have to set a format.
 
 Beneath, you can find an example of what is expected.
 
-```JSON
+```json
 {       "col1": {"name": "case_id", "columnIndex": "0", "columnType":   "CASE_ID"},         
         "col2": {"name": "activity", "columnIndex": "1", "columnType": "TASK_NAME"},         
         "col3": {"name": "start_date", "columnIndex": "2", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"},         
         "col4": {"name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
 ```
 
-More information about Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/wiki/5.-Sending-Data#column-mapping).
+You can also add `DIMENSION` and `METRIC` columns. For instance:
+````json
+{       "col1": "name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
+````
+
+More information about Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
 
 You must also input your **Project ID**. It can be found in the URL, when you are in the project. Or you can get it with the Project Creator node output.
 
@@ -402,6 +435,6 @@ In this section, documentation can be found for further reading.
 Support is available at the following address: [support@igrafx.com](mailto:support@igrafx.com)
 
 
-* [iGrafx Help](https://fr.help.logpickr.com/)
+* [iGrafx Help](https://www.help.logpickr.com/en/welcome/)
 * [iGrafx SDK](https://github.com/igrafx/mining-python-sdk)
 * [Knime Python Extension Documentation](https://docs.knime.com/latest/pure_python_node_extensions_guide/index.html#introduction)

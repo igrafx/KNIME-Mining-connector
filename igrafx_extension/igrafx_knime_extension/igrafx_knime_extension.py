@@ -7,7 +7,16 @@ import time
 
 LOGGER = logging.getLogger(__name__)
 
-@knext.node(name="iGrafx API Connection Node", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png", category="/Mining")
+
+igx_category = knext.category(
+    path="/community",
+    level_id="igrafx_extension",
+    name="iGrafx Extension",
+    description="The iGrafx Extension for Knime.",
+    icon="icons/igx_logo.png",
+)
+
+@knext.node(name="iGrafx API Connection", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png", category=igx_category)
 @knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the component.")
 @knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the component.")
 class iGrafxAPINode:
@@ -58,7 +67,7 @@ class iGrafxAPINode:
         # Return input data as output
         return input_data
 
-@knext.node(name="iGrafx Project Creation", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png", category="/Mining")
+@knext.node(name="iGrafx Project Creation", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png", category=igx_category)
 @knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the component.")
 @knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the component.")
 class iGrafxProjectCreationNode:
@@ -109,7 +118,7 @@ class iGrafxProjectCreationNode:
         return input_data
 
 
-@knext.node(name="iGrafx Column Mapping Status", node_type=knext.NodeType.SINK, icon_path="icons/igx_logo.png", category="/Mining")
+@knext.node(name="iGrafx Column Mapping Status", node_type=knext.NodeType.SINK, icon_path="icons/igx_logo.png", category=igx_category)
 @knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the component.")
 @knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the component.")
 class ColumnMappingStatusNode:
@@ -167,7 +176,7 @@ class ColumnMappingStatusNode:
         return input_data
 
 
-@knext.node(name="iGrafx File Upload", node_type=knext.NodeType.MANIPULATOR, icon_path="icons/igx_logo.png", category="/Mining")
+@knext.node(name="iGrafx File Upload", node_type=knext.NodeType.MANIPULATOR, icon_path="icons/igx_logo.png", category=igx_category)
 @knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the component.")
 @knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the component.")
 class iGrafxFileUploadNode:

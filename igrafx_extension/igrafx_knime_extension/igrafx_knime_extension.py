@@ -1,6 +1,5 @@
 import logging
 import knime.extension as knext
-import pandas as pd
 import igrafx_mining_sdk as igx
 import tempfile
 import time
@@ -198,7 +197,7 @@ class iGrafxFileUploadNode:
     # Define parameters for file upload
     column_dict = knext.StringParameter("Column Mapping", "The column mapping of the file you want to upload in JSON format.")
     given_project_id = knext.StringParameter("Project ID", "The ID of the project you want to upload the file to.")
-    chunk_size = knext.IntParameter("Number of Rows per Chunk", "The number of rows to process at a time", 500, min_value=0)
+    chunk_size = knext.IntParameter("Number of Rows per Chunk", "The number of rows to process at a time", 100000, min_value=0)
 
 
     def configure(self, configure_context, input_schema):

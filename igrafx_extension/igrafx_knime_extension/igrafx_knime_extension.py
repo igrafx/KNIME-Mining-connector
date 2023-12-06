@@ -260,9 +260,6 @@ class iGrafxFileUploadNode:
             # Add the file
             my_project.add_file(temp_csv_file_path)
 
-            # Wait for the upload to complete
-            time.sleep(180)
-
             temp_csv_file.close() #Make sure the temp file is closed to be deleted
 
             exec_context.flow_variables["chunk_size"] = chunk_size

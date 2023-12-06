@@ -8,5 +8,5 @@ dependencies:
   - knime-python-base
   - pip
   - pyarrow=9.0.0
-pip:
-  - igrafx_mining_sdk==2.28.0
+  - pip:
+    - igrafx_mining_sdk==2.28.0

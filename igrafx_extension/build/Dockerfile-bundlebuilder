@@ -1,0 +1,17 @@
+FROM datajoint/miniconda3
+
+VOLUME /extension
+
+VOLUME /release
+
+USER root
+
+RUN conda create -n knime-ext-bundling -c knime -c conda-forge knime-extension-bundling
+
+RUN echo "conda activate knime-ext-bundling" >> ~/.bashrc
+
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN conda update conda
+
+CMD build_python_extension.py /extension/ /release

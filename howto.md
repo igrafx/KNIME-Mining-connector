@@ -1,6 +1,6 @@
 # How to use the extension
 
-This document encompasses the installation and basic uses of the **iGrafx KNIME Mining Connector**.
+This document encompasses the installation and basic uses of the **iGrafx KNIME Mining Extension**.
 
 The **iGrafx KNIME Mining Extension** is an open-source application seamlessly integrated with Knime to effortlessly transmit data to the iGrafx Mining Platform.
 
@@ -14,16 +14,281 @@ To maximize the benefits of this extension, ensure you have an active iGrafx acc
 
 ## Table of Contents
 
-1. [Requirements](#requirements)
-2. [Getting Started](#getting-started)
-3. [Using the iGrafx Knime Extension locally](#using-the-igrafx-knime-extension-locally)
-4. [Using the iGrafx KNIME Mining Connector](#using-the-igrafx-knime-mining-connector)
-5. [Using the iGrafx API Connection Node](#using-the-igrafx-api-connection-node)
-6. [Using the Project Creation Component](#using-the-project-creation-component)
-7. [Using the iGrafx Column Mapping Status Node](#using-the-igrafx-column-mapping-status-node)
-8. [Using the iGrafx File Upload Node](#using-the-igrafx-file-upload-node)
-9. [The iGrafx Extension Example](#the-igrafx-extension-example)
-10. [Further Documentation](#further-documentation)
+1. [Installing the iGrafx Extension](#installing-the-igrafx-extension)
+2. [Using the iGrafx KNIME Mining Extension](#using-the-igrafx-knime-mining-extension)
+3. [Using the iGrafx API Connection Node](#using-the-igrafx-api-connection-node)
+4. [Using the Project Creation Node](#using-the-project-creation-node)
+5. [Using the iGrafx Column Mapping Status Node](#using-the-igrafx-column-mapping-status-node)
+6. [Using the iGrafx File Upload Node](#using-the-igrafx-file-upload-node)
+7. [The iGrafx Extension Example](#the-igrafx-extension-example)
+8. [Using the iGrafx Mining Knime Extension as a developer](#using-the-igrafx-mining-knime-extension-as-a-developer)
+9. [Requirements](#requirements)
+10. [Getting Started](#getting-started)
+11. [Using the iGrafx Knime Extension locally](#using-the-igrafx-knime-extension-locally)
+12. [Further Documentation](#further-documentation)
+
+## Installing the iGrafx Extension
+To install the **iGrafx Extension** on Knime, open Knime.
+
+Go to the top right, you will find a small *i* icon . 
+
+![info_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/info_icon.png)
+
+Click on it then scroll down to **Install Extensions**. Then, click on the **Install Extensions** button.
+
+![install_extensions_button](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/install_extensions_button.png)
+
+
+A **window** will pop up. In the search bar, you can search for **iGrafx**. 
+Tick the box of the corresponding extension and click on **Finish**.
+It may take some time to install.
+
+![igx_extension](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_extension.png)
+
+Another window will pop up during the installation, asking if you trust the extension:
+
+![Trust_window](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/trusted.png)
+
+Tick the **Always trust all content** box. Then, on the next window that pops up, click on **Yes I accept the risk**.
+You can now click on **Trust Slected**. Wait for the installation to finish.
+Don't restart the platform just yet.
+
+Click on the **settings** icon in the top right of the window.
+
+![settings_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/settings_icon.png)
+
+Then, click on the **arrow** next to the **Install/Update** section.
+
+Go to the **Available Software sites** section and double click on the **iGrafx Extension**.
+
+![Available_Software](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/available_software.png)
+
+In the window that pops up, make sure the information are as follows:
+
+- Name: iGrafx Extension
+- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/dev/igrafx_extension/releases/5.1
+
+Copy and paste the location in the respective input.
+
+![location](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/location.png)
+
+Click on **Add**, the **Apply and Close**.
+
+You can now restart Knime.
+
+After reopening Knime, you can go to the **Node Repository** and type **iGrafx** in the search bar.
+Then, click on **More Advanced Nodes**. The iGrafx nodes should be there.
+
+![nodes_repo](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/node_repo.png)
+
+Congratulations! You can now refer to other sections for details on how to use the nodes.
+
+## Using the iGrafx KNIME Mining Extension
+
+There are several nodes in the iGrafx extension.
+
+You will find:
+- An **iGrafx Mining API Connection** Node
+- An **iGrafx Mining Project Creation** Node
+- An **iGrafx Mining Column Mapping Status** Node
+- An **iGrafx Mining File Upload** Node
+
+When executing a node, you will notice 3 circles underneath the nodes. If the circle is green,
+it means that the node has successfully been executed. Contrariwise, if it is red, it has failed.
+If it is yellow, it means it is configured.
+
+Each node has flow variables which are produced when it is executed. To see them, go to the **flow variable** tab
+
+![flow_variable](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/flow_variable.png)
+
+In the next sections of this document, each node will be thoroughly explained.
+
+## Using the iGrafx API Connection Node
+
+The iGrafx Mining API Connection Node is the Node that will allow you to connect to the API and use it through the SDK.
+Note that this node is **mandatory** as it allows you to establish a connection with the API.
+
+To use this node, double click on it. The following window will pop up.
+
+![component_parameters](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_connection_config.png)
+
+You then have to fill in your **Workgroup ID** and **Secret Key**, **Authentication URL** and **API URL**. To get this information, open up the **Process Explorer 360**, and go to your workgroup settings. In the settings page, go to the **Public API** tab. There, you should see your workgroup's ID and secret key. These are the values that will be used by the SDK to log in to the iGrafx P360 Live Mining API.
+
+![settings](https://github.com/igrafx/mining-python-sdk/blob/dev/imgs/settings.PNG)
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable |                        Meaning                         |         Description |
+|:--------------|:------------------------------------------------------:|--------------------:|
+| auth_url      |     The authentication URL of the iGrafx platform.     |  Authentication URL |
+| api_url       |   The URL of the iGrafx API platform you are using.    |             API URL | 
+| wg_key        | The Private Key of the workgroup you are working with. |       Workgroup Key |
+| wg_id         |     The ID of the workgroup You are working with.      |        Workgroup ID |
+
+The flow variables are automatically passed to other iGrafx nodes.
+
+## Using the Project Creation Node
+
+The iGrafx Mining Project Creation node is an optional node that allows you to create a project in a workgroup.
+
+To use it, double click on the node and enter the **name** you want to give your project and its **description**.
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable  |                        Meaning                         |        Description |
+|:---------------|:------------------------------------------------------:|-------------------:|
+| auth_url       |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url        |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key         | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id          |     The ID of the workgroup You are working with.      |       Workgroup ID |
+| new_project_id |          The ID of the newly created project.          |     New Project ID |
+
+The new **project ID**  can then be used in the **Column Mapping Status** node for instance.
+You can also use this new ID in the **File Upload** node if you wish to upload the file to a new project.
+
+Please note that the flow variables of each node vary depending on the order they are in.
+
+## Using the iGrafx Column Mapping Status Node
+
+The Column Mapping Status node allows you to check if a column mapping exists.
+A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
+
+Further documentation on the column mapping and file structure can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
+
+To use the node, you can either place the node after the **iGrafx Project Creation** node or the **iGrafx File Upload** node
+to automatically get the project ID, or you can manually set it by double clicking on the node.
+Please note that if you set the project ID by double clicking the node, it is prioritized over the project ID connection.
+
+If the Column Mapping Status node is green, it means that a column mapping exists for this project.
+If there are other nodes connected after this one, they will also pass as the column mapping exists.
+
+If on the other hand, it is red, that means that the column mapping does not exist and has to be defined.
+You can define a column mapping in the **File Upload** node.
+If there are other nodes connected after this one, they will not be executed as the column mapping does not exist.
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable         |                            Meaning                             |           Description |
+|:----------------------|:--------------------------------------------------------------:|----------------------:|
+| auth_url              |         The authentication URL of the iGrafx platform.         |    Authentication URL |
+| api_url               |       The URL of the iGrafx API platform you are using.        |               API URL | 
+| wg_key                |     The Private Key of the workgroup you are working with.     |         Workgroup Key |
+| wg_id                 |         The ID of the workgroup You are working with.          |          Workgroup ID |
+| new_project_id        |              The ID of the newly created project.              |        New Project ID |
+| column_mapping_exists | A boolean indicating whether ot not the column mapping exists. | Column Mapping Status |
+
+
+If the `column_mapping_exists` flow variable is **True**, then the column mapping exists,
+else it does not.
+
+## Using the iGrafx File Upload Node
+
+The iGrafx Mining File Upload Node is the node that will allow you to upload you file by simply entering a [column mapping](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data), a Project ID and a chunk size value.
+A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
+
+
+To use it, double click on it and enter the  column mapping of the file you wish to upload.
+This has to be done in a JSON format. 
+In this JSON, for each column, there is a column number (for instance *"col1"*).
+It is then followed by the column's name, its index number and the column type.
+For date columns, you have to set a format.
+
+Beneath, you can find an example of what is expected.
+
+```json
+{       "col1": {"name": "case_id", "columnIndex": "0", "columnType":   "CASE_ID"},         
+        "col2": {"name": "activity", "columnIndex": "1", "columnType": "TASK_NAME"},         
+        "col3": {"name": "start_date", "columnIndex": "2", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"},         
+        "col4": {"name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
+```
+
+You can also add `DIMENSION` and `METRIC` columns. For instance:
+````json
+{       "col1": "name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
+````
+
+More information about Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
+
+You must also input your **Project ID**. It can be found in the URL, when you are in the project. Or you can get it with the Project Creator node output.
+
+![url-projectID](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/url-projectID.png)
+
+Finally, the **number of rows in each sent chunk** must be set (chunk size). 
+This means that for every file that is sent, it will be cut in the chunk size value, processed and sent to the platform.
+Depending on the number of rows in your file it is important to set this value.
+A good value to set it to is a 100 000, for instance.
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable         |               Meaning                                          |             Description  |
+|:----------------------|:--------------------------------------------------------------:|-------------------------:|
+| auth_url              |         The authentication URL of the iGrafx platform.         |       Authentication URL |
+| api_url               |       The URL of the iGrafx API platform you are using.        |                  API URL | 
+| wg_key                |     The Private Key of the workgroup you are working with.     |            Workgroup Key |
+| wg_id                 |         The ID of the workgroup You are working with.          |             Workgroup ID |
+| new_project_id        |              The ID of the newly created project.              |           New Project ID |
+| column_mapping_exists | A boolean indicating whether ot not the column mapping exists. |    Column Mapping Status |
+| chunk_size            |            The number of rows to process at a time             | Number of Rows per Chunk |
+
+
+## The iGrafx Mining Extension Example
+
+Go to Knime and import the workflow called ``igrafx_extension_example.knwf``.
+
+When the workflow is imported, you should see all iGrafx Extension nodes.
+
+![igrafx_workflow](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_wf.png)
+
+To start using them, look for a **File Reader Node**. With this node, you will be able to select the file you wish to upload to the iGrafx platform.
+You can try it with the [100_fake_cases.csv](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/igrafx_extension/100_fake_cases.csv) file.
+
+You can then connect it to any node you wish to try, fill in the information by double clicking the node and execute the nodes.
+
+Set your credentials on the iGrafx Mining API Connection node.
+
+Note that the column mapping for the **100_fake_cases.csv** file is as follows:
+````json
+{
+   "col1":{
+      "name":"case_id",
+      "columnIndex":"0",
+      "columnType":"CASE_ID"
+   },
+   "col2":{
+      "name":"activity",
+      "columnIndex":"1",
+      "columnType":"TASK_NAME"
+   },
+   "col3":{
+      "name":"start_date",
+      "columnIndex":"2",
+      "columnType":"TIME",
+      "format":"yyyy-MM-dd HH:mm:ss.SSSSSS"
+   },
+   "col4":{
+      "name":"end_date",
+      "columnIndex":"3",
+      "columnType":"TIME",
+      "format":"yyyy-MM-dd HH:mm:ss.SSSSSS"
+   }
+}
+````
+You can now execute all the nodes.
+
+Once all connected nodes are green, the execution is done.
+
+
+## Using the iGrafx Mining Knime Extension as a developer
+If you are a developer and wish to contribute to the project, please follow the steps below, as they are relatively different from the ones a client would follow.
+
 
 ## Requirements
 
@@ -42,7 +307,7 @@ You can download Anaconda [here](https://www.anaconda.com/download).
 
 ## Getting started
 
-After having downloaded Knime and Anaconda, open Knime. In the top right, you will find a small *i* icon . 
+After having downloaded Knime and Anaconda, open Knime. In the top right, you will find a small *i* icon. 
 
 ![info_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/info_icon.png)
 
@@ -272,171 +537,6 @@ You can now relaunch Knime. If you type ``iGrafx`` in the node Repository, you s
 Congratulations! The extension has been installed locally. You can now use the iGrafx nodes.
 
 
-## Using the iGrafx KNIME Mining Connector
-
-There are several nodes in the iGrafx extension.
-
-You will find:
-- An **iGrafx API Connection** Node
-- An **iGrafx Project Creation** Node
-- An **iGrafx Column Mapping Status** Node
-- An **iGrafx File Upload** Node
-
-When executing a node, you will notice 3 circles underneath the nodes. If the circle is green,
-it means that the node has successfully been executed. Contrariwise, if it is red, it has failed.
-If it is yellow, it means it is configured.
-
-
-In the next sections of this document, each node will be thoroughly explained.
-
-## Using the iGrafx API Connection Node
-
-The iGrafx API Connection Node is the Node that will allow you to connect to the API and use it through the SDK.
-Note that this node is **mandatory** as it allows you to establish a connection with the API.
-
-To use this node, double click on it. The following window will pop up.
-
-![component_parameters](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_connection_config.png)
-
-You then have to fill in your **Workgroup ID** and **Secret Key**, **Authentication URL** and **API URL**. To get this information, open up the **Process Explorer 360**, and go to your workgroup settings. In the settings page, go to the **Public API** tab. There, you should see your workgroup's ID and secret key. These are the values that will be used by the SDK to log in to the iGrafx P360 Live Mining API.
-
-![settings](https://github.com/igrafx/mining-python-sdk/blob/dev/imgs/settings.PNG)
-
-This node takes a table as input and outputs a table.
-
-Here are the **flow variables** of this node:
-
-| Flow variable |                        Meaning                         |         Description |
-|:--------------|:------------------------------------------------------:|--------------------:|
-| auth_url      |     The authentication URL of the iGrafx platform.     |  Authentication URL |
-| api_url       |   The URL of the iGrafx API platform you are using.    |             API URL | 
-| wg_key        | The Private Key of the workgroup you are working with. |       Workgroup Key |
-| wg_id         |     The ID of the workgroup You are working with.      |        Workgroup ID |
-
-The flow variables are automatically passed to other iGrafx nodes.
-
-## Using the Project Creation Component
-
-The iGrafx Project Creation node is an optional node that allows you to create a project in a workgroup.
-
-To use it, double click on the node and enter the **name** you want to give your project and its **description**.
-
-This node takes a table as input and outputs a table.
-
-Here are the **flow variables** of this node:
-
-| Flow variable  |                        Meaning                         |        Description |
-|:---------------|:------------------------------------------------------:|-------------------:|
-| auth_url       |     The authentication URL of the iGrafx platform.     | Authentication URL |
-| api_url        |   The URL of the iGrafx API platform you are using.    |            API URL | 
-| wg_key         | The Private Key of the workgroup you are working with. |      Workgroup Key |
-| wg_id          |     The ID of the workgroup You are working with.      |       Workgroup ID |
-| new_project_id |          The ID of the newly created project.          |     New Project ID |
-
-The new **project ID**  can then be used in the **Column Mapping Status** node for instance.
-You can also use this new ID in the **File Upload** node if you wish to upload the file to a new project.
-
-Please note that the flow variables of each node vary depending on the order they are in.
-
-## Using the iGrafx Column Mapping Status Node
-
-The Column Mapping Status node allows you to check if a column mapping exists.
-A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
-
-Further documentation on the column mapping and file structure can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
-
-To use the node, you can either place the node after the **iGrafx Project Creation** node or the **iGrafx File Upload** node
-to automatically get the project ID, or you can manually set it by double clicking on the node.
-Please note that if you set the project ID by double clicking the node, it is prioritized over the project ID connection.
-
-If the Column Mapping Status node is green, it means that a column mapping exists for this project.
-If there are other nodes connected after this one, they will also pass as the column mapping exists.
-
-If on the other hand, it is red, that means that the column mapping does not exist and has to be defined.
-You can define a column mapping in the **File Upload** node.
-If there are other nodes connected after this one, they will not be executed as the column mapping does not exist.
-
-This node takes a table as input and outputs a table.
-
-Here are the **flow variables** of this node:
-
-| Flow variable         |                            Meaning                             |           Description |
-|:----------------------|:--------------------------------------------------------------:|----------------------:|
-| auth_url              |         The authentication URL of the iGrafx platform.         |    Authentication URL |
-| api_url               |       The URL of the iGrafx API platform you are using.        |               API URL | 
-| wg_key                |     The Private Key of the workgroup you are working with.     |         Workgroup Key |
-| wg_id                 |         The ID of the workgroup You are working with.          |          Workgroup ID |
-| new_project_id        |              The ID of the newly created project.              |        New Project ID |
-| column_mapping_exists | A boolean indicating whether ot not the column mapping exists. | Column Mapping Status |
-
-
-If the `column_mapping_exists` flow variable is **True**, then the column mapping exists,
-else it does not.
-
-## Using the iGrafx File Upload Node
-
-The iGrafx File Upload Node is the node that will allow you to upload you file by simply entering a [column mapping](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data), a Project ID and a chunk size value.
-A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
-
-
-To use it, double click on it and enter the  column mapping of the file you wish to upload.
-This has to be done in a JSON format. 
-In this JSON, for each column, there is a column number (for instance *"col1"*).
-It is then followed by the column's name, its index number and the column type.
-For date columns, you have to set a format.
-
-Beneath, you can find an example of what is expected.
-
-```json
-{       "col1": {"name": "case_id", "columnIndex": "0", "columnType":   "CASE_ID"},         
-        "col2": {"name": "activity", "columnIndex": "1", "columnType": "TASK_NAME"},         
-        "col3": {"name": "start_date", "columnIndex": "2", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"},         
-        "col4": {"name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
-```
-
-You can also add `DIMENSION` and `METRIC` columns. For instance:
-````json
-{       "col1": "name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
-````
-
-More information about Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
-
-You must also input your **Project ID**. It can be found in the URL, when you are in the project. Or you can get it with the Project Creator node output.
-
-![url-projectID](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/url-projectID.png)
-
-Finally, the **number of rows in each sent chunk** must be set (chunk size). 
-This means that for every file that is sent, it will be cut in the chunk size value, processed and sent to the platform.
-Depending on the number of rows in your file it is important to set this value.
-A good value to set it to is a 100 000, for instance.
-
-This node takes a table as input and outputs a table.
-
-Here are the **flow variables** of this node:
-
-| Flow variable         |               Meaning                                          |             Description  |
-|:----------------------|:--------------------------------------------------------------:|-------------------------:|
-| auth_url              |         The authentication URL of the iGrafx platform.         |       Authentication URL |
-| api_url               |       The URL of the iGrafx API platform you are using.        |                  API URL | 
-| wg_key                |     The Private Key of the workgroup you are working with.     |            Workgroup Key |
-| wg_id                 |         The ID of the workgroup You are working with.          |             Workgroup ID |
-| new_project_id        |              The ID of the newly created project.              |           New Project ID |
-| column_mapping_exists | A boolean indicating whether ot not the column mapping exists. |    Column Mapping Status |
-| chunk_size            |            The number of rows to process at a time             | Number of Rows per Chunk |
-
-
-## The iGrafx Extension Example
-
-Go to Knime and import the workflow called ``igrafx_extension_example.knwf``.
-
-When the workflow is imported, you should see all iGrafx Extension nodes.
-
-To start using them, look for a **File Reader Node**. With this node, you will be able to select the file you wish to upload to the iGrafx platform.
-
-You can then connect it to any node you wish to try, fill in the information by double clicking the node and execute the nodes.
-If you are executing the iGrafx File Upload node, it may take some time to execute, depending on the chunk size.
-
-One all connected nodes are green, the execution is done.
 
 ## Further Documentation
 

@@ -1,3 +1,4 @@
 .idea
 igrafx_extension/igrafx_knime_extension/__pycache__/*.pyc
 .DS_Store
+igrafx_extension/igrafx_knime_extension/__pycache__

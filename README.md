@@ -1,4 +1,4 @@
-# iGrafx KNIME Mining Connector
+# iGrafx KNIME Mining Extension
 
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/igrafx/KNIME-Mining-connector?color=orange)
@@ -14,7 +14,7 @@
 ***
 ## Introduction
 
-Welcome to the **iGrafx KNIME Mining Connector** – an open-source application seamlessly integrated with Knime to effortlessly transmit data to the iGrafx Mining Platform.
+Welcome to the **iGrafx KNIME Mining Extension** – an open-source application seamlessly integrated with Knime to effortlessly transmit data to the iGrafx Mining Platform.
 
 Powered by the [iGrafx P360 Live Mining SDK](https://github.com/igrafx/mining-python-sdk) and rooted in Python, this connector simplifies the data transfer process, eliminating complexity and enhancing your workflow.
 
@@ -32,34 +32,64 @@ For a step-by-step guide on setting up and using the iGrafx KNIME Mining Connect
 
 Empower your Knime workflows with seamless data transmission to the iGrafx Mining Platform – explore the potential of the iGrafx KNIME Mining Connector today!
 
+## Installing the iGrafx Extension
+If you are a developer wishing to contribute, please refer to [this](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md#using-the-igrafx-mining-knime-extension-as-a-developer) section instead.
 
-## Requirements
+To install the **iGrafx Extension** on Knime, open Knime.
 
-Ensure you meet the following requirements before using this package:
+Go to the top right, you will find a small *i* icon . 
 
-- **Knime**: This package requires Knime. Download your preferred version [here](https://www.knime.com/downloads).
+![info_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/info_icon.png)
 
-- **Anaconda**: Install [Anaconda](https://www.anaconda.com/download) as it is essential for seamless integration between Python and Knime.
+Click on it then scroll down to **Install Extensions**. Then, click on the **Install Extensions** button.
 
-- **iGrafx P360 Live Mining SDK**: Once Anaconda is installed, the SDK must be installed. Make sure you refer to the [howto.md](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md) for additional explanations. Please note that the SDK version must match the platform version to ensure that all functionalities will work. To install the latest version of the SDK, open the Anaconda Prompt and run the following command to install the necessary SDK:
-
-  ```shell
-  pip install igrafx-mining-sdk
-  ```
-If you need to install a specific version of the SDK, use the following command:
-  ```shell
-  pip install igrafx-mining-sdk==<Your Version>
-  ```
-For instance:
-  ```shell
-  pip install igrafx-mining-sdk==2.25.0
-  ```
-You can go to the [PyPi page](https://pypi.org/project/igrafx-mining-sdk/2.25.0/) of the SDK to check the different versions. You can also to the SDk's [Github page](https://github.com/igrafx/mining-python-sdk) if you need additional information about the SDK.
+![install_extensions_button](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/install_extensions_button.png)
 
 
-These prerequisites will ensure a smooth setup and operation of the iGrafx KNIME Mining Connector.
+A **window** will pop up. In the search bar, you can search for **iGrafx**. 
+Tick the box of the corresponding extension and click on **Finish**.
+It may take some time to install.
 
-More details on how to setup Knime with Python are available in the [howto.md](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md).
+![igx_extension](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_extension.png)
+
+Another window will pop up during the installation, asking if you trust the extension:
+
+![Trust_window](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/trusted.png)
+
+Tick the **Always trust all content** box. Then, on the next window that pops up, click on **Yes I accept the risk**.
+You can now click on **Trust Slected**. Wait for the installation to finish.
+Don't restart the platform just yet.
+
+Click on the **settings** icon in the top right of the window.
+
+![settings_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/settings_icon.png)
+
+Then, click on the **arrow** next to the **Install/Update** section.
+
+Go to the **Available Software sites** section and double click on the **iGrafx Extension**.
+
+![Available_Software](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/available_software.png)
+
+In the window that pops up, make sure the information are as follows:
+
+- Name: iGrafx Extension
+- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/dev/igrafx_extension/releases/5.1
+
+Copy and paste the location in the respective input.
+
+![location](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/location.png)
+
+Click on **Add**, the **Apply and Close**.
+
+You can now restart Knime.
+
+After reopening Knime, you can go to the **Node Repository** and type **iGrafx** in the search bar.
+Then, click on **More Advanced Nodes**. The iGrafx nodes should be there.
+
+![nodes_repo](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/node_repo.png)
+
+Congratulations! You can now refer to other sections for details on how to use the nodes.
+
 ## Documentation
 
 For comprehensive documentation, refer to the [howto.md](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md) file.

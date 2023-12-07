@@ -2,7 +2,7 @@ import logging
 import knime.extension as knext
 import igrafx_mining_sdk as igx
 import tempfile
-import time
+
 
 LOGGER = logging.getLogger(__name__)
 

@@ -1,9 +1,9 @@
 name: igrafx_extension # Will be concatenated with the group_id to an ID
 author: iGrafx
 env_yml_path:
-  osx-64: igx_env.yml
+  osx-64: igx_env_osx_intel.yml 
   osx-arm64: igx_env_osx_arm.yml 
-  linux-64: igx_env.yml 
+  linux-64: igx_env_linux.yml 
   win-64: igx_env_win.yml
 extension_module: igrafx_knime_extension # The .py Python module containing the nodes of your extension
 description: The iGrafx Knime Extension # Human readable bundle name / description

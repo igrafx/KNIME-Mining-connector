@@ -1,13 +1,11 @@
+.ONESHELL:
 VERSION=5.1
 
+#https://docs.knime.com/latest/pure_python_node_extensions_guide/index.html#extension-bundling
 
-#1 - Create before a personal token at https://github.com/settings/tokens 
-#2 - login to ghcr.io with your new token 
-#    echo mytoken | docker login ghcr.io -u myusername --password-stdin
-build_bundler:
-	docker buildx build --platform linux/amd64,linux/arm64 -t  ghcr.io/igrafx/knimebundle_builder:1.0.0 --build-arg VERSION=$(VERSION) --rm -f ./igrafx_extension/build/Dockerfile-bundlebuilder --push . 
+install-builder:
+	source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate ; conda create -n knime-ext-bundling -c knime -c conda-forge knime-extension-bundling=5.1.0
 
 build:
-	rm -rf ./igrafx_extension/releases/5.1
-	docker run -v //$(shell pwd)/igrafx_extension:/extension -v //$(shell pwd)/igrafx_extension/releases/5.1:/release ghcr.io/igrafx/knimebundle_builder:1.0.0
-
+	rm -rf ./igrafx_extension/releases/$(VERSION)
+	source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate knime-ext-bundling ; build_python_extension.py ./igrafx_extension/igrafx_knime_extension ./igrafx_extension/releases/$(VERSION) ; conda deactivate

@@ -33,7 +33,7 @@ For a step-by-step guide on setting up and using the iGrafx KNIME Mining Connect
 Empower your Knime workflows with seamless data transmission to the iGrafx Mining Platform – explore the potential of the iGrafx KNIME Mining Connector today!
 
 ## Installing the iGrafx Extension
-If you are a developer wishing to contribute, please refer to [this]() section instead.
+If you are a developer wishing to contribute, please refer to [this](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md#using-the-igrafx-mining-knime-extension-as-a-developer) section instead.
 
 To install the **iGrafx Extension** on Knime, open Knime.
 

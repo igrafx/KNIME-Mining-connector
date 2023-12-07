@@ -43,11 +43,11 @@ Click on the **settings** icon in the top right of the window.
 
 Then, click on the **arrow** next to the **Install/Update** section.
 
-Go to the **Available Software sites** section and double click on the **iGrafx Extension**.
+Go to the **Available Software sites** section and click the add button.
 
 ![Available_Software](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/available_software.png)
 
-In the window that pops up, make sure the information are as follows:
+In the window that pops up, make sure the information is as follows:
 
 - Name: iGrafx Extension
 - Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases/5.1

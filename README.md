@@ -93,6 +93,9 @@ Then, click on **More Advanced Nodes**. The iGrafx nodes should be there.
 
 ![nodes_repo](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/node_repo.png)
 
+If it is not installed this will cause issues with the extension and you will not be able to use the extension.
+Please run ``sudo xcodebuild -license`` from within a Terminal window to review and agree to the **Xcode and Apple SDKs license**.
+
 Congratulations! You can now refer to other sections for details on how to use the nodes.
 
 You can directly refer to the example if [needed](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md#the-igrafx-mining-extension-example).

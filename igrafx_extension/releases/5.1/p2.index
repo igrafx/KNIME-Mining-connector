@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #Thu Dec 07 17:46:56 CET 2023
+=======
+#Thu Dec 07 14:41:41 CET 2023
+>>>>>>> 697021115561bf57318c53d6656aad0d987cb473
 artifact.repository.factory.order=artifacts.xml.xz,artifacts.xml,\!
 version=1
 metadata.repository.factory.order=content.xml.xz,content.xml,\!

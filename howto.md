@@ -331,7 +331,7 @@ Click on it then scroll down to **Install Extensions**. Then, click on the **Ins
 
 A **window** will pop up. In the search bar, you can search for **Python integration**. Tick the following boxes, corresponding to the necessary extensions and click on **Finish**.
 
-![python_integration_extensions](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/python__ext_install.png)
+![python_integration_extensions](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/python__ext_install.png)
 
 When that is done, configure the KNIME Python Integration. To do so, click on the **settings** icon in the top right of the window.
 

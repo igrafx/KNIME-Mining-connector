@@ -258,7 +258,9 @@ When the workflow is imported, you should see all iGrafx Extension nodes.
 
 ![igrafx_workflow](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_wf.png)
 
-To start using them, look for a **File Reader Node**. With this node, you will be able to select the file you wish to upload to the iGrafx platform.
+To start using them, look for a **File Reader Node**. Please note that you may use other nodes as long as the output is a table.
+Here we use the File Reader Node as an Example.
+With this node, you will be able to select the file you wish to upload to the iGrafx platform.
 You can try it with the [100_fake_cases.csv](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/igrafx_extension/100_fake_cases.csv) file.
 
 You can then connect it to any node you wish to try, fill in the information by double clicking the node and execute the nodes.
@@ -327,20 +329,26 @@ Click on it then scroll down to **Install Extensions**. Then, click on the **Ins
 ![install_extensions_button](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/install_extensions_button.png)
 
 
-A **window** will pop up. In the search bar, you can search for **Python integration**. Tick the box of the corresponding extension and click on **Finish**.
+A **window** will pop up. In the search bar, you can search for **Python integration**. Tick the following boxes, corresponding to the necessary extensions and click on **Finish**.
 
-![python_integration](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/python_integration.png)
+![python_integration_extensions](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/python__ext_install.png)
 
 When that is done, configure the KNIME Python Integration. To do so, click on the **settings** icon in the top right of the window.
 
 ![settings_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/settings_icon.png)
 
-When clicking on it you will see a section called **Conda**. Go to that section and browse for your **Conda Installation Directory**. When the correct path is entered, the conda version will appear underneath. The path may look like this: `C:\Users\Your Name\AppData\Local\anaconda3`.
+When clicking on it you will see a section called **Conda**. 
+Go to that section and browse for your **Conda Installation Directory**. 
+When the correct path is entered, the conda version will appear underneath. The path may look like this: `C:\Users\Your Name\AppData\Local\anaconda3`.
+**Please note that the path to your Anaconda3 may differ depending on how and where you installed it.** 
 
 ![conda_path](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/conda_path.png)
 
 ## Using the iGrafx Knime Extension locally
 ### Cloning the iGrafx KNIME Mining Extension
+You are going to need the ``git`` command for this section. 
+If you do not have git, please follow the instructions [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+
 
 Once everything is Python is integrated in Knime, the first thing to do is to clone the repository.
 To do so create a new folder. Open a terminal and type the following command:
@@ -441,7 +449,8 @@ You can go to the [PyPi page](https://pypi.org/project/igrafx-mining-sdk/2.25.0/
 ### Setting up the Conda Environment in Knime
 This section is to set up the Conda environment in Knime.
 
-Open Knime and go to the `Settings`. Go to the `Python` tab.
+Open Knime and go to the `Settings`. Go to the `Python` tab. Make sure you are in the `Python` tab and not the ``Python (Legacy)`` tab.
+Indeed, Python 2 is not used here, so it isn't necessary.
 
 Under `Python environment configuration`, check `Conda`.
 

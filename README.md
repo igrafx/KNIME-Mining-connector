@@ -33,7 +33,6 @@ For a step-by-step guide on setting up and using the iGrafx KNIME Mining Connect
 Empower your Knime workflows with seamless data transmission to the iGrafx Mining Platform – explore the potential of the iGrafx KNIME Mining Connector today!
 
 ## Installing the iGrafx Extension
-If you are a developer wishing to contribute, please refer to [this](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md#using-the-igrafx-mining-knime-extension-as-a-developer) section instead.
 
 To install the **iGrafx Extension** on Knime, open Knime.
 
@@ -97,6 +96,8 @@ If it is not installed this will cause issues with the extension and you will no
 Please run ``sudo xcodebuild -license`` from within a Terminal window to review and agree to the **Xcode and Apple SDKs license**.
 
 Congratulations! You can now refer to other sections for details on how to use the nodes.
+
+If you are a developer wishing to contribute, please refer to [this](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md#using-the-igrafx-mining-knime-extension-as-a-developer) section instead.
 
 You can directly refer to the example if [needed](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md#the-igrafx-mining-extension-example).
 

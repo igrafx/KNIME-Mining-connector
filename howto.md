@@ -28,7 +28,7 @@ To maximize the benefits of this extension, ensure you have an active iGrafx acc
 12. [Further Documentation](#further-documentation)
 
 ## Installing the iGrafx Extension
-To install the **iGrafx Extension** on Knime, open Knime.
+To install the **iGrafx Extension** on Knime as a user, open Knime.
 
 Click on the **settings** icon in the top right of the window.
 
@@ -93,6 +93,7 @@ Please run ``sudo xcodebuild -license`` from within a Terminal window to review 
 Congratulations! You can now refer to other sections for details on how to use the nodes.
 If you are already familiar with the extension, you can skip to the [example](https://github.com/igrafx/KNIME-Mining-connector/blob/master/howto.md#the-igrafx-mining-extension-example)
 
+If you are a developer wishing to contribute, please refer to [this](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md#using-the-igrafx-mining-knime-extension-as-a-developer) section instead.
 
 ## Using the iGrafx KNIME Mining Extension
 

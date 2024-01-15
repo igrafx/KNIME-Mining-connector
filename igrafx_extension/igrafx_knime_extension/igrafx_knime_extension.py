@@ -266,3 +266,128 @@ class iGrafxFileUploadNode:
 
         # Return input data as output
         return input_data
+
+
+
+@knext.node(name="iGrafx Mining Project Mapping Info Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png", category=igx_category)
+@knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
+class iGrafxMappingInfoNode:
+    """Node to fetch mapping information from the iGrafx Mining API.
+
+    The iGrafx Mapping Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve mapping information for a specified project.
+    By providing the Project ID, this node establishes a connection with the iGrafx API and fetches details about metrics and dimensions.
+
+    Key Features:
+
+    1. Project Mapping Details: Fetches mapping information, including metrics and dimensions, for the specified project.
+    It returns the Name, Aggregation, and the database's column name, to name a few, for each dimension and metric.
+
+    2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data retrieval and interaction with iGrafx Mining resources.
+
+    3. Dynamic Configuration: Allows users to dynamically provide the Project ID as a parameter or use a predefined ID from the flow variables.
+
+    The iGrafx Mapping Info Fetcher node facilitates the retrieval of essential mapping information, providing users with insights into metrics and dimensions associated with a specific project.
+
+    """
+
+    # Define the project ID for the project you want to retrieve mapping information
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project for which you want to retrieve mapping information.")
+
+    def configure(self, configure_context, input_schema):
+        # Set warning during configuration
+        configure_context.set_warning("Getting Mapping Information")
+
+    def execute(self, exec_context, input_data):
+
+        # Get Workgroup object from the previous node
+        wg = igx.Workgroup(
+            exec_context.flow_variables["wg_id"],
+            exec_context.flow_variables["wg_key"],
+            exec_context.flow_variables["api_url"],
+            exec_context.flow_variables["auth_url"]
+        )
+
+        # Retrieve project ID from flow variables
+        if not self.given_project_id:
+            project_id = exec_context.flow_variables["new_project_id"]
+        else:
+            # If the project ID was manually set, it will be prioritized over the flow variable project ID
+            project_id = self.given_project_id
+            exec_context.flow_variables["new_project_id"] = project_id
+
+        # Use project ID from String Configuration
+        my_project = wg.project_from_id(project_id)
+
+        # Check if column mapping exists in the project
+        mapping_infos = my_project.get_mapping_infos()
+        exec_context.flow_variables["mapping_infos"] = str(mapping_infos)
+
+
+        # Raise an error if mapping infos don't exist
+        if not mapping_infos:
+            raise TypeError("Mapping Infos doesn't exist")
+
+        # Return input data as output
+        return input_data
+
+
+@knext.node(name="iGrafx Mining Project Deletion", node_type=knext.NodeType.MANIPULATOR, icon_path="icons/igx_logo.png",
+            category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
+class iGrafxProjectDeletionNode:
+    """Node to delete a project in the iGrafx Mining API.
+    The iGrafx Mining Project Deletion node allows users to delete a project in the iGrafx Mining API. By providing the Project ID, this node sends a request to delete the specified project.
+
+    Key Features:
+
+    - Project Deletion: Deletes the specified project from the iGrafx Mining API.
+
+    - Secure Operation: Requires the Project ID for authorization, ensuring that only authorized users can delete projects.
+    Furthermore, a project ID must be entered in the node, else the project will not be deleted.
+
+    - Workflow Integration: Seamlessly integrates with KNIME workflows, allowing users to include project deletion as part of their data processing pipelines.
+
+    The iGrafx Mining Project Deletion node provides a straightforward way to delete projects, offering users flexibility and control over their iGrafx Mining API operations.
+    """
+
+    # Project ID to be deleted
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project you want to delete.")
+
+    def configure(self, configure_context, input_schema):
+        # Set warning during configuration
+        configure_context.set_warning("Deleting iGrafx Mining Project")
+
+    def execute(self, exec_context, input_data):
+
+        # Check if project ID is given
+        if not self.given_project_id:
+            raise ValueError("No Project ID provided. Make sure to provide the Project ID for deletion.")
+
+
+        # Establish connection by creating a Workgroup Object
+        wg = igx.Workgroup(
+            exec_context.flow_variables["wg_id"],
+            exec_context.flow_variables["wg_key"],
+            exec_context.flow_variables["api_url"],
+            exec_context.flow_variables["auth_url"]
+        )
+
+        project_id = self.given_project_id
+
+        # Use project ID from String Configuration
+        my_project = wg.project_from_id(project_id)
+
+        # Delete the project
+        response_project_delete = my_project.delete_project()
+
+        if not response_project_delete.ok:
+            raise ValueError(f"Project deletion failed. Status code: {response_project_delete.status_code}, "
+                             f"Reason: {response_project_delete.text}")
+        # Return input data as output
+        return input_data

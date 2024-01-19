@@ -2,9 +2,7 @@ import logging
 import knime.extension as knext
 import igrafx_mining_sdk as igx
 import tempfile
-
 import requests
-from requests.exceptions import HTTPError
 
 
 LOGGER = logging.getLogger(__name__)
@@ -120,7 +118,7 @@ class iGrafxProjectCreationNode:
         return input_data
 
 
-@knext.node(name="iGrafx Mining Column Mapping Status", node_type=knext.NodeType.SINK, icon_path="icons/igx_logo.png", category=igx_category)
+@knext.node(name="iGrafx Mining Column Mapping Status", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png", category=igx_category)
 @knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
 @knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
 class ColumnMappingStatusNode:
@@ -155,11 +153,14 @@ class ColumnMappingStatusNode:
             exec_context.flow_variables["auth_url"]
         )
 
-        # Retrieve project ID from flow variables
+        # Retrieve project ID from flow variables or manually set if provided
         if not self.given_project_id:
-            project_id = exec_context.flow_variables["new_project_id"]
+            if 'new_project_id' not in exec_context.flow_variables:
+                raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
+            else:
+                project_id = exec_context.flow_variables["new_project_id"]
+
         else:
-            # If the project ID was manually set, it will be prioritized over the flow variable project ID
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
 
@@ -227,13 +228,14 @@ class iGrafxFileUploadNode:
 
         # Retrieve project ID from flow variables or manually set if provided
         if not self.given_project_id:
-            project_id = exec_context.flow_variables["new_project_id"]
+            if 'new_project_id' not in exec_context.flow_variables:
+                raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
+            else:
+                project_id = exec_context.flow_variables["new_project_id"]
+
         else:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
-
-        if not project_id:
-            raise ValueError("No project ID was given")
         
         my_project = wg.project_from_id(project_id)
 
@@ -271,7 +273,7 @@ class iGrafxFileUploadNode:
         return input_data
 
 
-@knext.node(name="iGrafx Mining Project Deletion", node_type=knext.NodeType.MANIPULATOR, icon_path="icons/igx_logo.png",
+@knext.node(name="iGrafx Mining Project Deletion", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png",
             category=igx_category)
 @knext.input_table(name="Input Table",
                    description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
@@ -279,7 +281,7 @@ class iGrafxFileUploadNode:
                     description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxProjectDeletionNode:
     """Node to delete a project in the iGrafx Mining API.
-    The iGrafx Mining Project Deletion node allows users to delete a project in the iGrafx Mining API. By providing the Project ID, this node sends a request to delete the specified project.
+    The iGrafx Mining Project Deletion node allows users to delete a project via the iGrafx Mining API. By providing the Project ID, this node sends a request to delete the specified project.
 
     Key Features:
 
@@ -318,7 +320,7 @@ class iGrafxProjectDeletionNode:
 
         project_id = self.given_project_id
 
-        # Use project ID from String Configuration
+        # Use project ID from String Parameter
         my_project = wg.project_from_id(project_id)
 
         # Delete the project
@@ -337,7 +339,7 @@ class iGrafxProjectDeletionNode:
 class iGrafxMappingInfoNode:
     """Node to fetch mapping information from the iGrafx Mining API.
 
-    The iGrafx Mapping Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve mapping information for a specified project.
+    The iGrafx Mining Mapping Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve mapping information for a specified project.
     By providing the Project ID, this node establishes a connection with the iGrafx API and fetches details about metrics and dimensions.
 
     Key Features:
@@ -385,10 +387,9 @@ class iGrafxMappingInfoNode:
         # Use project ID from String Configuration
         my_project = wg.project_from_id(project_id)
 
-        # Check if column mapping exists in the project
+        # Get Mapping Infos of the project
         mapping_infos = my_project.get_mapping_infos() # returns a json
         exec_context.flow_variables["mapping_infos"] = str(mapping_infos)
-
 
         # Raise an error if mapping infos don't exist
         if not mapping_infos:
@@ -398,33 +399,41 @@ class iGrafxMappingInfoNode:
         return input_data
 
 
-@knext.node(name="iGrafx Mining Project Variant Fetcher", node_type=knext.NodeType.MANIPULATOR, icon_path="icons/igx_logo.png",
+@knext.node(name="iGrafx Mining Project Variant Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",
             category=igx_category)
 @knext.input_table(name="Input Table",
                    description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
 @knext.output_table(name="Output Table",
                     description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxProjectVariantNode:
-    """Node to upload a CSV file to the iGrafx Mining platform.
-    The iGrafx Mining File Upload node serves as a pivotal tool within the KNIME environment, enabling users to seamlessly upload files to the iGrafx Mining platform. By providing essential parameters such as the Project ID, Column Mapping in JSON format, and the Workgroup Object, users can establish a secure connection to the iGrafx Mining API and transfer files efficiently.
+    """Node to fetch project variants via the iGrafx Mining API.
+
+    The iGrafx Mining Project Variant Fetcher node connects to the iGrafx Mining API, allowing users to retrieve information
+    about project variants. By specifying the Project ID, users can establish a connection with the iGrafx API and
+    retrieve details about project variants, such as names, IDs, number of occurences and associated information.
 
     Key Features:
 
-    - Efficient File Upload: Simplifies the process of uploading files to the iGrafx Mining platform directly from KNIME, ensuring a streamlined workflow.
+    - Dynamic Configuration: Users can dynamically provide the Project ID as a parameter or use a predefined ID from
+      flow variables.
+    - Pagination Support: The node supports pagination, allowing users to specify the page index and a limit for fetching
+      project variants.
+    - Search Functionality: Users can filter project variants by name using the optional search query parameter.
+    - Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, facilitating efficient
+      data retrieval and interaction with iGrafx Mining resources.
 
-    - Project ID Integration: Allows users to specify the target project by providing the unique Project ID, ensuring that the uploaded files are associated with the correct project.
-
-    - Column Mapping Support: Accommodates the transmission of column mapping details in JSON format, facilitating structured and organized data transfer.
-
-    - Workgroup Object Connectivity: Establishes a secure connection to the iGrafx Mining API by utilizing the Workgroup Object, ensuring authentication and access permissions.
-
-    This node empowers users to seamlessly integrate file upload functionalities into their KNIME workflows, enabling efficient data transfer and synchronization with the iGrafx Mining platform. By leveraging this node, users can ensure the accurate and secure uploading of files while maintaining structured data organization within the iGrafx ecosystem.
+    This node empowers users to seamlessly integrate project variant information into their KNIME workflows, enabling
+    efficient data access and synchronization with the iGrafx Mining platform.
     """
     # Define parameters to get project variants
-    given_project_id = knext.StringParameter("Project ID", "The ID of the project you want to upload the file to.")
-    page_index = knext.IntParameter("Page Index","The page index for pagination.", )
-    limit = knext.IntParameter("Limit", "The maximum number of items to return per page.")
-    search = knext.StringParameter("Search Query", "The search query to filter variants by name (optional).")
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project for which you want to get the variant information.")
+    page_index = knext.IntParameter("Page Index",
+                                    "The page index for pagination.", )
+    limit = knext.IntParameter("Limit",
+                               "The maximum number of items to return per page.")
+    search = knext.StringParameter("Search Query",
+                                   "The search query to filter variants by name (optional).")
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration
@@ -463,33 +472,41 @@ class iGrafxProjectVariantNode:
         return input_data
 
 
-@knext.node(name="iGrafx Mining Completed Cases", node_type=knext.NodeType.MANIPULATOR, icon_path="icons/igx_logo.png",
+@knext.node(name="iGrafx Mining Completed Cases", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",
             category=igx_category)
 @knext.input_table(name="Input Table",
                    description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
 @knext.output_table(name="Output Table",
                     description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxCompletedCasesNode:
-    """Node to upload a CSV file to the iGrafx Mining platform.
-    The iGrafx Mining File Upload node serves as a pivotal tool within the KNIME environment, enabling users to seamlessly upload files to the iGrafx Mining platform. By providing essential parameters such as the Project ID, Column Mapping in JSON format, and the Workgroup Object, users can establish a secure connection to the iGrafx Mining API and transfer files efficiently.
+    """Node to fetch completed cases for a specified project.
+
+    The iGrafx Mining Completed Cases node connects to the iGrafx Mining API, enabling users to retrieve information about
+    completed cases for a specified project. By providing the Project ID and optional search criteria, users can
+    establish a connection with the iGrafx API and fetch details about completed cases.
 
     Key Features:
 
-    - Efficient File Upload: Simplifies the process of uploading files to the iGrafx Mining platform directly from KNIME, ensuring a streamlined workflow.
+    - Dynamic Configuration: Users can dynamically provide the Project ID as a parameter or use a predefined ID from
+      flow variables.
+    - Pagination Support: The node supports pagination, allowing users to specify the page index and limit for fetching
+      completed cases.
+    - Search Functionality: Users can filter completed cases by case ID using the optional search query parameter.
+    - Error Handling: The node includes error handling for scenarios where there is no END CASE rule set or when
+      unexpected exceptions occur.
 
-    - Project ID Integration: Allows users to specify the target project by providing the unique Project ID, ensuring that the uploaded files are associated with the correct project.
-
-    - Column Mapping Support: Accommodates the transmission of column mapping details in JSON format, facilitating structured and organized data transfer.
-
-    - Workgroup Object Connectivity: Establishes a secure connection to the iGrafx Mining API by utilizing the Workgroup Object, ensuring authentication and access permissions.
-
-    This node empowers users to seamlessly integrate file upload functionalities into their KNIME workflows, enabling efficient data transfer and synchronization with the iGrafx Mining platform. By leveraging this node, users can ensure the accurate and secure uploading of files while maintaining structured data organization within the iGrafx ecosystem.
+    This node empowers users to seamlessly integrate completed case information into their KNIME workflows, enabling
+    efficient data access and synchronization with the iGrafx Mining platform.
     """
     # Define parameters to get project variants
-    given_project_id = knext.StringParameter("Project ID", "The ID of the project you want to upload the file to.")
-    page_index = knext.IntParameter("Page Index","The page index for pagination.", )
-    limit = knext.IntParameter("Limit", "The maximum number of items to return per page.")
-    search_case_id = knext.StringParameter("Search Query", "The search query to filter cases by ID (optional).")
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project you want to retrieve completed cases for.")
+    page_index = knext.IntParameter("Page Index",
+                                    "The page index for pagination.", )
+    limit = knext.IntParameter("Limit",
+                               "The maximum number of items to return per page.")
+    search_case_id = knext.StringParameter("Search Query",
+                                           "The search query to filter cases by ID (optional).")
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration
@@ -516,7 +533,7 @@ class iGrafxCompletedCasesNode:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
 
-        # Fetch project variants using the provided parameters
+        # Fetch completed cases using the provided parameters
         page_index_value = self.page_index
         limit_value = self.limit
         search_value = self.search_case_id
@@ -524,12 +541,14 @@ class iGrafxCompletedCasesNode:
         my_project = wg.project_from_id(project_id)
 
         try:
-            completed_cases_data = my_project.get_project_completed_cases(page_index=page_index_value, limit=limit_value, search_case_id=search_value)
+            completed_cases_data = my_project.get_project_completed_cases(page_index=page_index_value,
+                                                                          limit=limit_value,
+                                                                          search_case_id=search_value)
             exec_context.flow_variables["completed_cases_data"] = str(completed_cases_data)
 
         except requests.exceptions.JSONDecodeError as je:
             exec_context.flow_variables["completed_cases_data"] = str(je)
-            raise ValueError(f"There is no END CASE rule set: {je}")
+            raise ValueError(f"There is no END CASE rule set or there is overfiltering being done: {je}")
 
         except Exception as e:
             # Handle any other unexpected exception
@@ -538,3 +557,99 @@ class iGrafxCompletedCasesNode:
 
         # Return input data as output
         return input_data
+
+
+@knext.node(name="iGrafx Mining Project Data", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",
+            category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Original Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
+@knext.output_table(name="Project Data",
+                    description="A Table Output that provides data of the project.")
+class iGrafxProjectDataNode:
+    """Node to retrieve project data from the iGrafx Mining platform.
+
+    The iGrafx Project Data node connects to the iGrafx Mining API, allowing users to fetch information about a specific
+    project. Users can dynamically provide the Project ID as a parameter or use a predefined ID from flow variables.
+
+    Key Features:
+
+    - Dynamic Configuration: Users can dynamically provide the Project ID as a parameter or use a predefined ID from
+      flow variables.
+    - Data Processing: This node processes the project data. It cleans it, filters it and converts it into a table.
+
+    This node facilitates efficient integration of project data into KNIME workflows, enabling users to synchronize with
+    the iGrafx Mining platform seamlessly.
+    """
+    # Define parameters to get project data
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project you want to retrieve data for.")
+
+    def configure(self, configure_context, input_schema):
+        # Set warning during configuration
+        configure_context.set_warning("Getting Project Data")
+
+    def execute(self, exec_context, input_data):
+
+        # Get Workgroup object from the previous node
+        wg = igx.Workgroup(
+            exec_context.flow_variables["wg_id"],
+            exec_context.flow_variables["wg_key"],
+            exec_context.flow_variables["api_url"],
+            exec_context.flow_variables["auth_url"]
+        )
+
+        # Retrieve project ID from flow variables or manually set if provided
+        if not self.given_project_id:
+            if 'new_project_id' not in exec_context.flow_variables:
+                raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
+            else:
+                project_id = exec_context.flow_variables["new_project_id"]
+
+        else:
+            project_id = self.given_project_id
+            exec_context.flow_variables["new_project_id"] = project_id
+
+        my_project = wg.project_from_id(project_id)
+
+        mapping_infos = my_project.get_mapping_infos()
+
+        # Create a dictionary mapping database column names from mapping infos to their corresponding names
+        # We get the database column names and names of the metrics and dimensions which will then be replaced in the dataframe
+        column_name_mapping_infos = {item['databaseColumnName']: item['name'] for category in mapping_infos.values() for item
+                               in category}
+
+        # Get the datasource
+        datasource = my_project.nodes_datasource
+
+        # Load the dataframe of the datasource
+        df = datasource.load_dataframe()
+
+        # Rename the columns based on the mapping
+        df = df.rename(columns=column_name_mapping_infos)
+
+        for col in df.columns:
+            # Check if the column name matches the pattern "case_+databasecolumnname"
+            if col.startswith("case_") and col[5:] in column_name_mapping_infos:
+                # Replace the column name with the concatenated string
+                new_col_name = f"{column_name_mapping_infos[col[5:]]} (case)"
+                df.rename(columns={col: new_col_name}, inplace=True)
+
+        # Filter columns based on the condition
+        columns_to_keep = [col for col in df.columns
+                           if "loop_path" not in col and
+                           "graphkey" not in col and
+                           "processkey" not in col and
+                           "ingestion_timestamp" not in col and
+                           "linkedToStart" not in col and
+                           "linkedToEnd" not in col]
+
+        # Create a new DataFrame with the selected columns
+        filtered_df = df[columns_to_keep]
+
+        # Convert the filtered DataFrame to a KNIME Table
+        knime_df = knext.Table.from_pandas(filtered_df)
+
+        # Return input data as output
+        return input_data, knime_df

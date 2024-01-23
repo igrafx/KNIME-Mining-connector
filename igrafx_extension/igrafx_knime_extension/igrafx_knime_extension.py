@@ -1,9 +1,13 @@
 import logging
+import os
+
 import knime.extension as knext
 import igrafx_mining_sdk as igx
 import tempfile
-import requests
-
+import requests as req
+import xml.etree.ElementTree as ET
+import pandas as pd
+import xml.dom.minidom
 
 LOGGER = logging.getLogger(__name__)
 
@@ -546,7 +550,7 @@ class iGrafxCompletedCasesNode:
                                                                           search_case_id=search_value)
             exec_context.flow_variables["completed_cases_data"] = str(completed_cases_data)
 
-        except requests.exceptions.JSONDecodeError as je:
+        except req.exceptions.JSONDecodeError as je:
             exec_context.flow_variables["completed_cases_data"] = str(je)
             raise ValueError(f"There is no END CASE rule set or there is overfiltering being done: {je}")
 

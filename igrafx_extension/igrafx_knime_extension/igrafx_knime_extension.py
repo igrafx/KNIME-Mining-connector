@@ -313,7 +313,6 @@ class iGrafxProjectDeletionNode:
         if not self.given_project_id:
             raise ValueError("No Project ID provided. Make sure to provide the Project ID for deletion.")
 
-
         # Establish connection by creating a Workgroup Object
         wg = igx.Workgroup(
             exec_context.flow_variables["wg_id"],

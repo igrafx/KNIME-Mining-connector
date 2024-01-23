@@ -266,3 +266,177 @@ class iGrafxFileUploadNode:
 
         # Return input data as output
         return input_data
+
+
+@knext.node(name="iGrafx SAP Data Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",
+            category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.input_table(name="Input Table 2",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Original Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
+class iGrafxSAPNode:
+    """Node to retrieve project data from the iGrafx Mining platform.
+
+    The iGrafx Project Data node connects to the iGrafx Mining API, allowing users to fetch information about a specific
+    project. Users can dynamically provide the Project ID as a parameter or use a predefined ID from flow variables.
+
+    Key Features:
+
+    - Dynamic Configuration: Users can dynamically provide the Project ID as a parameter or use a predefined ID from
+      flow variables.
+    - Data Processing: This node processes the project data. It cleans it, filters it and converts it into a table.
+
+    This node facilitates efficient integration of project data into KNIME workflows, enabling users to synchronize with
+    the iGrafx Mining platform seamlessly.
+    """
+
+    def configure(self, configure_context, input_schema, input_schema2):
+        # Set warning during configuration
+        configure_context.set_warning("Getting Project Data")
+
+    def execute(self, exec_context, input_data, input_data2):
+
+        # Fetch Token
+        url = "https://ns3080305.ip-145-239-0.eu:44302/sap/bc/dsfp2/rest_api/PROCESS"
+
+        payload = {}
+        headers = {
+            'X-CSRF-TOKEN': 'fetch',
+            'Authorization': 'Basic YXBpX3Rlc3RlcjpEZWNlU29mdDIwMjMh',
+            'Cookie': 'SAP_SESSIONID_ER6_800=aRX3WvU8HCFtwrDQGDYsRgLlbJO2txHuu8KkvwEd5J0%3d; sap-usercontext=sap-client=800'
+        }
+
+        response = req.request("GET", url, headers=headers, data=payload, verify=False)
+
+        # Access the CSRF token from the response's headers
+        csrf_token = response.headers.get('x-csrf-token')
+        cookie = "SAP_SESSIONID_ER6_800=" + response.cookies.get('SAP_SESSIONID_ER6_800') + "; path=/"
+
+        # Print the CSRF token and the Cookie
+        print(f"CSRF Token: {csrf_token}\nCookie: {cookie}")
+        print(response)
+        selection_df = input_data.to_pandas()#selection
+        description_df = input_data2.to_pandas()#description
+
+        selection_path_content = selection_df.iloc[0]['Path']
+        # Access the 'path' attribute directly
+        selection_path_value = selection_path_content.path
+        # Parse the path using double backslashes as the separator
+        selection_parsed_path = selection_path_value.split('\\')
+        # Join the path components using a forward slash
+        selection_final_path = '/'.join(selection_parsed_path)
+
+        print(selection_final_path)
+
+        selection_file_name = os.path.basename(selection_final_path)
+
+        print(selection_file_name)
+
+        # description
+        description_path_content = description_df.iloc[0]['Path']
+
+        # Access the 'path' attribute directly
+        description_path_value = description_path_content.path
+
+        # Parse the path using double backslashes as the separator
+        description_parsed_path = description_path_value.split('\\')
+
+        # Join the path components using a forward slash
+        description_final_path = '/'.join(description_parsed_path)
+
+        print(description_final_path)
+
+        description_file_name = os.path.basename(description_final_path)
+
+        print(description_file_name)
+
+        payload = {}
+        files = [
+            ('selection', (selection_file_name, open(selection_final_path, 'rb'), 'application/xml')),
+            ('description',
+             (description_file_name, open(description_final_path, 'rb'), 'application/xml'))
+        ]
+        headers2 = {
+            'X-CSRF-TOKEN': csrf_token,
+            'Cookie': cookie
+        }
+
+        response = req.request("POST", url, headers=headers2, data=payload, files=files, verify=False)
+
+        print(f"The response is: {response.text}")
+        #print(csrf_token)
+        #print(cookie)
+
+        # Parse the XML file
+        xml_tree = ET.ElementTree(ET.fromstring(response.text))
+
+        # Retrieve the root element of the XML document.
+        # The root element is the highest-level element in the XML hierarchy,
+        # representing the starting point for accessing the other elements in the document.
+        root = xml_tree.getroot()
+
+        # Uncomment to print the XML
+        xml_content = ET.tostring(xml_tree.getroot(), encoding='utf-8', method='xml')
+     #   print(xml_content.decode('utf-8'))
+
+        # Create an empty DataFrame with the desired columns
+        columns = ['Case ID', 'Entity ID', 'Entity Name']
+        df = pd.DataFrame(columns=columns)
+
+        # Find all XML elements with the tag name 'Case' that are children of the 'Cases'
+        case_elements = root.findall('Cases/Case')
+
+        # Iterate over Case elements
+        for case_element in case_elements:
+            case_id = case_element.attrib['id']
+
+            doc_group_elements = case_element.findall('DocGroup')
+
+            # Iterate over DocGroup elements
+            for doc_group_element in doc_group_elements:
+                entity_element = doc_group_element.find('Entity')
+
+                if entity_element is not None:
+                    entity_id = entity_element.attrib['id']
+                    entity_name = entity_element.text
+                else:
+                    entity_id = ""
+                    entity_name = ""
+
+                event_elements = doc_group_element.findall('.//Header/Events/Event')
+
+                # Check if there are any Event elements
+                if not event_elements:
+                    # Append a row without Event information
+                    df = df.append({
+                        'Case ID': case_id,
+                        'Entity ID': entity_id,
+                        'Entity Name': entity_name,
+                    }, ignore_index=True)
+
+                # Iterate over Event elements
+                for event_element in event_elements:
+                    event_type = event_element.attrib['type']
+                    event_ts = event_element.attrib['ts']
+
+                    task_name = f"{event_type} {entity_name}"
+
+                    # Append a new row to the DataFrame
+                    df = df.append({'Case ID': case_id,
+                                    'Entity ID': entity_id,
+                                    'Entity Name': entity_name,
+                                    }, ignore_index=True)
+                    df['Task Name'] = task_name
+                    df['Event Type'] = event_type
+                    df['Timestamp'] = event_ts
+
+        if 'Timestamp' in df.columns:
+            # Execute the line only if 'Timestamp' column exists
+            df['Timestamp'] = df['Timestamp'].str.replace(" CET", "")
+        # knime_df = knext.Table.from_pandas(first_cell_input_data_df)
+        knime_df = knext.Table.from_pandas(df)
+
+        # Return input data as output
+        return knime_df

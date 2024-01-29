@@ -1,8 +1,13 @@
 import logging
+import os
+
 import knime.extension as knext
 import igrafx_mining_sdk as igx
 import tempfile
-
+import requests as req
+import xml.etree.ElementTree as ET
+import pandas as pd
+import xml.dom.minidom
 
 LOGGER = logging.getLogger(__name__)
 
@@ -292,11 +297,17 @@ class iGrafxSAPNode:
     the iGrafx Mining platform seamlessly.
     """
 
+    start_date = knext.StringParameter("Start Date", "The date from when you want to get information.",)
+    end_date = knext.StringParameter("End Date", "The date until when you want to get information.")
+
     def configure(self, configure_context, input_schema, input_schema2):
         # Set warning during configuration
         configure_context.set_warning("Getting Project Data")
 
     def execute(self, exec_context, input_data, input_data2):
+
+        start_date = self.start_date
+        end_date = self.end_date
 
         # Fetch Token
         url = "https://ns3080305.ip-145-239-0.eu:44302/sap/bc/dsfp2/rest_api/PROCESS"
@@ -435,8 +446,8 @@ class iGrafxSAPNode:
         if 'Timestamp' in df.columns:
             # Execute the line only if 'Timestamp' column exists
             df['Timestamp'] = df['Timestamp'].str.replace(" CET", "")
-        # knime_df = knext.Table.from_pandas(first_cell_input_data_df)
+            df = df.loc[(df['Timestamp'] >= start_date) & (df['Timestamp'] <= end_date)]
+
         knime_df = knext.Table.from_pandas(df)
 
-        # Return input data as output
         return knime_df

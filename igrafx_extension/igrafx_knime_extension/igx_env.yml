@@ -24,8 +24,8 @@ dependencies:
   - gflags=2.2.2
   - glog=0.6.0
   - importlib-metadata=7.0.0
-  - knime-extension=4.7.0
-  - knime-python-base=4.7.1
+  - knime-extension=5.1.0
+  - knime-python-base=5.1.0
   - krb5=1.21.2
   - libabseil=20230125.3
   - libblas=3.9.0

@@ -266,3 +266,68 @@ class iGrafxFileUploadNode:
 
         # Return input data as output
         return input_data
+
+@knext.node(name="iGrafx Mining Column Mapping Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png", category=igx_category)
+@knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
+class iGrafxColumnMappingFetcherNode:
+    """Node to fetch mapping information from the iGrafx Mining API.
+
+    The iGrafx Mining Mapping Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve mapping information for a specified project.
+    By providing the Project ID, this node establishes a connection with the iGrafx API and fetches details about metrics and dimensions.
+
+    Key Features:
+
+    1. Project Mapping Details: Fetches mapping information, including metrics and dimensions, for the specified project.
+    It returns the Name, Aggregation, and the database's column name, to name a few, for each dimension and metric.
+
+    2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data retrieval and interaction with iGrafx Mining resources.
+
+    3. Dynamic Configuration: Allows users to dynamically provide the Project ID as a parameter or use a predefined ID from the flow variables.
+
+    The iGrafx Mapping Info Fetcher node facilitates the retrieval of essential mapping information, providing users with insights into metrics and dimensions associated with a specific project.
+
+    """
+
+    # Define the project ID for the project you want to retrieve column mapping
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project for which you want to retrieve the column mapping.")
+
+    def configure(self, configure_context, input_schema):
+        # Set warning during configuration
+        configure_context.set_warning("Getting Column Mapping")
+
+    def execute(self, exec_context, input_data):
+
+        # Get Workgroup object from the previous node
+        wg = igx.Workgroup(
+            exec_context.flow_variables["wg_id"],
+            exec_context.flow_variables["wg_key"],
+            exec_context.flow_variables["api_url"],
+            exec_context.flow_variables["auth_url"]
+        )
+
+        # Retrieve project ID from flow variables or manually set if provided
+        if not self.given_project_id:
+            if 'new_project_id' not in exec_context.flow_variables:
+                raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
+            else:
+                project_id = exec_context.flow_variables["new_project_id"]
+
+        else:
+            project_id = self.given_project_id
+            exec_context.flow_variables["new_project_id"] = project_id
+
+        # Use project ID from String Configuration
+        my_project = wg.project_from_id(project_id)
+
+        # Get Column Mapping of the project
+        column_mapping = my_project.get_column_mapping() # returns a json
+        exec_context.flow_variables["column_mapping"] = str(column_mapping)
+
+        # Raise an error if column mapping doesn't exist
+        if not column_mapping:
+            raise TypeError("Column Mapping doesn't exist for the given project.")
+
+        # Return input data as output
+        return input_data

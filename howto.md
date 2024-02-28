@@ -251,6 +251,26 @@ Here are the **flow variables** of this node:
 | chunk_size            |            The number of rows to process at a time             | Number of Rows per Chunk |
 
 
+## Using the iGrafx Column Mapping Fetcher Node
+
+The iGrafx Column Mapping Fetcher Node allows you to retrieve the Column Mapping of a given project.
+It enables users to fetch column mapping details - such as the column names, types and indices - from an iGrafx project, providing insights into the structure and organization of data within the specified project.
+
+To use this node, double click on it and enter the project ID for which you wish to retrieve the column mapping.
+
+This node takes a table as input and outputs a table.
+
+| Flow variable  |                        Meaning                         |        Description |
+|:---------------|:------------------------------------------------------:|-------------------:|
+| auth_url       |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url        |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key         | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id          |     The ID of the workgroup You are working with.      |       Workgroup ID |
+| new_project_id |          The ID of the newly created project.          |     New Project ID |
+| column_mapping |         Column Mapping for a specified project         |     Column Mapping |
+
+When the node is successfully executed, it will return the `column_mapping` of the given project.
+
 ## The iGrafx Mining Extension Example
 
 Go to Knime and import the workflow called ``igrafx_extension_example.knwf``.

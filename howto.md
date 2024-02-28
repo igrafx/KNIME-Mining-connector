@@ -20,12 +20,17 @@ To maximize the benefits of this extension, ensure you have an active iGrafx acc
 4. [Using the Project Creation Node](#using-the-project-creation-node)
 5. [Using the iGrafx Column Mapping Status Node](#using-the-igrafx-column-mapping-status-node)
 6. [Using the iGrafx File Upload Node](#using-the-igrafx-file-upload-node)
-7. [The iGrafx Mining Extension Example](#the-igrafx-mining-extension-example)
-8. [Using the iGrafx Mining Knime Extension as a developer](#using-the-igrafx-mining-knime-extension-as-a-developer)
-9. [Requirements](#requirements)
-10. [Getting Started](#getting-started)
-11. [Using the iGrafx Knime Extension locally](#using-the-igrafx-knime-extension-locally)
-12. [Further Documentation](#further-documentation)
+7. [The iGrafx Mining Project Data Node](#the-igrafx-mining-project-data-node)
+8. [The iGrafx Mining Completed Cases Node](#the-igrafx-mining-completed-cases-node)
+9. [The iGrafx Mining Project Variant Fetcher Node](#the-igrafx-mining-project-variant-fetcher-node)
+10. [The iGrafx Mining Project Mapping Info Fetcher Node](#the-igrafx-mining-project-mapping-info-fetcher-node)
+11. [The iGrafx Mining Project Deletion Node](#the-igrafx-mining-project-deletion-node)
+12. [The iGrafx Mining Extension Example](#the-igrafx-mining-extension-example)
+13. [Using the iGrafx Mining Knime Extension as a developer](#using-the-igrafx-mining-knime-extension-as-a-developer)
+14. [Requirements](#requirements)
+15. [Getting Started](#getting-started)
+16. [Using the iGrafx Knime Extension locally](#using-the-igrafx-knime-extension-locally)
+17. [Further Documentation](#further-documentation)
 
 ## Installing the iGrafx Extension
 To install the **iGrafx Extension** on Knime as a user, open Knime.
@@ -250,6 +255,121 @@ Here are the **flow variables** of this node:
 | column_mapping_exists | A boolean indicating whether ot not the column mapping exists. |    Column Mapping Status |
 | chunk_size            |            The number of rows to process at a time             | Number of Rows per Chunk |
 
+
+## The iGrafx Mining Project Data Node
+
+The iGrafx Mining Project Data Node is a node that can be used to retrieve data about a specific project. 
+This information is based on the node datasource. It is fetched, cleaned, filtered and returned.
+It returns information such as the **case ID**, the **task ID**, corresponding **vertex IDs** and much more.
+
+To use it, double click on the **iGrafx Mining Project Data** node. Make sure there is an iGrafx API Connection node active first.
+Enter the ID of the project for which you wish to retrieve data and execute it.
+
+It will return two tables: the **Original Table** and a table containing the **Project's Data**.
+
+This node takes a table as input and outputs 2 tables.
+
+Here are the **flow variables** of this node:
+
+| Flow variable         |               Meaning                                          |             Description  |
+|:----------------------|:--------------------------------------------------------------:|-------------------------:|
+| auth_url              |         The authentication URL of the iGrafx platform.         |       Authentication URL |
+| api_url               |       The URL of the iGrafx API platform you are using.        |                  API URL | 
+| wg_key                |     The Private Key of the workgroup you are working with.     |            Workgroup Key |
+| wg_id                 |         The ID of the workgroup You are working with.          |             Workgroup ID |
+| new_project_id        |              The ID of the newly created project.              |           New Project ID |
+
+
+While using this node, the flow variables will not be modified, it will simply take those of the latter node.
+Only the **Project Data** table is added.
+
+## The iGrafx Mining Completed Cases Node
+
+The iGrafx Mining Completed Cases Node is a node that fetches completed cases for a specific project.
+
+To use it, double click on the **iGrafx Mining Completed Cases** node. Enter 
+the **ID** of the project for which you wish to retrieve completed cases. 
+Then, enter the page index for **pagination**.
+You must also set a **limit** which represents the maximum number of items to return per page.
+Optionally, you may enter a case ID in the **search query** to filter the results by case ID.
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable        |                        Meaning                         |              Description |
+|:---------------------|:------------------------------------------------------:|-------------------------:|
+| auth_url             |     The authentication URL of the iGrafx platform.     |       Authentication URL |
+| api_url              |   The URL of the iGrafx API platform you are using.    |                  API URL | 
+| wg_key               | The Private Key of the workgroup you are working with. |            Workgroup Key |
+| wg_id                |     The ID of the workgroup You are working with.      |             Workgroup ID |
+| new_project_id       |          The ID of the newly created project.          |           New Project ID |
+| completed_cases_data |            The case IDs of completed cases             |          Completed Cases |
+
+
+The complete cases data can be found in the flow variables. It is called `completed_cases_data`.
+
+If you are met with the error: `There is no END CASE rule set or there is overfiltering being done`, it means that there is no **Business Rule** set for the project.
+You can set one by going to the projects settings.
+
+## The iGrafx Mining Project Variant Fetcher Node
+
+The iGrafx Mining Project Variant Fetcher node is a node that allows users to retrieve information about project variants.
+By specifying the Project ID, users can establish a connection with the iGrafx API and retrieve details about project variants,
+such as names, IDs, number of occurences and associated information.
+
+To use it, double click the **iGrafx Mining Project Variant Fetcher** node. 
+Set the **project ID** of the project for which you want to get variant information.
+You must also set the **page index** for pagination, 
+the **limit** (representing the maximum number of items per page) and optionally, you can set a string in the search query. 
+It represents the search query to filter the variants by name.
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable  |                        Meaning                         |        Description |
+|:---------------|:------------------------------------------------------:|-------------------:|
+| auth_url       |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url        |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key         | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id          |     The ID of the workgroup You are working with.      |       Workgroup ID |
+| new_project_id |          The ID of the newly created project.          |     New Project ID |
+| variants_data  |             Information about the variants             |     Variants Cases |
+
+When the node is successfully executed, for each variant, it will return its ID, name,and number of occurences under the flow variable `variants_data`. 
+
+## The iGrafx Mining Project Mapping Info Fetcher Node
+
+**The iGrafx Mining Project Mapping Info Fetcher** node is a node that returns the **mapping information** of a project.
+It returns the Name, Aggregation, and the database's column name, to name a few, for each dimension and metric.
+
+To use it, double click **The iGrafx Mining Project Mapping Info Fetcher** node and set the **project ID** of the project
+for which you want to retrieve mapping information.
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable  |                        Meaning                         |        Description |
+|:---------------|:------------------------------------------------------:|-------------------:|
+| auth_url       |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url        |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key         | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id          |     The ID of the workgroup You are working with.      |       Workgroup ID |
+| new_project_id |          The ID of the newly created project.          |     New Project ID |
+| mapping_infos  |      Mapping information for a specified project       |      Mapping Infos |
+
+When the node is successfully executed, it will return the `mapping_infos` of the given project. 
+
+## The iGrafx Mining Project Deletion Node
+
+**The iGrafx Mining Project Deletion** Node is a node that allows you to delete a project by giving its ID.
+
+To use it, double click on it and enter the project ID of the project you wish to delete. 
+After executing, if the node becomes green, that means the project has been deleted.
+
+Flow variables are not modified with this node.
 
 ## The iGrafx Mining Extension Example
 

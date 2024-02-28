@@ -9,6 +9,6 @@ extension_module: igrafx_knime_extension # The .py Python module containing the 
 description: The iGrafx Knime Extension # Human readable bundle name / description
 long_description: The iGrafx Knime Extension contains nodes to upload data to the iGrafx platform.
 group_id: org.igx
-version: 1.0.0 # Version of this Python node extension
+version: 1.2.0 # Version of this Python node extension
 vendor: iGrafx LLC
 license_file: LICENSE.TXT # Best practice: put your LICENSE.TXT next to the knime.yml; otherwise you would need to change to path/to/LICENSE.txt

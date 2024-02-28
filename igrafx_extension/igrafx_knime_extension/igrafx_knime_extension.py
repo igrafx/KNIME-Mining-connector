@@ -271,22 +271,24 @@ class iGrafxFileUploadNode:
 @knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
 @knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxColumnMappingFetcherNode:
-    """Node to fetch mapping information from the iGrafx Mining API.
+    """Node to fetch Column Mapping of a project from the iGrafx Mining API.
 
-    The iGrafx Mining Mapping Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve mapping information for a specified project.
-    By providing the Project ID, this node establishes a connection with the iGrafx API and fetches details about metrics and dimensions.
+The iGrafx Column Mapping Fetcher node in KNIME is a node designed to retrieve the column mapping of a project.
+It enables users to fetch column mapping details from an iGrafx project, providing insights into the structure and organization of data within the specified project.
 
-    Key Features:
+**Key Features:**
+1. **Data Retrieval:** The node retrieves column mapping information from an iGrafx project, including details such as column names, types, and indices.
+2. **Integration:** Enables integration of iGrafx data into KNIME workflows, allowing users to incorporate iGrafx data alongside other data sources for comprehensive analysis.
+3. **Automation:** Supports automation of data retrieval tasks, streamlining the process of accessing column mapping information from iGrafx projects within the KNIME environment.
+4. **Flexibility:** Provides flexibility in configuring and specifying parameters for accessing iGrafx data, ensuring compatibility with various project setups and requirements.
+5. **Error Handling:** Includes error handling mechanisms to manage situations where column mapping information may not be available or accessible, allowing for robust workflow execution.
 
-    1. Project Mapping Details: Fetches mapping information, including metrics and dimensions, for the specified project.
-    It returns the Name, Aggregation, and the database's column name, to name a few, for each dimension and metric.
+**Use Cases:**
+- **Data Exploration:** Users can utilize the node to explore and understand the structure of data stored within iGrafx projects, facilitating data exploration and analysis efforts.
+- **Data Integration:** Facilitates the integration of iGrafx data with other data sources within KNIME workflows, enabling comprehensive data analysis and processing tasks.
+- **Workflow Automation:** Supports workflow automation by enabling the retrieval of column mapping information programmatically, reducing manual effort and improving workflow efficiency.
 
-    2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data retrieval and interaction with iGrafx Mining resources.
-
-    3. Dynamic Configuration: Allows users to dynamically provide the Project ID as a parameter or use a predefined ID from the flow variables.
-
-    The iGrafx Mapping Info Fetcher node facilitates the retrieval of essential mapping information, providing users with insights into metrics and dimensions associated with a specific project.
-
+**Overall, the "iGrafx Column Mapping Fetcher" node enhances the capabilities of KNIME workflows by providing seamless access to column mapping information from iGrafx projects, thereby empowering users to perform comprehensive data analysis and processing tasks within the KNIME environment.**
     """
 
     # Define the project ID for the project you want to retrieve column mapping

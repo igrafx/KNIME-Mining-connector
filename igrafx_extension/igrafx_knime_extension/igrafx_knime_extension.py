@@ -234,7 +234,7 @@ class iGrafxFileUploadNode:
         
         my_project = wg.project_from_id(project_id)
 
-        file_structure = igx.FileStructure(file_type=igx.FileType.csv)
+        file_structure = igx.FileStructure(charset="UTF-8", file_type=igx.FileType.csv)
 
         column_mapping = igx.ColumnMapping.from_json(column_dict)
 
@@ -252,9 +252,8 @@ class iGrafxFileUploadNode:
             # Create a temporary file and write the CSV data to it
             temp_csv_file = tempfile.NamedTemporaryFile(suffix=".csv", delete=False)
             temp_csv_file_path = temp_csv_file.name
-
             # Write the CSV data to the temporary file
-            with open(temp_csv_file_path, 'w') as csv_file:
+            with open(temp_csv_file_path, 'w', encoding=file_structure.charset) as csv_file:
                 csv_file.write(csv_data)
 
             # Add the file

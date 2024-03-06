@@ -201,11 +201,14 @@ else it does not.
 
 ## Using the iGrafx File Upload Node
 
-The iGrafx Mining File Upload Node is the node that will allow you to upload you file by simply entering a [column mapping](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data), a Project ID and a chunk size value.
+The iGrafx Mining File Upload Node is the node that will allow you to upload you file by simply entering a file structure encoding, a [column mapping](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data), a Project ID and a chunk size value.
 A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
 
 
-To use it, double click on it and enter the  column mapping of the file you wish to upload.
+To use the node, double click on it and enter the encoding that you wish to use for the file. 
+Note that by default, it is set to ``UTF-8`` but you can modify it as you like.  
+
+Then, enter the column mapping of the file you wish to upload.
 This has to be done in a JSON format. 
 In this JSON, for each column, there is a column number (for instance *"col1"*).
 It is then followed by the column's name, its index number and the column type.
@@ -225,7 +228,7 @@ You can also add `DIMENSION` and `METRIC` columns. For instance:
 {       "col1": "name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
 ````
 
-More information about Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
+More information about File Structures, Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
 
 You must also input your **Project ID**. It can be found in the URL, when you are in the project. Or you can get it with the Project Creator node output.
 

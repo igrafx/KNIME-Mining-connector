@@ -210,7 +210,9 @@ The iGrafx Mining File Upload Node is the node that will allow you to upload you
 A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
 
 
-To use it, double click on it and enter the  column mapping of the file you wish to upload.
+**Please make sure that you are using ``UTF-8`` for the data you are planning to send, else it will result in an error.**
+
+To use the node, double click on it and , enter the column mapping of the file you wish to upload.
 This has to be done in a JSON format. 
 In this JSON, for each column, there is a column number (for instance *"col1"*).
 It is then followed by the column's name, its index number and the column type.
@@ -230,7 +232,7 @@ You can also add `DIMENSION` and `METRIC` columns. For instance:
 {       "col1": "name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
 ````
 
-More information about Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
+More information about File Structures, Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
 
 You must also input your **Project ID**. It can be found in the URL, when you are in the project. Or you can get it with the Project Creator node output.
 
@@ -246,7 +248,7 @@ This node takes a table as input and outputs a table.
 Here are the **flow variables** of this node:
 
 | Flow variable         |               Meaning                                          |             Description  |
-|:----------------------|:--------------------------------------------------------------:|-------------------------:|
+|:----------------------|:--------------    ------------------------------------------------:|-------------------------:|
 | auth_url              |         The authentication URL of the iGrafx platform.         |       Authentication URL |
 | api_url               |       The URL of the iGrafx API platform you are using.        |                  API URL | 
 | wg_key                |     The Private Key of the workgroup you are working with.     |            Workgroup Key |

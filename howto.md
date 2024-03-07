@@ -201,7 +201,7 @@ else it does not.
 
 ## Using the iGrafx File Upload Node
 
-The iGrafx Mining File Upload Node is the node that will allow you to upload you file by simply entering a file structure encoding, a [column mapping](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data), a Project ID and a chunk size value.
+The iGrafx Mining File Upload Node is the node that will allow you to upload you file by simply entering a [column mapping](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data), a Project ID and a chunk size value.
 A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
 
 

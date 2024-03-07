@@ -190,16 +190,11 @@ class iGrafxFileUploadNode:
 
     - Column Mapping Support: Accommodates the transmission of column mapping details in JSON format, facilitating structured and organized data transfer.
 
-    - File Structure encoding Support: Allows users to specify the encoding of the file structure, ensuring that the uploaded files are properly encoded.
-    
     - Workgroup Object Connectivity: Establishes a secure connection to the iGrafx Mining API by utilizing the Workgroup Object, ensuring authentication and access permissions.
 
     This node empowers users to seamlessly integrate file upload functionalities into their KNIME workflows, enabling efficient data transfer and synchronization with the iGrafx Mining platform. By leveraging this node, users can ensure the accurate and secure uploading of files while maintaining structured data organization within the iGrafx ecosystem.
     """
-    # Define parameters for file upload
-    filestructure_encoding = knext.StringParameter("File Structure Encoding",
-                                                   "The encoding of the file structure. By default, UTF-8 is used.",
-                                                   "UTF-8")
+
     column_dict = knext.StringParameter("Column Mapping",
                                         "The column mapping of the file you want to upload in JSON format.")
     given_project_id = knext.StringParameter("Project ID",
@@ -216,7 +211,6 @@ class iGrafxFileUploadNode:
     def execute(self, exec_context, input_data):
 
         column_dict = self.column_dict
-        file_structure_encoding = self.filestructure_encoding
 
         # Get Workgroup object from the previous node
         wg = igx.Workgroup(
@@ -244,7 +238,7 @@ class iGrafxFileUploadNode:
         
         my_project = wg.project_from_id(project_id)
 
-        file_structure = igx.FileStructure(charset=file_structure_encoding, file_type=igx.FileType.csv)
+        file_structure = igx.FileStructure(charset="UTF-8", file_type=igx.FileType.csv)
 
         column_mapping = igx.ColumnMapping.from_json(column_dict)
 

@@ -1,7 +1,7 @@
 .ONESHELL:
 VERSION=5.1
 
-#https://docs.knime.com/latest/pure_python_node_extensions_guide/index.html#extension-bundling
+#Doc for bundling: https://docs.knime.com/latest/pure_python_node_extensions_guide/index.html#extension-bundling
 
 ifeq ($(OS),Windows_NT)
 # Windows commands

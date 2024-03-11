@@ -48,7 +48,7 @@ Go to the **Available Software sites** section and click the add button.
 In the window that pops up, make sure the information are as follows:
 
 - Name: iGrafx Extension
-- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases/5.1
+- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases/5.2
 
 Copy and paste the location in the respective input.
 

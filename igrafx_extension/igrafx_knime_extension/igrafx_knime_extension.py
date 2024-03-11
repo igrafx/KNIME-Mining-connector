@@ -1,13 +1,9 @@
 import logging
-import os
-
 import knime.extension as knext
 import igrafx_mining_sdk as igx
 import tempfile
 import requests as req
-import xml.etree.ElementTree as ET
-import pandas as pd
-import xml.dom.minidom
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -20,22 +16,37 @@ igx_category = knext.category(
     icon="icons/igx_logo.png",
 )
 
-@knext.node(name="iGrafx Mining API Connection", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png", category=igx_category)
-@knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
-@knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
+
+@knext.node(name="iGrafx Mining API Connection",
+            node_type=knext.NodeType.OTHER,
+            icon_path="icons/igx_logo.png",
+            category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxAPINode:
     """Node to connect to the iGrafx Mining API.
-    The iGrafx Mining API Connection node serves as the gateway to establish a seamless connection with the iGrafx Mining API. By providing vital credentials such as the Workgroup ID, Workgroup Private Key, API URL, and Authentication URL, this node enables users to access and utilize the iGrafx API and SDK functionalities within the KNIME environment.
+    The iGrafx Mining API Connection node serves as the gateway to establish a seamless
+    connection with the iGrafx Mining API.
+    By providing vital credentials such as the Workgroup ID, Workgroup Private Key, API URL, and Authentication URL,
+     this node enables users to access and utilize the iGrafx API and SDK functionalities within the KNIME environment.
 
     Key features of the iGrafx Mining API Connection node include:
 
-    1. Authentication Configuration: Input fields for Workgroup ID, Workgroup Private Key, API URL, and Authentication URL, allowing users to securely authenticate their access to the iGrafx Mining API.
+    1. Authentication Configuration: Input fields for Workgroup ID, Workgroup Private Key, API URL,
+    and Authentication URL, allowing users to securely authenticate their access to the iGrafx Mining API.
 
-    2. Seamless Integration: Facilitates the integration of iGrafx API and SDK capabilities directly into KNIME workflows, ensuring efficient data transfer and interaction with the iGrafx Mining platform.
+    2. Seamless Integration: Facilitates the integration of iGrafx API and SDK capabilities directly into
+     KNIME workflows, ensuring efficient data transfer and interaction with the iGrafx Mining platform.
 
-    3. Essential Connectivity: An essential prerequisite for leveraging iGrafx API features within KNIME, enabling users to perform various operations, such as data retrieval, analysis, and interaction with iGrafx Mining resources.
+    3. Essential Connectivity: An essential prerequisite for leveraging iGrafx API features within KNIME,
+    enabling users to perform various operations, such as data retrieval, analysis,
+     and interaction with iGrafx Mining resources.
 
-    The iGrafx Mining API Connection node acts as a foundational element, empowering users to harness the full potential of the iGrafx Mining API and SDK functionalities within the KNIME analytics platform, enabling seamless data flow and interaction with iGrafx resources.
+    The iGrafx Mining API Connection node acts as a foundational element,
+    empowering users to harness the full potential of the iGrafx Mining API and SDK functionalities within the
+    KNIME analytics platform, enabling seamless data flow and interaction with iGrafx resources.
 
     """
 
@@ -71,32 +82,45 @@ class iGrafxAPINode:
         # Return input data as output
         return input_data
 
-@knext.node(name="iGrafx Mining Project Creation", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png", category=igx_category)
-@knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
-@knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
+
+@knext.node(name="iGrafx Mining Project Creation",
+            node_type=knext.NodeType.OTHER,
+            icon_path="icons/igx_logo.png",
+            category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxProjectCreationNode:
     """Node to create an iGrafx Mining  roject.
-    The iGrafx Mining Project Creation node in KNIME facilitates the seamless creation of projects within your iGrafx Workgroup. By utilizing this node, users can efficiently generate new projects by providing  a project name and description.
+    The iGrafx Mining Project Creation node in KNIME facilitates the seamless creation of projects within your
+    iGrafx Workgroup. By utilizing this node,
+    users can efficiently generate new projects by providing  a project name and description.
 
     Key Features:
 
-    - Effortless Project Setup: Streamline the process of creating projects in your iGrafx Workgroup directly within KNIME.
+    - Effortless Project Setup: Streamline the process of creating projects in your iGrafx Workgroup directly within
+    KNIME.
 
-    - Customizable Project Details: Specify a unique project name and description, tailoring each project to its intended purpose or scope.
+    - Customizable Project Details: Specify a unique project name and description, tailoring each project to its
+    intended purpose or scope.
 
-    - Enhanced Workflow Control: Enable efficient management of projects by initiating them directly from your KNIME workflow.
+    - Enhanced Workflow Control: Enable efficient management of projects by initiating them directly from your
+    KNIME workflow.
 
-    With this node, users gain the ability to integrate project creation tasks seamlessly into their KNIME workflows, ensuring smoother project initiation and management within the iGrafx environment.
+    With this node, users gain the ability to integrate project creation tasks seamlessly into their KNIME workflows,
+     ensuring smoother project initiation and management within the iGrafx environment.
     """
 
     # Define parameters for project creation
-    project_name = knext.StringParameter("Project Name", "The name of the project you want to create.")
-    project_description = knext.StringParameter("Project Description", "The description of the project you want to create.")
+    project_name = knext.StringParameter("Project Name",
+                                         "The name of the project you want to create.")
+    project_description = knext.StringParameter("Project Description",
+                                                "The description of the project you want to create.")
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration
         configure_context.set_warning("Creating iGrafx Mining Project")
-        
 
     def execute(self, exec_context, input_data):
 
@@ -122,26 +146,37 @@ class iGrafxProjectCreationNode:
         return input_data
 
 
-@knext.node(name="iGrafx Mining Column Mapping Status", node_type=knext.NodeType.OTHER, icon_path="icons/igx_logo.png", category=igx_category)
-@knext.input_table(name="Input Table", description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
-@knext.output_table(name="Output Table", description="A Table Output that provides data (CSV or other) out of the node.")
+@knext.node(name="iGrafx Mining Column Mapping Status",
+            node_type=knext.NodeType.OTHER,
+            icon_path="icons/igx_logo.png",
+            category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
 class ColumnMappingStatusNode:
     """Node to check if a column mapping exists in the project.
-    The Mining Column Mapping Status node plays a pivotal role in assessing the presence or absence of a column mapping within a specified project within the iGrafx Workgroup environment.
+    The Mining Column Mapping Status node plays a pivotal role in assessing the presence or absence
+    of a column mapping within a specified project within the iGrafx Workgroup environment.
 
     Key Features:
 
     - Mapping Assessment: This node verifies the existence of a column mapping within the specified project.
 
-    - Boolean Output: Outputs a Boolean status, indicating whether a column mapping is present (True) or absent (False) in the designated project.
+    - Boolean Output: Outputs a Boolean status, indicating whether a column mapping is present (True) or absent (False)
+    in the designated project.
 
-    - Validation Functionality: Allows users to confirm the availability of column mapping, assisting in decision-making for subsequent actions or processes within the workflow.
+    - Validation Functionality: Allows users to confirm the availability of column mapping, assisting
+    in decision-making for subsequent actions or processes within the workflow.
 
-    By providing a clear status regarding the existence of column mapping in the specified project, the Column Mapping Status node empowers users to make informed decisions based on the presence or absence of the column mapping within the iGrafx Workgroup project.
+    By providing a clear status regarding the existence of column mapping in the specified project,
+    the Column Mapping Status node empowers users to make informed decisions based on the presence or
+    absence of the column mapping within the iGrafx Workgroup project.
     """
 
     # Define parameters for column mapping assessment
-    given_project_id = knext.StringParameter("Project ID", "The ID of the project you want to check the column mapping.")
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project you want to check the column mapping.")
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration

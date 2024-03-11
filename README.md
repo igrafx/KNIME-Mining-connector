@@ -51,7 +51,7 @@ In the window that pops up, make sure the information is as follows:
 - Name: iGrafx Extension
 - Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases/5.2
 
-Copy and paste the location in the respective input.
+Copy and paste the location in the respective input. **5.2** is the latest Knime version and the build will work with that version.
 
 ![location](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/location2.png)
 

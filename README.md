@@ -27,6 +27,7 @@ Powered by the [iGrafx P360 Live Mining SDK](https://github.com/igrafx/mining-py
 ### Prerequisites:
 
 - **iGrafx Account**: To maximize the benefits of this connector, ensure you have an active iGrafx account. If you don't have one, please contact us to set up your account.
+- **Please make sure you have the 5.2 version of Knime as the latest release works with that version.**
 
 For a step-by-step guide on setting up and using the iGrafx KNIME Mining Connector, refer to the detailed tutorial in the [howto.md](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/howto.md) file.
 
@@ -35,6 +36,9 @@ Empower your Knime workflows with seamless data transmission to the iGrafx Minin
 ## Installing the iGrafx Extension
 
 To install the **iGrafx Extension** on Knime, open Knime.
+
+**Please make sure you have the 5.2 version of Knime as the latest release works with that version.**
+
 
 Click on the **settings** icon in the top right of the window.
 
@@ -49,9 +53,11 @@ Go to the **Available Software sites** section and click the add button.
 In the window that pops up, make sure the information is as follows:
 
 - Name: iGrafx Extension
-- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases/5.2
+- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases
 
-Copy and paste the location in the respective input. **5.2** is the latest Knime version and the build will work with that version.
+Copy and paste the location in the respective input. 
+
+**5.2 is the latest Knime version and the build will work with that version.**
 
 ![location](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/location2.png)
 

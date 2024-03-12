@@ -10,6 +10,9 @@ This connector simplifies the data transfer process, eliminating complexity and 
 
 To maximize the benefits of this extension, ensure you have an active iGrafx account. If you don't have one, please contact us to set up your account.
 
+**Please make sure you have the 5.2 version of Knime as the latest release works with that version.**
+
+
 ***
 
 ## Table of Contents
@@ -48,9 +51,11 @@ Go to the **Available Software sites** section and click the add button.
 In the window that pops up, make sure the information are as follows:
 
 - Name: iGrafx Extension
-- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases/5.2
+- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases
 
-Copy and paste the location in the respective input. **5.2** is the latest Knime version and the build will work with that version.
+Copy and paste the location in the respective input. 
+
+**5.2 is the latest Knime version and the build will work with that version.**
 
 ![location2](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/location2.png)
 

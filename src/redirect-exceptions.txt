@@ -1,2 +1,0 @@
-https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/feat/PROC-3342-build_new_version_knime/igrafx_extension/releases/5.2
-    - https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/dev/igrafx_extension/releases/5.1

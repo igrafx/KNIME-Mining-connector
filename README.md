@@ -38,7 +38,7 @@ Empower your Knime workflows with seamless data transmission to the iGrafx Minin
 To install the **iGrafx Extension** on Knime, open Knime.
 
 **Please make sure you have the 5.2 version of Knime as the latest release works with that version.**
-
+ 
 
 Click on the **settings** icon in the top right of the window.
 

@@ -36,7 +36,7 @@ To maximize the benefits of this extension, ensure you have an active iGrafx acc
 17. [Further Documentation](#further-documentation)
 
 ## Installing the iGrafx Extension
-To install the **iGrafx Extension** on Knime as a user, open Knime.
+To install the **iGrafx Extension** on Knime as a user, open Knime. 
 
 Click on the **settings** icon in the top right of the window.
 

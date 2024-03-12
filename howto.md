@@ -43,7 +43,7 @@ Then, click on the **arrow** next to the **Install/Update** section.
 
 Go to the **Available Software sites** section and click the add button.
 
-![Available_Software](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/available_software.png)
+![Available_Software](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/available_software_5.2.png)
 
 In the window that pops up, make sure the information are as follows:
 
@@ -52,7 +52,7 @@ In the window that pops up, make sure the information are as follows:
 
 Copy and paste the location in the respective input.
 
-![location2](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/location2.png)
+![location2](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/location3.png)
 
 Click on **Add**, the **Apply and Close**.
 
@@ -82,7 +82,7 @@ Another window will pop up during the installation, asking if you trust the exte
 ![Trust_window](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/trusted.png)
 
 Tick the **Always trust all content** box. Then, on the next window that pops up, click on **Yes I accept the risk**.
-You can now click on **Trust Slected**. Wait for the installation to finish.
+You can now click on **Trust Selected**. Wait for the installation to finish.
 Don't restart the platform just yet.
 
 You can now restart Knime.
@@ -92,7 +92,7 @@ Then, click on **More Advanced Nodes**. The iGrafx nodes should be there.
 
 ![nodes_repo](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/node_repo.png)
 
-**For MacOS users** please install **XCode**. If it is not installed this will cause issues with the extension and you will not be able to use the extension.
+**For macOS users** please install **XCode**. If it is not installed this will cause issues with the extension, and you will not be able to use the extension.
 Please run ``sudo xcodebuild -license`` from within a Terminal window to review and agree to the **Xcode and Apple SDKs license**.
 
 Congratulations! You can now refer to other sections for details on how to use the nodes.
@@ -125,7 +125,7 @@ In the next sections of this document, each node will be thoroughly explained.
 The iGrafx Mining API Connection Node is the Node that will allow you to connect to the API and use it through the SDK.
 Note that this node is **mandatory** as it allows you to establish a connection with the API.
 
-To use this node, double click on it. The following window will pop up.
+To use this node, double-click on it. The following window will pop up.
 
 ![component_parameters](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_connection_config.png)
 
@@ -150,7 +150,9 @@ The flow variables are automatically passed to other iGrafx nodes.
 
 The iGrafx Mining Project Creation node is an optional node that allows you to create a project in a workgroup.
 
-To use it, double click on the node and enter the **name** you want to give your project and its **description**.
+To use it, double-click on the node and enter the **name** you want to give your project and its **description**.
+
+Note that the **description** is optional.
 
 This node takes a table as input and outputs a table.
 
@@ -177,8 +179,8 @@ A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
 Further documentation on the column mapping and file structure can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
 
 To use the node, you can either place the node after the **iGrafx Project Creation** node or the **iGrafx File Upload** node
-to automatically get the project ID, or you can manually set it by double clicking on the node.
-Please note that if you set the project ID by double clicking the node, it is prioritized over the project ID connection.
+to automatically get the project ID, or you can manually set it by double-clicking on the node.
+Please note that if you set the project ID by double-clicking the node, it is prioritized over the project ID connection.
 
 If the Column Mapping Status node is green, it means that a column mapping exists for this project.
 If there are other nodes connected after this one, they will also pass as the column mapping exists.
@@ -212,7 +214,7 @@ A column mapping is a list of columns describing a document(.CSV, .XLSX, .XLS).
 
 **Please make sure that you are using ``UTF-8`` for the data you are planning to send, else it will result in an error.**
 
-To use the node, double click on it and , enter the column mapping of the file you wish to upload.
+To use the node, double-click on it and , enter the column mapping of the file you wish to upload.
 This has to be done in a JSON format. 
 In this JSON, for each column, there is a column number (for instance *"col1"*).
 It is then followed by the column's name, its index number and the column type.
@@ -229,7 +231,8 @@ Beneath, you can find an example of what is expected.
 
 You can also add `DIMENSION` and `METRIC` columns. For instance:
 ````json
-{       "col1": "name": "end_date", "columnIndex": "3", "columnType": "TIME", "format": "yyyy-MM-dd HH:mm:ss.SSSSSS"}         }
+{"col5": {"name": "Price", "columnIndex": "4", "columnType": "METRIC", "isCaseScope": false, 
+        "groupedTasksAggregation": "SUM", "aggregation": "SUM", "unit": "unit"}}
 ````
 
 More information about File Structures, Columns and column mappings can be found [here](https://github.com/igrafx/mining-python-sdk/blob/dev/howto.md#sending-data).
@@ -247,15 +250,15 @@ This node takes a table as input and outputs a table.
 
 Here are the **flow variables** of this node:
 
-| Flow variable         |               Meaning                                          |             Description  |
-|:----------------------|:--------------    ------------------------------------------------:|-------------------------:|
-| auth_url              |         The authentication URL of the iGrafx platform.         |       Authentication URL |
-| api_url               |       The URL of the iGrafx API platform you are using.        |                  API URL | 
-| wg_key                |     The Private Key of the workgroup you are working with.     |            Workgroup Key |
-| wg_id                 |         The ID of the workgroup You are working with.          |             Workgroup ID |
-| new_project_id        |              The ID of the newly created project.              |           New Project ID |
-| column_mapping_exists | A boolean indicating whether ot not the column mapping exists. |    Column Mapping Status |
-| chunk_size            |            The number of rows to process at a time             | Number of Rows per Chunk |
+| Flow variable         |                             Meaning                             |              Description |
+|:----------------------|:---------------------------------------------------------------:|-------------------------:|
+| auth_url              |         The authentication URL of the iGrafx platform.          |       Authentication URL |
+| api_url               |        The URL of the iGrafx API platform you are using.        |                  API URL | 
+| wg_key                |     The Private Key of the workgroup you are working with.      |            Workgroup Key |
+| wg_id                 |          The ID of the workgroup You are working with.          |             Workgroup ID |
+| new_project_id        |              The ID of the newly created project.               |           New Project ID |
+| column_mapping_exists | A boolean indicating whether ot not the column mapping exists.  |    Column Mapping Status |
+| chunk_size            |             The number of rows to process at a time             | Number of Rows per Chunk |
 
 
 ## The iGrafx Mining Project Data Node
@@ -264,7 +267,7 @@ The iGrafx Mining Project Data Node is a node that can be used to retrieve data 
 This information is based on the node datasource. It is fetched, cleaned, filtered and returned.
 It returns information such as the **case ID**, the **task ID**, corresponding **vertex IDs** and much more.
 
-To use it, double click on the **iGrafx Mining Project Data** node. Make sure there is an iGrafx API Connection node active first.
+To use it, double-click on the **iGrafx Mining Project Data** node. Make sure there is an iGrafx API Connection node active first.
 Enter the ID of the project for which you wish to retrieve data and execute it.
 
 It will return two tables: the **Original Table** and a table containing the **Project's Data**.
@@ -273,7 +276,7 @@ This node takes a table as input and outputs 2 tables.
 
 Here are the **flow variables** of this node:
 
-| Flow variable         |               Meaning                                          |             Description  |
+| Flow variable         |                            Meaning                             |              Description |
 |:----------------------|:--------------------------------------------------------------:|-------------------------:|
 | auth_url              |         The authentication URL of the iGrafx platform.         |       Authentication URL |
 | api_url               |       The URL of the iGrafx API platform you are using.        |                  API URL | 
@@ -289,7 +292,7 @@ Only the **Project Data** table is added.
 
 The iGrafx Mining Completed Cases Node is a node that fetches completed cases for a specific project.
 
-To use it, double click on the **iGrafx Mining Completed Cases** node. Enter 
+To use it, double-click on the **iGrafx Mining Completed Cases** node. Enter 
 the **ID** of the project for which you wish to retrieve completed cases. 
 Then, enter the page index for **pagination**.
 You must also set a **limit** which represents the maximum number of items to return per page.
@@ -318,9 +321,9 @@ You can set one by going to the projects settings.
 
 The iGrafx Mining Project Variant Fetcher node is a node that allows users to retrieve information about project variants.
 By specifying the Project ID, users can establish a connection with the iGrafx API and retrieve details about project variants,
-such as names, IDs, number of occurences and associated information.
+such as names, IDs, number of occurrences and associated information.
 
-To use it, double click the **iGrafx Mining Project Variant Fetcher** node. 
+To use it, double-click the **iGrafx Mining Project Variant Fetcher** node. 
 Set the **project ID** of the project for which you want to get variant information.
 You must also set the **page index** for pagination, 
 the **limit** (representing the maximum number of items per page) and optionally, you can set a string in the search query. 
@@ -339,14 +342,14 @@ Here are the **flow variables** of this node:
 | new_project_id |          The ID of the newly created project.          |     New Project ID |
 | variants_data  |             Information about the variants             |     Variants Cases |
 
-When the node is successfully executed, for each variant, it will return its ID, name,and number of occurences under the flow variable `variants_data`. 
+When the node is successfully executed, for each variant, it will return its ID, name,and number of occurrences under the flow variable `variants_data`. 
 
 ## The iGrafx Mining Project Mapping Info Fetcher Node
 
 **The iGrafx Mining Project Mapping Info Fetcher** node is a node that returns the **mapping information** of a project.
 It returns the Name, Aggregation, and the database's column name, to name a few, for each dimension and metric.
 
-To use it, double click **The iGrafx Mining Project Mapping Info Fetcher** node and set the **project ID** of the project
+To use it, double-click **The iGrafx Mining Project Mapping Info Fetcher** node and set the **project ID** of the project
 for which you want to retrieve mapping information.
 
 This node takes a table as input and outputs a table.
@@ -368,7 +371,7 @@ When the node is successfully executed, it will return the `mapping_infos` of th
 
 **The iGrafx Mining Project Deletion** Node is a node that allows you to delete a project by giving its ID.
 
-To use it, double click on it and enter the project ID of the project you wish to delete. 
+To use it, double-click on it and enter the project ID of the project you wish to delete. 
 After executing, if the node becomes green, that means the project has been deleted.
 
 Flow variables are not modified with this node.
@@ -386,7 +389,7 @@ Here we use the File Reader Node as an Example.
 With this node, you will be able to select the file you wish to upload to the iGrafx platform.
 You can try it with the [100_fake_cases.csv](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/igrafx_extension/100_fake_cases.csv) file.
 
-You can then connect it to any node you wish to try, fill in the information by double clicking the node and execute the nodes.
+You can then connect it to any node you wish to try, fill in the information by double-clicking the node and execute the nodes.
 
 Set your credentials on the iGrafx Mining API Connection node.
 
@@ -437,7 +440,7 @@ You can find the download link [here](https://www.knime.com/downloads).
 
 ### Download Anaconda
 
-To be able to use Python in Knime, Anaconda must be installed, otherwise Python nodes will not be accessible and it will be impossible to use the iGrafx Knime Mining Connector.
+To be able to use Python in Knime, Anaconda must be installed, otherwise Python nodes will not be accessible, and it will be impossible to use the iGrafx Knime Mining Connector.
 
 You can download Anaconda [here](https://www.anaconda.com/download).
 
@@ -460,7 +463,7 @@ When that is done, configure the KNIME Python Integration. To do so, click on th
 
 ![settings_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/settings_icon.png)
 
-When clicking on it you will see a section called **Conda**. 
+When clicking on it, you will see a section called **Conda**. 
 Go to that section and browse for your **Conda Installation Directory**. 
 When the correct path is entered, the conda version will appear underneath. The path may look like this: `C:\Users\Your Name\AppData\Local\anaconda3`.
 **Please note that the path to your Anaconda3 may differ depending on how and where you installed it.** 
@@ -483,7 +486,7 @@ After having executed the command, do the following command.
 git clone https://github.com/igrafx/KNIME-Mining-connector.git
 ```
 
-Doing this will clone the iGrafx KNIME Mining Connector Github repository to the new folder you have created. This simply means that the project was copied from Github to your new folder. 
+Doing this will clone the iGrafx KNIME Mining Connector GitHub repository to the new folder you have created. This simply means that the project was copied from GitHub to your new folder. 
 
 ### Checking the Project Structure
 
@@ -520,20 +523,20 @@ The ``igrafx_knime_extension`` will be your new extension. In it, you will find 
  - The ``icons`` folder contain the node icons.
  - The ``knime.yml``, which contains important metadata about your extension, such as the name, the version, the licence, etc...
  - The ``igrafx_knime_extension.py``, which contains Python definitions of the nodes of the extension.
- - The ``config.yml``, just outside of the folder, which contains the information that binds the extension and the corresponding conda/Python environment with KNIME Analytics Platform.
+ - The ``config.yml``, just outside the folder, which contains the information that binds the extension and the corresponding conda/Python environment with KNIME Analytics Platform.
 
 ### Creating a new Conda Python environment
-We need to **create an environment** containing the [knime-python-base metapackage](https://anaconda.org/knime/knime-python-base)
+We need to **create an environment** containing the [knime-python-base meta package](https://anaconda.org/knime/knime-python-base)
 and the node development API [knime-extension](https://anaconda.org/knime/knime-extension).
 
 To do this, open **Anaconda prompt** and copy the following command:
 ```shell
-conda create -n <Your Environment Name> python=3.9.16 knime-python-base=4.7 knime-extension=4.7 -c knime -c conda-forge
+conda create -n <Your Environment Name> python=3.9.16 knime-python-base=5.2 knime-extension=5.2 -c knime -c conda-forge
 ```
 
 If you would like to install the packages into an environment that already exists you can run the following command from within that environment:
 ````shell
-conda install knime-python-base=4.7 knime-extension=4.7 -c knime -c conda-forge
+conda install knime-python-base=5.2 knime-extension=5.2 -c knime -c conda-forge
 ````
 Please note that you must append both the ``knime`` and ``conda-forge`` channels to the commands to install the ``mandatory packages``.
 To install ``additional packages``, for your specific use case, it is better to use the ``conda-forge`` channel.
@@ -551,7 +554,7 @@ When the terminal is opened, enter the following command:
 ```bash
 conda activate <Your Environment Name>
 ```
-Doing this will activate the environment you created above and you will then be able to install the package.
+Doing this will activate the environment you created above, and you will then be able to install the package.
 Finally, you can install **the latest** the iGrafx SDK with the following command:
 ```bash
 pip install igrafx-mining-sdk
@@ -567,7 +570,7 @@ For instance:
   ```shell
   pip install igrafx-mining-sdk==2.28.0
   ```
-You can go to the [PyPi page](https://pypi.org/project/igrafx-mining-sdk/2.25.0/) of the SDK to check the different versions. You can also to the SDK's [Github page](https://github.com/igrafx/mining-python-sdk) if you need additional information about the SDK.
+You can go to the [PyPi page](https://pypi.org/project/igrafx-mining-sdk/2.25.0/) of the SDK to check the different versions. You can also to the SDK's [GitHub page](https://github.com/igrafx/mining-python-sdk) if you need additional information about the SDK.
 
 ### Setting up the Conda Environment in Knime
 This section is to set up the Conda environment in Knime.
@@ -607,7 +610,7 @@ pyarrow                   9.0.0           py39hca4e8af_45_cpu    conda-forge
 numpy                     1.21.6           py39h6331f09_0    conda-forge
 ````
 
-The problematic packages will not have `conda-forge` written but they will have something else.
+The problematic packages will not have `conda-forge` written, but they will have something else.
 
 Then reinstall the packages with the following commands using the versions that were found with the commands above:
 ````shell
@@ -625,7 +628,7 @@ conda install -c conda-forge pyarrow=9.0.0
 ````
 If there are other packages that are problematic, **use the same commands but change the name of the package**.
 
-Afterwards, restart Knime. Go to the **Python Tab** in **Settings**.
+Afterward, restart Knime. Go to the **Python Tab** in **Settings**.
 Reselect the correct environment. If the Python Version is shown, the environment has been set successfully!
 
 ### Editing the necessary files
@@ -642,7 +645,7 @@ org.igx.igrafx_extension: # {group_id}.{name} from the knime.yml
 Replace the `src` field as to specify the path to the `igrafx_knime_extension` folder.
 For instance, it could look like ``C:/Users/iGrafx/igrafx_extension/igrafx_knime_extension``.
 
-**Please double check the paths as the most common errors stem from incorrect paths.**
+**Please double-check the paths as the most common errors stem from incorrect paths.**
 
 Similarly, the ``conda_env_path`` field should specify the path to the conda/Python environment created earlier.
 To get this path, run the following command in your Terminal/Anaconda Prompt,
@@ -666,12 +669,12 @@ and modify it to have the correct path to the ``config.yml``:
 
 **Please note that the forward slash ``/`` has to be used on all OS, including Windows.**
 
-**On MacOS**,  to locate ``knime.ini``, open **Finder** and navigate to your
-installed Applications. Next, **right click** the KNIME application, select **Show
+**On macOS**,  to locate ``knime.ini``, open **Finder** and navigate to your
+installed Applications. Next, **right-click** the KNIME application, select **Show
 Package Contents** in the menu, and navigate to **Contents → Eclipse**.
 
 The ``knime.ini`` file can be edited with any plaintext editor, such as **Notepad** (Windows),
-**TextEdit** (MacOS) or **gedit** (Linux).
+**TextEdit** (macOS) or **gedit** (Linux).
 
 
 You can now relaunch Knime. If you type ``iGrafx`` in the node Repository, you should find the iGrafx nodes. 

@@ -59,9 +59,6 @@ class iGrafxAPINode:
         configure_context.set_warning("Connecting to iGrafx Mining API")
 
     def execute(self, exec_context, input_data):
-        # Get the input data and convert to Pandas DataFrame
-        input_df = input_data.to_pandas()
-
         # Get authentication variables from flow variables
         w_id = self.workgroup_id
         w_key = self.workgroup_key
@@ -93,7 +90,7 @@ class iGrafxProjectCreationNode:
     """Node to create an iGrafx Mining  Project.
     The iGrafx Mining Project Creation node in KNIME facilitates the seamless creation of projects within your
     iGrafx Workgroup. By utilizing this node,
-    users can efficiently generate new projects by providing  a project name and description.
+    users can efficiently generate new projects by providing a project name and an optional description.
 
     Key Features:
 
@@ -114,7 +111,8 @@ class iGrafxProjectCreationNode:
     project_name = knext.StringParameter("Project Name",
                                          "The name of the project you want to create.")
     project_description = knext.StringParameter("Project Description",
-                                                "The description of the project you want to create.")
+                                                "The description of the project you want to create. "
+                                                "The description is optional.")
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration
@@ -180,8 +178,7 @@ class ColumnMappingStatusNode:
         configure_context.set_warning("Checking Column Mapping Status")
 
     def execute(self, exec_context, input_data):
-
-        # Get Workgroup object from the previous node
+        # Get Workgroup object from the previous node to establish connection
         wg = igx.Workgroup(
             exec_context.flow_variables["wg_id"],
             exec_context.flow_variables["wg_key"],
@@ -195,7 +192,6 @@ class ColumnMappingStatusNode:
                 raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
             else:
                 project_id = exec_context.flow_variables["new_project_id"]
-
         else:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
@@ -264,6 +260,7 @@ class iGrafxFileUploadNode:
     def execute(self, exec_context, input_data):
 
         column_dict = self.column_dict
+        chunk_size = self.chunk_size
 
         # Get Workgroup object from the previous node
         wg = igx.Workgroup(
@@ -276,16 +273,12 @@ class iGrafxFileUploadNode:
         # Get DataFrame from input table
         df = input_data.to_pandas()
 
-        # Retrieve the number of rows per chunk
-        chunk_size = self.chunk_size
-
         # Retrieve project ID from flow variables or manually set if provided
         if not self.given_project_id:
             if 'new_project_id' not in exec_context.flow_variables:
                 raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
             else:
                 project_id = exec_context.flow_variables["new_project_id"]
-
         else:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
@@ -316,9 +309,10 @@ class iGrafxFileUploadNode:
             # Add the file
             my_project.add_file(temp_csv_file_path)
 
-            temp_csv_file.close()  # Make sure the temp file is closed to be deleted
+            # Make sure the temp file is closed to be deleted
+            temp_csv_file.close()
 
-            exec_context.flow_variables["chunk_size"] = chunk_size
+        exec_context.flow_variables["chunk_size"] = chunk_size
 
         # Return input data as output
         return input_data
@@ -359,9 +353,10 @@ class iGrafxProjectDeletionNode:
         configure_context.set_warning("Deleting iGrafx Mining Project")
 
     def execute(self, exec_context, input_data):
-
         # Check if project ID is given
-        if not self.given_project_id:
+        project_id = self.given_project_id
+
+        if not project_id:
             raise ValueError("No Project ID provided. Make sure to provide the Project ID for deletion.")
 
         # Establish connection by creating a Workgroup Object
@@ -372,13 +367,8 @@ class iGrafxProjectDeletionNode:
             exec_context.flow_variables["auth_url"]
         )
 
-        project_id = self.given_project_id
-
-        # Use project ID from String Parameter
-        my_project = wg.project_from_id(project_id)
-
         # Delete the project
-        response_project_delete = my_project.delete_project()
+        response_project_delete = wg.project_from_id(project_id).delete_project()
 
         if not response_project_delete.ok:
             raise ValueError(f"Project deletion failed. Status code: {response_project_delete.status_code}, "
@@ -443,7 +433,6 @@ class iGrafxMappingInfoNode:
                 raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
             else:
                 project_id = exec_context.flow_variables["new_project_id"]
-
         else:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
@@ -457,7 +446,7 @@ class iGrafxMappingInfoNode:
 
         # Raise an error if mapping infos don't exist
         if not mapping_infos:
-            raise TypeError("Mapping Infos doesn't exist")
+            raise TypeError("Mapping Infos do not exist")
 
         # Return input data as output
         return input_data
@@ -506,6 +495,11 @@ class iGrafxProjectVariantNode:
         configure_context.set_warning("Getting Project Variants")
 
     def execute(self, exec_context, input_data):
+        # Fetch project variants using the provided parameters
+        page_index_value = self.page_index
+        limit_value = self.limit
+        search_value = self.search
+
         # Get Workgroup object from the previous node
         wg = igx.Workgroup(
             exec_context.flow_variables["wg_id"],
@@ -520,15 +514,9 @@ class iGrafxProjectVariantNode:
                 raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
             else:
                 project_id = exec_context.flow_variables["new_project_id"]
-
         else:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
-
-        # Fetch project variants using the provided parameters
-        page_index_value = self.page_index
-        limit_value = self.limit
-        search_value = self.search
 
         my_project = wg.project_from_id(project_id)
         variants_data = my_project.get_project_variants(page_index=page_index_value, limit=limit_value,
@@ -580,6 +568,10 @@ class iGrafxCompletedCasesNode:
         configure_context.set_warning("Getting Completed cases")
 
     def execute(self, exec_context, input_data):
+        # Fetch completed cases using the provided parameters
+        page_index_value = self.page_index
+        limit_value = self.limit
+        search_value = self.search_case_id
 
         # Get Workgroup object from the previous node
         wg = igx.Workgroup(
@@ -595,15 +587,9 @@ class iGrafxCompletedCasesNode:
                 raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
             else:
                 project_id = exec_context.flow_variables["new_project_id"]
-
         else:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
-
-        # Fetch completed cases using the provided parameters
-        page_index_value = self.page_index
-        limit_value = self.limit
-        search_value = self.search_case_id
 
         my_project = wg.project_from_id(project_id)
 
@@ -673,7 +659,6 @@ class iGrafxProjectDataNode:
                 raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
             else:
                 project_id = exec_context.flow_variables["new_project_id"]
-
         else:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
@@ -688,30 +673,19 @@ class iGrafxProjectDataNode:
         column_name_mapping_infos = {item['databaseColumnName']: item['name'] for category in mapping_infos.values()
                                      for item in category}
 
-        # Get the datasource
-        datasource = my_project.nodes_datasource
-
-        # Load the dataframe of the datasource
-        df = datasource.load_dataframe()
+        # Get and Load the dataframe of the datasource
+        df = my_project.nodes_datasource.load_dataframe()
 
         # Rename the columns based on the mapping
         df = df.rename(columns=column_name_mapping_infos)
 
-        for col in df.columns:
-            # Check if the column name matches the pattern "case_+databasecolumnname"
-            if col.startswith("case_") and col[5:] in column_name_mapping_infos:
-                # Replace the column name with the concatenated string
-                new_col_name = f"{column_name_mapping_infos[col[5:]]} (case)"
-                df.rename(columns={col: new_col_name}, inplace=True)
+        # Check and replace the column name if it matches the pattern "case_+databasecolumnname"
+        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)" if col.startswith("case_") and col[5:] in column_name_mapping_infos else col, inplace=True)
 
         # Filter columns based on the condition
-        columns_to_keep = [col for col in df.columns
-                           if "loop_path" not in col and
-                           "graphkey" not in col and
-                           "processkey" not in col and
-                           "ingestion_timestamp" not in col and
-                           "linkedToStart" not in col and
-                           "linkedToEnd" not in col]
+        columns_to_keep = [col for col in df.columns if all(keyword not in col for keyword in
+                                                            ["loop_path", "graphkey", "processkey",
+                                                             "ingestion_timestamp", "linkedToStart", "linkedToEnd"])]
 
         # Create a new DataFrame with the selected columns
         filtered_df = df[columns_to_keep]

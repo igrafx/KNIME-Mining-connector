@@ -55,10 +55,10 @@ For more details, please consult [this section](#your-first-code-contribution).
 
 ## I Have a Question
 
-> If you wish to ask a question, we will assume that you have already read the avalaible [documentation](),
+> If you wish to ask a question, we will assume that you have already read the available [documentation](),
 > including the [README.md](https://github.com/igrafx/KNIME-Mining-connector/blob/main/README.md).
 
-Before asking a question, please search for existing [Github Issues](https://github.com/igrafx/KNIME-Mining-connector/issues) that might help you.
+Before asking a question, please search for existing [GitHub Issues](https://github.com/igrafx/KNIME-Mining-connector/issues) that might help you.
 If you have found a suitable issue and still need clarification, you can write your question in this issue. 
 You can also search the internet for answers first.
 
@@ -85,9 +85,9 @@ You can follow the subsequent steps to help us fix any potential bug as fast as 
 - Make sure you are using the latest version of the component.
 - Investigate and determine if your bug is really a bug and not an error on your side (e.g. using wrong credentials). 
 - Check that there isn't already a bug report that exists for the one you are having. You can then see if other users have experienced (and potentially solved) the same issue you are having.
-- Search the internet (including Stack Overflow) to see if the issue has been discussed outside of Github.
+- Search the internet (including Stack Overflow) to see if the issue has been discussed outside GitHub.
 
-Afterwards, collect information about the bug:
+Afterward, collect information about the bug:
 
 - Stack trace
 - OS, Platform and Versions
@@ -100,7 +100,7 @@ Afterwards, collect information about the bug:
 > Never report security related issues, vulnerabilities or bugs that include sensitive information (such as credentials) to the issue tracker, or anywhere else in public. 
 > Instead, sensitive related issues should be sent to [contact@igrafx.com](mailto:contact@igrafx.com).
 
-Github Issues is used to track bugs and errors, so if you run into an issue with the component:
+GitHub Issues is used to track bugs and errors, so if you run into an issue with the component:
 
 - Open an [Issue](https://github.com/igrafx/KNIME-Mining-connector/issues). Since we can't be sure it's a bug at this point, don't label the issue.
 - Explain the behaviour you expect and the actual behaviour that is observed.
@@ -133,7 +133,7 @@ Keep in mind that it's better to have features that will be useful to the majori
 
 ### How Do I Submit a Good Enhancement/Feature Suggestion?
 
->Enhancement suggestions are tracked as [Github issues](https://github.com/igrafx/KNIME-Mining-connector/issues).
+>Enhancement suggestions are tracked as [GitHub issues](https://github.com/igrafx/KNIME-Mining-connector/issues).
 
 To submit a good enhancement/feature suggestion, you can follow the subsequent steps:
 

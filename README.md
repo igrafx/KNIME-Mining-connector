@@ -48,7 +48,7 @@ Then, click on the **arrow** next to the **Install/Update** section.
 
 Go to the **Available Software sites** section and click the add button.
 
-![Available_Software](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/available_software.png)
+![Available_Software](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/available_software_5.2.png)
 
 In the window that pops up, make sure the information is as follows:
 
@@ -59,7 +59,7 @@ Copy and paste the location in the respective input.
 
 **5.2 is the latest Knime version and the build will work with that version.**
 
-![location](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/location2.png)
+![location](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/location3.png)
 
 Click on **Add**, the **Apply and Close**.
 
@@ -88,7 +88,7 @@ Another window will pop up during the installation, asking if you trust the exte
 ![Trust_window](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/trusted.png)
 
 Tick the **Always trust all content** box. Then, on the next window that pops up, click on **Yes I accept the risk**.
-You can now click on **Trust Slected**. Wait for the installation to finish.
+You can now click on **Trust Selected**. Wait for the installation to finish.
 Don't restart the platform just yet.
 
 You can now restart Knime.
@@ -98,7 +98,7 @@ Then, click on **More Advanced Nodes**. The iGrafx nodes should be there.
 
 ![nodes_repo](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/node_repo.png)
 
-If it is not installed this will cause issues with the extension and you will not be able to use the extension.
+If it is not installed this will cause issues with the extension, and you will not be able to use the extension.
 Please run ``sudo xcodebuild -license`` from within a Terminal window to review and agree to the **Xcode and Apple SDKs license**.
 
 Congratulations! You can now refer to other sections for details on how to use the nodes.

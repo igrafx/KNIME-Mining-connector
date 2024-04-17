@@ -381,6 +381,32 @@ After executing, if the node becomes green, that means the project has been dele
 
 Flow variables are not modified with this node.
 
+## The iGrafx Mining Column Mapping Fetcher Node
+
+**The iGrafx Mining Column Mapping Fetcher** node is a node that returns the **Column Mapping** of a project.
+It returns the information of each column such as the column's name, its index, the format of the date to name a few.
+
+To use it, double-click **iGrafx Mining Column Mapping Fetcher** node and set the **project ID** of the project
+for which you want to retrieve the column mapping.
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable  |                        Meaning                         |        Description |
+|:---------------|:------------------------------------------------------:|-------------------:|
+| auth_url       |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url        |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key         | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id          |     The ID of the workgroup You are working with.      |       Workgroup ID |
+| new_project_id |          The ID of the newly created project.          |     New Project ID |
+| column_mapping  |         Column Mapping for a specified project         |     Column Mapping |
+
+When the node is successfully executed, it will return the `column_mapping` of the given project. 
+
+Note that when retrieved, the column mapping can be reused to add files.
+
+
 ## The iGrafx Mining Extension Example
 
 Go to Knime and import the workflow called ``igrafx_extension_example.knwf``.

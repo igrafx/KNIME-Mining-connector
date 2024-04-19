@@ -562,8 +562,9 @@ and the node development API [knime-extension](https://anaconda.org/knime/knime-
 
 To do this, open **Anaconda prompt** and copy the following command:
 ```shell
-conda create -n <Your Environment Name> python=3.9.16 knime-python-base=5.2 knime-extension=5.2 -c knime -c conda-forge
+conda create -n <Your Environment Name> python=3.10.11 knime-python-base=5.2 knime-extension=5.2 -c knime -c conda-forge
 ```
+Python 3.10 is the minimum requirement to be able to use the iGrafx SDK.
 
 If you would like to install the packages into an environment that already exists you can run the following command from within that environment:
 ````shell
@@ -599,7 +600,7 @@ If you need to install a specific version of the SDK, use the following command:
   ```
 For instance:
   ```shell
-  pip install igrafx-mining-sdk==2.28.0
+  pip install igrafx-mining-sdk==2.31.4
   ```
 You can go to the [PyPi page](https://pypi.org/project/igrafx-mining-sdk/2.25.0/) of the SDK to check the different versions. You can also to the SDK's [GitHub page](https://github.com/igrafx/mining-python-sdk) if you need additional information about the SDK.
 

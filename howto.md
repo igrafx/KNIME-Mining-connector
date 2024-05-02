@@ -381,6 +381,32 @@ After executing, if the node becomes green, that means the project has been dele
 
 Flow variables are not modified with this node.
 
+## The iGrafx Mining Column Mapping Fetcher Node
+
+**The iGrafx Mining Column Mapping Fetcher** node is a node that returns the **Column Mapping** of a project.
+It returns the information of each column such as the column's name, its index, the format of the date to name a few.
+
+To use it, double-click **iGrafx Mining Column Mapping Fetcher** node and set the **project ID** of the project
+for which you want to retrieve the column mapping.
+
+This node takes a table as input and outputs a table.
+
+Here are the **flow variables** of this node:
+
+| Flow variable  |                        Meaning                         |        Description |
+|:---------------|:------------------------------------------------------:|-------------------:|
+| auth_url       |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url        |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key         | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id          |     The ID of the workgroup You are working with.      |       Workgroup ID |
+| new_project_id |          The ID of the newly created project.          |     New Project ID |
+| column_mapping  |         Column Mapping for a specified project         |     Column Mapping |
+
+When the node is successfully executed, it will return the `column_mapping` of the given project. 
+
+Note that when retrieved, the column mapping can be reused to add files.
+
+
 ## The iGrafx Mining Extension Example
 
 Go to Knime and import the workflow called ``igrafx_extension_example.knwf``.
@@ -536,8 +562,9 @@ and the node development API [knime-extension](https://anaconda.org/knime/knime-
 
 To do this, open **Anaconda prompt** and copy the following command:
 ```shell
-conda create -n <Your Environment Name> python=3.9.16 knime-python-base=5.2 knime-extension=5.2 -c knime -c conda-forge
+conda create -n <Your Environment Name> python=3.10.11 knime-python-base=5.2 knime-extension=5.2 -c knime -c conda-forge
 ```
+Python 3.10 is the minimum requirement to be able to use the iGrafx SDK.
 
 If you would like to install the packages into an environment that already exists you can run the following command from within that environment:
 ````shell
@@ -573,7 +600,7 @@ If you need to install a specific version of the SDK, use the following command:
   ```
 For instance:
   ```shell
-  pip install igrafx-mining-sdk==2.28.0
+  pip install igrafx-mining-sdk==2.31.4
   ```
 You can go to the [PyPi page](https://pypi.org/project/igrafx-mining-sdk/2.25.0/) of the SDK to check the different versions. You can also to the SDK's [GitHub page](https://github.com/igrafx/mining-python-sdk) if you need additional information about the SDK.
 

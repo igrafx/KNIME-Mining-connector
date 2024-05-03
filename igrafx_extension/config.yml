@@ -1,4 +1,4 @@
 org.igx.igrafx_extension: # {group_id}.{name} from the knime.yml
-  src: C:/Users/Path/to/igrafx_extension/igrafx_knime_extension # Path to folder containing the extension files
-  conda_env_path:  C:/Users/Path/to/anaconda/python/environment # Path to the Python environment to use
+  src: C:/Users/Dhruv.Maulloo/PycharmProjects/KNIME-Mining-connector/igrafx_extension/igrafx_knime_extension # Path to folder containing the extension files
+  conda_env_path:  C:/Users/Dhruv.Maulloo/AppData/Local/anaconda3/envs/knime_sdk # Path to the Python environment to use
   debug_mode: false # Optional line, if set to true, it will always use the latest changes of execute/configure, when that method is used within the KNIME Analytics Platform

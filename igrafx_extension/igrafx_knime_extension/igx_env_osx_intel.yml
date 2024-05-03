@@ -25,11 +25,12 @@ dependencies:
   - gflags=2.2.2
   - glog=0.6.0
   - importlib-metadata=7.0.0
-  - knime-extension
-  - knime-python-base
+  - knime-extension=5.2.0
+  - knime-python-base=5.2.0
   - krb5=1.21.2
   - ld_impl_linux-64=2.40
-  - libabseil=20230125.3
+  - libabseil=20230802.1
+  - libarrow-flight=14.0.1
   - libblas=3.9.0
   - libbrotlicommon=1.1.0
   - libbrotlidec=1.1.0
@@ -54,7 +55,7 @@ dependencies:
   - libuuid
   - libzlib=1.2.13
   - lz4-c=1.9.4
-  - markdown=3.4.3
+  - markdown=3.5.1
   - ncurses=6.4
   - nomkl=1.0
   - numpy
@@ -64,8 +65,8 @@ dependencies:
   - parquet-cpp=1.5.1
   - pip=23.3.1
   - py4j=0.10.9.7
-  - pyarrow=9.0.0
-  - python=3.9
+  - pyarrow=14.0.1
+  - python=3.10
   - python-dateutil=2.8.2
   - python-tzdata=2023.3
   - python_abi
@@ -87,12 +88,11 @@ dependencies:
       - charset-normalizer==3.3.2
       - greenlet==3.0.1
       - idna==3.6
-      - igrafx-mining-sdk==2.28.0
-      - networkx==2.6.3
-      - pydruid==0.6.5
-      - python-dotenv==0.19.2
-      - sqlalchemy==2.0.12
+      - igrafx-mining-sdk==2.31.5
+      - networkx==3.1
+      - pydruid==0.6.6
+      - python-dotenv==1.0.1
+      - sqlalchemy==2.0.29
       - toml==0.10.2
       - typing-extensions==4.8.0
-      - urllib3==1.26.18
-      - igrafx-mining-sdk==2.28.1
+      - urllib3==2.2.1

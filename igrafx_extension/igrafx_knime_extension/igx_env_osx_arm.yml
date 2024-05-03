@@ -24,10 +24,12 @@ dependencies:
   - gflags=2.2.2=hc88da5d_1004
   - glog=0.6.0=h6da1cb0_0
   - importlib-metadata=7.0.0=pyha770c72_0
-  - knime-extension=4.7.0=py_0
-  - knime-python-base=4.7.1=py39_202301111650
+  - knime-extension=5.2.0=py_0
+  - knime-python-base=5.2.0=py39_202301111650
   - krb5=1.21.2=h92f50d5_0
-  - libabseil=20230125.3=cxx17_h13dd4ca_0
+  - libabseil=20230802.1=cxx17_h13dd4ca_0
+  - libarrow-flight=14.0.1=h120cb0d_0_cpu
+  - libarrow=14.0.1=h0406937_1_cpu
   - libblas=3.9.0=20_osxarm64_openblas
   - libbrotlicommon=1.1.0=hb547adb_1
   - libbrotlidec=1.1.0=hb547adb_1
@@ -43,7 +45,7 @@ dependencies:
   - libgfortran=5.0.0=13_2_0_hd922786_1
   - libgfortran5=13.2.0=hf226fd6_1
   - libgoogle-cloud=2.12.0=h05652e3_1
-  - libgrpc=1.56.2=h9075ed4_1
+  - libgrpc=1.59.2=h9075ed4_1
   - liblapack=3.9.0=20_osxarm64_openblas
   - libnghttp2=1.58.0=ha4dd798_0
   - libopenblas=0.3.25=openmp_h6c19121_0
@@ -55,7 +57,7 @@ dependencies:
   - libzlib=1.2.13=h53f4e23_5
   - llvm-openmp=17.0.6=hcd81f8e_0
   - lz4-c=1.9.4=hb7217d7_0
-  - markdown=3.4.1=pyhd8ed1ab_0
+  - markdown=3.5.1=pyhd8ed1ab_0
   - ncurses=6.4=h463b476_2
   - nomkl=1.0=h5ca1d4c_0
   - numpy
@@ -65,10 +67,10 @@ dependencies:
   - parquet-cpp=1.5.1=2
   - pip=23.3.1=pyhd8ed1ab_0
   - py4j=0.10.9.7=pyhd8ed1ab_0
-  - pyarrow=9.0.0=py39h1c1c01c_49_cpu
-  - python=3.9.15=hea58f1e_0_cpython
+  - pyarrow=14.0.1=py39h1c1c01c_49_cpu
+  - python=3.10.14=hea58f1e_0_cpython
   - python-dateutil=2.8.2=pyhd8ed1ab_0
-  - python_abi=3.9=4_cp39
+  - python_abi=3.10=4_cp39
   - pytz=2023.3.post1=pyhd8ed1ab_0
   - re2=2023.03.02=hc5e2d97_0
   - readline=8.2=h92ec313_1
@@ -85,13 +87,12 @@ dependencies:
       - certifi==2023.11.17
       - charset-normalizer==3.3.2
       - idna==3.6
-      - igrafx-mining-sdk==2.28.0
-      - networkx==2.6.3
-      - pydruid==0.6.5
-      - python-dotenv==0.19.2
+      - igrafx-mining-sdk==2.31.5
+      - networkx==3.1
+      - pydruid==0.6.6
+      - python-dotenv==1.0.1
       - requests==2.29.0
-      - sqlalchemy==2.0.12
+      - sqlalchemy==2.0.29
       - toml==0.10.2
       - typing-extensions==4.8.0
-      - urllib3==1.26.18
-      - igrafx-mining-sdk==2.28.1
+      - urllib3==2.2.1

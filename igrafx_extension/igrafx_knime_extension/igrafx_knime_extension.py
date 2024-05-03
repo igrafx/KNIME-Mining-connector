@@ -123,6 +123,11 @@ class iGrafxProjectCreationNode:
         project_name = self.project_name
         project_description = self.project_description
 
+        if 'column_mapping' in exec_context.flow_variables:
+            column_mapping = exec_context.flow_variables["column_mapping"]
+        else:
+            column_mapping = None
+
         # Establish connection by creating a Workgroup Object
         wg = igx.Workgroup(
             exec_context.flow_variables["wg_id"],
@@ -285,9 +290,18 @@ class iGrafxFileUploadNode:
 
         my_project = wg.project_from_id(project_id)
 
+        if not self.column_dict:
+            if 'column_mapping' not in exec_context.flow_variables:
+                raise ValueError("No column mapping was given as a parameter or fetched from flow variables.")
+            else:
+                column_mapping = exec_context.flow_variables["column_mapping"]
+        else:
+            column_mapping = self.column_dict
+            exec_context.flow_variables["column_mapping"] = column_mapping
+
         file_structure = igx.FileStructure(charset="UTF-8", file_type=igx.FileType.csv)
 
-        column_mapping = igx.ColumnMapping.from_json(column_dict)
+        column_mapping = igx.ColumnMapping.from_json(column_mapping)
 
         my_project.add_column_mapping(file_structure, column_mapping)
 

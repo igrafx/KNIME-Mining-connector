@@ -6,7 +6,7 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1
   - _openmp_mutex=4.5
-  - arrow-cpp=0.11.0
+  - arrow-cpp
   - aws-c-auth=0.7.4
   - aws-c-cal=0.6.2
   - aws-c-common=0.9.3
@@ -27,13 +27,11 @@ dependencies:
   - glog=0.6.0
   - importlib-metadata=7.0.0
   - keyutils=1.6.1
-  - knime-extension=5.2.0
-  - knime-python-base=5.2.0
+  - knime-extension
+  - knime-python-base
   - krb5=1.21.2
   - ld_impl_linux-64=2.40
-  - libabseil=20230125.2
-  - libarrow-flight=14.0.1
-  - libarrow=14.0.1
+  - libabseil=20230125.3
   - libblas=3.9.0
   - libbrotlicommon=1.1.0
   - libbrotlidec=1.1.0
@@ -50,13 +48,11 @@ dependencies:
   - libgfortran5=13.2.0
   - libgomp=13.2.0
   - libgoogle-cloud=2.12.0
-  - libgrpc=1.59.2
   - liblapack=3.9.0
   - libnghttp2
   - libnsl=2.0.1
   - libopenblas=0.3.25
-  - libprotobuf=3.21.12
-  - libre2-11=2023.6.2
+  - libprotobuf=4.23.3
   - libsqlite=3.44.2
   - libssh2=1.11.0
   - libstdcxx-ng=13.2.0
@@ -65,7 +61,7 @@ dependencies:
   - libuuid
   - libzlib=1.2.13
   - lz4-c=1.9.4
-  - markdown=3.5.1
+  - markdown=3.4.3
   - ncurses=6.4
   - nomkl=1.0
   - numpy
@@ -75,7 +71,7 @@ dependencies:
   - parquet-cpp=1.5.1
   - pip=23.3.1
   - py4j=0.10.9.7
-  - pyarrow>= 14.0.1,<14.0.2.0a0
+  - pyarrow=9.0.0
   - python=3.10
   - python-dateutil=2.8.2
   - python-tzdata=2023.3
@@ -98,7 +94,6 @@ dependencies:
       - charset-normalizer==3.3.2
       - greenlet==3.0.1
       - idna==3.6
-      - igrafx-mining-sdk==2.31.5
       - networkx==3.1
       - pydruid==0.6.6
       - python-dotenv==1.0.1
@@ -106,3 +101,4 @@ dependencies:
       - toml==0.10.2
       - typing-extensions==4.8.0
       - urllib3==2.2.1
+      - igrafx-mining-sdk==2.31.5

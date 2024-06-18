@@ -275,51 +275,56 @@ class iGrafxFileUploadNode:
 
 @knext.node(name="iGrafx SAP Data Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",
             category=igx_category)
-@knext.input_table(name="Input Table",
-                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
-@knext.input_table(name="Input Table 2",
-                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
-@knext.output_table(name="Original Table",
+@knext.output_table(name="SAP Table",
                     description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxSAPNode:
-    """Node to retrieve project data from the iGrafx Mining platform.
+    """Node to fetch SAP data from the iGrafx Mining platform.
 
-    The iGrafx Project Data node connects to the iGrafx Mining API, allowing users to fetch information about a specific
-    project. Users can dynamically provide the Project ID as a parameter or use a predefined ID from flow variables.
+    The iGrafx SAP Data Fetcher node allows users to fetch detailed information about specific
+    SAP data. Users can provide the parameters such as the SAP API URL, the authorization token and the cookie, which will be used to connect to the SAP API and retrieve the data.
+    Additionally, users can specify the Start Date and End Date to filter the data within the specified
+    date range.
+    This node can then directly be connected to other iGrafx nodes for further processing and uploading to the iGrafx platform.
 
     Key Features:
 
-    - Dynamic Configuration: Users can dynamically provide the Project ID as a parameter or use a predefined ID from
-      flow variables.
-    - Data Processing: This node processes the project data. It cleans it, filters it and converts it into a table.
+    - **Data Processing**: The node processes the data by cleaning, filtering, and converting it into a table format.
+    - **CSRF Token Handling**: Automatically handles CSRF token fetching and cookie management for API authentication.
+    - **XML Generation**: Automatically generates the necessary XML payloads for selection and description to interact with the SAP API, eliminating the need to manually input XML files.
 
-    This node facilitates efficient integration of project data into KNIME workflows, enabling users to synchronize with
-    the iGrafx Mining platform seamlessly.
+    This node returns a table containing the fetched data. This table is retrieved in XML format, then cleaned and converted into a structured table.
+    It facilitates easy data processing and uploading to the iGrafx platform by using the other nodes.
+
+    Please contact us in order to get access to the SAP extension.
+
     """
 
-    start_date = knext.StringParameter("Start Date", "The date from when you want to get information.",)
-    end_date = knext.StringParameter("End Date", "The date until when you want to get information.")
+    start_date = knext.StringParameter("Start Date", "The date from when you want to retrieve information.",)
+    end_date = knext.StringParameter("End Date", "The date until when you want to retrieve information.")
+    sap_api_url = knext.StringParameter("SAP API URL", "The URL of the SAP API to be used for data fetching.")
+    authorization = knext.StringParameter("Authorization", "The authorization token to be used for authentication.")
+    auth_cookie = knext.StringParameter("Cookie", "The cookie to be used for authentication.")
 
-    def configure(self, configure_context, input_schema, input_schema2):
+    def configure(self, configure_context):
         # Set warning during configuration
-        configure_context.set_warning("Getting Project Data")
+        configure_context.set_warning("Getting SAP Data")
 
-    def execute(self, exec_context, input_data, input_data2):
+    def execute(self, exec_context):
 
         start_date = self.start_date
         end_date = self.end_date
-
-        # Fetch Token
-        url = "https://ns3080305.ip-145-239-0.eu:44302/sap/bc/dsfp2/rest_api/PROCESS"
+        sap_api_url = self.sap_api_url
+        authorization = self.authorization
+        auth_cookie = self.auth_cookie
 
         payload = {}
         headers = {
             'X-CSRF-TOKEN': 'fetch',
-            'Authorization': 'Basic YXBpX3Rlc3RlcjpEZWNlU29mdDIwMjMh',
-            'Cookie': 'SAP_SESSIONID_ER6_800=aRX3WvU8HCFtwrDQGDYsRgLlbJO2txHuu8KkvwEd5J0%3d; sap-usercontext=sap-client=800'
+            'Authorization': authorization,
+            'Cookie': auth_cookie
         }
 
-        response = req.request("GET", url, headers=headers, data=payload, verify=False)
+        response = req.request("GET", sap_api_url, headers=headers, data=payload, verify=False)
 
         # Access the CSRF token from the response's headers
         csrf_token = response.headers.get('x-csrf-token')
@@ -328,69 +333,177 @@ class iGrafxSAPNode:
         # Print the CSRF token and the Cookie
         print(f"CSRF Token: {csrf_token}\nCookie: {cookie}")
         print(response)
-        selection_df = input_data.to_pandas()#selection
-        description_df = input_data2.to_pandas()#description
 
-        selection_path_content = selection_df.iloc[0]['Path']
-        # Access the 'path' attribute directly
-        selection_path_value = selection_path_content.path
-        # Parse the path using double backslashes as the separator
-        selection_parsed_path = selection_path_value.split('\\')
-        # Join the path components using a forward slash
-        selection_final_path = '/'.join(selection_parsed_path)
+        # Create the root element of the selection XML
+        selection_root_xml = ET.Element("Selection")
 
-        print(selection_final_path)
+        # Create and append FromDate element
+        from_date_element = ET.SubElement(selection_root_xml, "FromDate")
+        from_date_element.text = start_date
 
-        selection_file_name = os.path.basename(selection_final_path)
+        # Create and append ToDate element
+        to_date_element = ET.SubElement(selection_root_xml, "ToDate")
+        to_date_element.text = end_date
 
-        print(selection_file_name)
+        # Create and append ReadData element with attributes
+        read_data_element = ET.SubElement(selection_root_xml, "ReadData")
+        read_data_element.set("change_events", "X")
+        read_data_element.set("messages", "")
+        read_data_element.set("document_details", "")
 
-        # description
-        description_path_content = description_df.iloc[0]['Path']
+        # Convert the XML tree to a string
+        selection_xml = ET.tostring(selection_root_xml, encoding='utf-8', method='xml').decode()
 
-        # Access the 'path' attribute directly
-        description_path_value = description_path_content.path
+        # Create the root element of the description XML
+        description_root = ET.Element("Process")
 
-        # Parse the path using double backslashes as the separator
-        description_parsed_path = description_path_value.split('\\')
+        # Add child elements to the root
+        ET.SubElement(description_root, "ID").text = "O2C"
+        ET.SubElement(description_root, "Product").text = "ERP"
 
-        # Join the path components using a forward slash
-        description_final_path = '/'.join(description_parsed_path)
+        # Create the Entities element
+        entities_element = ET.SubElement(description_root, "Entities")
 
-        print(description_final_path)
+        identifiers_element = ET.SubElement(entities_element, "Identifiers")
+        ET.SubElement(identifiers_element, "Type").text = "DomVal"
+        ET.SubElement(identifiers_element, "Domain").text = "VBTYP"
 
-        description_file_name = os.path.basename(description_final_path)
+        leading_entities_element = ET.SubElement(entities_element, "LeadingEntities")
+        ET.SubElement(leading_entities_element, "EntityID").text = "B"
+        ET.SubElement(leading_entities_element, "EntityID").text = "C"
 
-        print(description_file_name)
+        # Create ProcessStepsDescr element
+        process_steps_element = ET.SubElement(description_root, "ProcessStepsDescr")
 
+        status_element = ET.SubElement(process_steps_element, "Status", default='X')
+        data_tables_element = ET.SubElement(status_element, "DataTables")
+        data_table_vbuk_element = ET.SubElement(data_tables_element, "DataTable", id='VBUK')
+        fields_vbuk_element = ET.SubElement(data_table_vbuk_element, "Fields")
+        ET.SubElement(fields_vbuk_element, "Field", id='GBSTK')
+
+        messages_element = ET.SubElement(process_steps_element, "Messages", default='X')
+        data_table_nast_element = ET.SubElement(messages_element, "DataTable", id='NAST')
+        fields_nast_element = ET.SubElement(data_table_nast_element, "Fields")
+        ET.SubElement(fields_nast_element, "Field", id='KAPPL', dom_val_from='TNAPR-KAPPL')
+        ET.SubElement(fields_nast_element, "Field", id='OBJKY', source='VBELN')
+        ET.SubElement(fields_nast_element, "Field", id='KSCHL', semantic='message_type', dom_val_from='TNAPR-KSCHL')
+        ET.SubElement(fields_nast_element, "Field", id='SPRAS')
+        ET.SubElement(fields_nast_element, "Field", id='PARNR')
+        ET.SubElement(fields_nast_element, "Field", id='USNAM', semantic='user')
+        ET.SubElement(fields_nast_element, "Field", id='PARVW', dom_val_from='VBPA-PARVW')
+        ET.SubElement(fields_nast_element, "Field", id='ERDAT', semantic='crea_timestamp-date')
+        ET.SubElement(fields_nast_element, "Field", id='ERUHR', semantic='crea_timestamp-time')
+
+        # Create ProcessSteps element
+        process_steps_element = ET.SubElement(process_steps_element, "ProcessSteps")
+
+        for entity_id, header_table, item_table, change_object_class, kappl_value in [
+            ("B", "VBAK", "VBAP", "VERKBELEG", "V1"),
+            ("C", "VBAK", "VBAP", "VERKBELEG", "V1"),
+            ("J", "LIKP", "LIPS", "LIEFERUNG", "V2"),
+            ("M", "VBRK", "VBRP", "FAKTBELEG", "V2")
+        ]:
+            process_step = ET.SubElement(process_steps_element, "ProcessStep")
+            ET.SubElement(process_step, "EntityID").text = entity_id
+
+            executables_element = ET.SubElement(process_step, "Executables")
+            for action, mod_type in [("01", "create"), ("02", "change")]:
+                executable = ET.SubElement(executables_element, "Executable", mod_type=mod_type)
+                ET.SubElement(executable, "Type").text = "TRAN"
+                ET.SubElement(executable, "ID").text = f"VA{action}"
+                ET.SubElement(executable, "Event").text = "Create" if action == "01" else "Change"
+
+            ET.SubElement(process_step, "HeaderDataTable").text = header_table
+            ET.SubElement(process_step, "ItemDataTable").text = item_table
+            ET.SubElement(process_step, "ChangeObjectClass").text = change_object_class
+
+            messages_step = ET.SubElement(process_step, "Messages")
+            data_table_nast_step = ET.SubElement(messages_step, "DataTable", id='NAST')
+            fields_nast_step = ET.SubElement(data_table_nast_step, "Fields")
+            ET.SubElement(fields_nast_step, "Field", id='KAPPL').text = kappl_value
+
+        # Create ProcessFlow element
+        process_flow_element = ET.SubElement(description_root, "ProcessFlow")
+        data_table_vbfa = ET.SubElement(process_flow_element, "DataTable", id='VBFA')
+        ET.SubElement(data_table_vbfa, "PredecessorEntity").text = "VBTYP_V"
+        ET.SubElement(data_table_vbfa, "SuccessorEntity").text = "VBTYP_N"
+        ET.SubElement(data_table_vbfa, "PredecessorHeaderKey").text = "VBELV"
+        ET.SubElement(data_table_vbfa, "SuccessorHeaderKey").text = "VBELN"
+        ET.SubElement(data_table_vbfa, "PredecessorItemKey").text = "POSNV"
+        ET.SubElement(data_table_vbfa, "SuccessorItemKey").text = "POSNN"
+
+        # Create DataTables element
+        data_tables_element = ET.SubElement(description_root, "DataTables")
+
+        for id_value, header_table, fields_info in [
+            ('VBUK', 'X', [{'id': 'VBELN', 'header_key': 'X'}, {'id': 'GBSTK', 'read_value_texts': 'X'}]),
+            ('VBAK', '', [
+                {'id': 'VBELN', 'header_key': 'X'}, {'id': 'VBTYP', 'entity_id': 'X'},
+                {'id': 'UPD_TMSTMP', 'semantic': 'change_timestamp'},
+                {'id': 'ERDAT', 'semantic': 'crea_timestamp-date'}, {'id': 'ERZET', 'semantic': 'crea_timestamp-time'},
+                {'id': 'ERNAM', 'semantic': 'crea_user'}, {'id': 'AUART', 'read_value_texts': 'X'}, {'id': 'AUDAT'}
+            ]),
+            ('VBAP', '', [
+                {'id': 'VBELN', 'header_key': 'X'}, {'id': 'POSNR', 'item_key': 'X'}, {'id': 'MATNR'}, {'id': 'MATKL'},
+                {'id': 'MEINS'}, {'id': 'NETPR'}, {'id': 'NETWR'}, {'id': 'SMENG'},
+                {'id': 'ERDAT', 'semantic': 'crea_timestamp-date'},
+                {'id': 'ERZET', 'semantic': 'crea_timestamp-time'}, {'id': 'ERNAM', 'semantic': 'crea_user'}
+            ]),
+            ('VBRK', '', [
+                {'id': 'VBELN', 'header_key': 'X'}, {'id': 'VBTYP', 'entity_id': 'X'}, {'id': 'AEDAT'},
+                {'id': 'ERDAT', 'semantic': 'crea_timestamp-date'}, {'id': 'ERZET', 'semantic': 'crea_timestamp-time'},
+                {'id': 'ERNAM', 'semantic': 'crea_user'}, {'id': 'FKDAT'}, {'id': 'FKART', 'read_value_texts': 'X'}
+            ]),
+            ('VBRP', '', [
+                {'id': 'VBELN', 'header_key': 'X'}, {'id': 'POSNR', 'item_key': 'X'}, {'id': 'NETWR'}, {'id': 'FKIMG'},
+                {'id': 'VRKME'}, {'id': 'MATNR'}, {'id': 'MATKL'}, {'id': 'ERDAT', 'semantic': 'crea_timestamp-date'},
+                {'id': 'ERZET', 'semantic': 'crea_timestamp-time'}, {'id': 'ERNAM', 'semantic': 'crea_user'}
+            ]),
+            ('LIKP', '', [
+                {'id': 'VBELN', 'header_key': 'X'}, {'id': 'VBTYP', 'entity_id': 'X'}, {'id': 'AEDAT'},
+                {'id': 'ERDAT', 'semantic': 'crea_timestamp-date'}, {'id': 'ERZET', 'semantic': 'crea_timestamp-time'},
+                {'id': 'ERNAM', 'semantic': 'crea_user'}, {'id': 'LFDAT'}, {'id': 'LFART', 'read_value_texts': 'X'}
+            ]),
+            ('LIPS', '', [
+                {'id': 'VBELN', 'header_key': 'X'}, {'id': 'POSNR', 'item_key': 'X'}, {'id': 'MATKL'},
+                {'id': 'LFIMG'}, {'id': 'VRKME'}, {'id': 'NETPR'}, {'id': 'NETWR'}, {'id': 'MATNR'},
+                {'id': 'ERDAT', 'semantic': 'crea_timestamp-date'}, {'id': 'ERZET', 'semantic': 'crea_timestamp-time'},
+                {'id': 'ERNAM', 'semantic': 'crea_user'}
+            ])
+        ]:
+            data_table = ET.SubElement(data_tables_element, "DataTable", id=id_value)
+            if header_table:
+                data_table.set("header_table", header_table)
+            fields = ET.SubElement(data_table, "Fields")
+            for field_info in fields_info:
+                ET.SubElement(fields, "Field", field_info)
+
+        # Convert the tree to a string
+        description_xml = ET.tostring(description_root, encoding='utf-8').decode('utf-8')
+
+        # Selection and Description XML have been generated
+
+        # Send the XMls to the SAP API and retrieve the response:
         payload = {}
-        files = [
-            ('selection', (selection_file_name, open(selection_final_path, 'rb'), 'application/xml')),
-            ('description',
-             (description_file_name, open(description_final_path, 'rb'), 'application/xml'))
-        ]
+        files = {
+            'selection': ('selection.xml', selection_xml, 'application/xml'),
+            'description': ('description.xml', description_xml, 'application/xml')
+        }
         headers2 = {
             'X-CSRF-TOKEN': csrf_token,
             'Cookie': cookie
         }
 
-        response = req.request("POST", url, headers=headers2, data=payload, files=files, verify=False)
+        # The response of the Post request:
+        response = req.request("POST", sap_api_url, headers=headers2, data=payload, files=files, verify=False)
 
         print(f"The response is: {response.text}")
-        #print(csrf_token)
-        #print(cookie)
 
-        # Parse the XML file
+        # Parse the XML Response file
         xml_tree = ET.ElementTree(ET.fromstring(response.text))
 
         # Retrieve the root element of the XML document.
-        # The root element is the highest-level element in the XML hierarchy,
-        # representing the starting point for accessing the other elements in the document.
         root = xml_tree.getroot()
-
-        # Uncomment to print the XML
-        xml_content = ET.tostring(xml_tree.getroot(), encoding='utf-8', method='xml')
-     #   print(xml_content.decode('utf-8'))
 
         # Create an empty DataFrame with the desired columns
         columns = ['Case ID', 'Entity ID', 'Entity Name']
@@ -408,13 +521,11 @@ class iGrafxSAPNode:
             # Iterate over DocGroup elements
             for doc_group_element in doc_group_elements:
                 entity_element = doc_group_element.find('Entity')
+                document_element = doc_group_element.find('Document')
 
-                if entity_element is not None:
-                    entity_id = entity_element.attrib['id']
-                    entity_name = entity_element.text
-                else:
-                    entity_id = ""
-                    entity_name = ""
+                entity_id = entity_element.attrib['id'] if entity_element is not None else ""
+                entity_name = entity_element.text if entity_element is not None else ""
+                document_id = document_element.attrib['id'] if document_element is not None else ""
 
                 event_elements = doc_group_element.findall('.//Header/Events/Event')
 
@@ -425,6 +536,7 @@ class iGrafxSAPNode:
                         'Case ID': case_id,
                         'Entity ID': entity_id,
                         'Entity Name': entity_name,
+                        'Document ID': document_id
                     }, ignore_index=True)
 
                 # Iterate over Event elements
@@ -438,6 +550,7 @@ class iGrafxSAPNode:
                     df = df.append({'Case ID': case_id,
                                     'Entity ID': entity_id,
                                     'Entity Name': entity_name,
+                                    'Document ID': document_id,
                                     }, ignore_index=True)
                     df['Task Name'] = task_name
                     df['Event Type'] = event_type
@@ -446,7 +559,7 @@ class iGrafxSAPNode:
         if 'Timestamp' in df.columns:
             # Execute the line only if 'Timestamp' column exists
             df['Timestamp'] = df['Timestamp'].str.replace(" CET", "")
-            df = df.loc[(df['Timestamp'] >= start_date) & (df['Timestamp'] <= end_date)]
+            # df = df.loc[(df['Timestamp'] >= start_date) & (df['Timestamp'] <= end_date)]
 
         knime_df = knext.Table.from_pandas(df)
 

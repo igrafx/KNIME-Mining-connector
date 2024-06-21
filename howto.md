@@ -407,6 +407,25 @@ When the node is successfully executed, it will return the `column_mapping` of t
 Note that when retrieved, the column mapping can be reused to add files.
 
 
+## Using the iGrafx SAP Data fetcher
+
+The iGrafx SAP Data Fetcher Node is a node that allows you to retrieve data from an SAP API. 
+The node generates a Selection and Description XML, which are then used in a POST request to retrieve the desired data.
+This data is then cleaned and processed before being converted to a Table to be used.
+
+Please note that at present, the node only handles Order to Cash processes.
+
+To use the node double-click on it.
+Enter the **SAP API URL**, the **authorization token** and the **cookie** to connect to the SAP API. Doing that allows the node to do the necessary requests to retrieve the desired data.
+Then, enter the **Start and End dates**. The node will return Case IDs that fall within these dates.
+
+Please contact us at [support@igrafx.com](mailto:support@igrafx.com) for assistance with using the SAP extension.
+
+This node returns a table called **SAP Table**, which can then be connected to other iGrafx nodes to upload it to the iGrafx Mining Platform for further analysis.
+It has no inputs as all information is either generated within the node or given as parameter by the user.
+
+There are no flow variables for this node, simply the **SAP Table** output.
+
 ## The iGrafx Mining Extension Example
 
 Go to Knime and import the workflow called ``igrafx_extension_example.knwf``.

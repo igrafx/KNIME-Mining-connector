@@ -906,7 +906,7 @@ class iGrafxSAPNode:
         ET.SubElement(fields_nast_element, "Field", id='ERDAT', semantic='crea_timestamp-date')
         ET.SubElement(fields_nast_element, "Field", id='ERUHR', semantic='crea_timestamp-time')
 
-        # Create ProcessSteps element
+        # Create ProcessSteps elements
         process_steps_element = ET.SubElement(process_steps_element, "ProcessSteps")
 
         for entity_id, header_table, item_table, change_object_class, kappl_value in [

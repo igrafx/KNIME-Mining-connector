@@ -72,7 +72,7 @@ dependencies:
   - pip=23.3.1
   - py4j=0.10.9.7
   - pyarrow=9.0.0
-  - python=3.9
+  - python=3.10
   - python-dateutil=2.8.2
   - python-tzdata=2023.3
   - python_abi
@@ -90,4 +90,15 @@ dependencies:
   - zipp=3.17.0
   - zstd=1.5.5
   - pip:
-      - igrafx-mining-sdk==2.28.1
+      - certifi==2023.11.17
+      - charset-normalizer==3.3.2
+      - greenlet==3.0.1
+      - idna==3.6
+      - networkx==3.1
+      - pydruid==0.6.6
+      - python-dotenv==1.0.1
+      - sqlalchemy==2.0.29
+      - toml==0.10.2
+      - typing-extensions==4.8.0
+      - urllib3==2.2.1
+      - igrafx-mining-sdk==2.31.5

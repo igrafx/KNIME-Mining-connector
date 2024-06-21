@@ -4,80 +4,98 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - arrow-cpp=9.0.0
-  - aws-c-auth=0.7.4
-  - aws-c-cal=0.6.2
-  - aws-c-common=0.9.3
+  - aws-c-auth=0.7.8
+  - aws-c-cal=0.6.9
+  - aws-c-common=0.9.10
   - aws-c-compression=0.2.17
   - aws-c-event-stream=0.3.2
-  - aws-c-http=0.7.13
-  - aws-c-io=0.13.33
-  - aws-c-mqtt=0.9.7
-  - aws-c-s3=0.3.17
-  - aws-c-sdkutils=0.1.12
+  - aws-c-http=0.7.15
+  - aws-c-io=0.13.36
+  - aws-c-mqtt=0.10.0
+  - aws-c-s3=0.4.6
+  - aws-c-sdkutils=0.1.13
   - aws-checksums=0.1.17
-  - aws-crt-cpp=0.24.2
-  - aws-sdk-cpp=1.10.57
+  - aws-crt-cpp=0.25.0
+  - aws-sdk-cpp=1.11.210
   - bzip2=1.0.8
-  - c-ares=1.22.1
-  - ca-certificates=2023.11.17
-  - importlib-metadata=6.8.0
-  - knime-extension=5.1.0
-  - knime-python-base=5.1.0
+  - c-ares=1.28.1
+  - ca-certificates=2024.2.2
+  - importlib-metadata=7.1.0
+  - knime-extension=5.2.0
+  - knime-python-base=5.2.0
   - krb5=1.21.2
-  - libabseil=20230125.3
+  - libabseil=20230802.1
+  - libarrow=14.0.1
+  - libarrow-acero=14.0.1
+  - libarrow-dataset=14.0.1
+  - libarrow-flight=14.0.1
+  - libarrow-flight-sql=14.0.1
+  - libarrow-gandiva=14.0.1
+  - libarrow-substrait=14.0.1
   - libblas=3.9.0
-  - libbrotlicommon=1.0.9
-  - libbrotlidec=1.0.9
-  - libbrotlienc=1.0.9
+  - libbrotlicommon=1.1.0
+  - libbrotlidec=1.1.0
+  - libbrotlienc=1.1.0
   - libcblas=3.9.0
   - libcrc32c=1.1.2
-  - libcurl=8.4.0
+  - libcurl=8.7.1
   - libevent=2.1.12
   - libffi=3.4.2
   - libflang=5.0.0
   - libgoogle-cloud=2.12.0
-  - libgrpc=1.54.3
+  - libgrpc=1.59.3
   - liblapack=3.9.0
-  - libopenblas=0.3.25
-  - libprotobuf=3.21.12
-  - libsqlite=3.44.2
+  - libopenblas=0.3.27
+  - libparquet=14.0.1
+  - libprotobuf=4.24.4
+  - libre2-11=2023.09.01
+  - libsqlite=3.45.3
   - libssh2=1.11.0
-  - libthrift=0.18.1
+  - libthrift=0.19.0
   - libutf8proc=2.8.0
   - libzlib=1.2.13
   - llvm-meta=5.0.0
   - lz4-c=1.9.4
-  - markdown=3.4.3
+  - markdown=3.5.1
   - nomkl=1.0
-  - numpy
+  - numpy=1.26.2
   - openmp=5.0.0
-  - openssl=3.2.0
-  - orc=1.9.0
-  - pandas
-  - parquet-cpp=1.5.1
-  - pip=23.3.1
+  - openssl=3.2.1
+  - orc=1.9.2
+  - pandas=2.0.3
+  - pip=24.0
   - py4j=0.10.9.7
-  - pyarrow=9.0.0
-  - python=3.9.16
+  - pyarrow=14.0.1
+  - python=3.10.13
   - python-dateutil=2.8.2
-  - python-tzdata=2023.3
-  - python_abi=3.9
-  - pytz=2023.3.post1
-  - re2=2023.03.02
-  - setuptools=68.2.2
+  - python-tzdata=2024.1
+  - python_abi=3.10
+  - pytz=2024.1
+  - re2=2023.09.01
+  - setuptools=69.5.1
   - six=1.16.0
   - snappy=1.1.10
   - tk=8.6.13
-  - tzdata=2023c
+  - tzdata=2024a
   - ucrt=10.0.22621.0
   - vc=14.3
-  - vc14_runtime=14.36.32532
-  - vs2015_runtime=14.36.32532
-  - wheel=0.42.0
+  - vc14_runtime=14.38.33130
+  - vs2015_runtime=14.38.33130
+  - wheel=0.43.0
   - xz=5.2.6
   - zipp=3.17.0
-  - zlib=1.2.13
   - zstd=1.5.5
   - pip:
-      - igrafx-mining-sdk==2.28.1
+      - certifi==2024.2.2
+      - charset-normalizer==3.3.2
+      - greenlet==3.0.3
+      - idna==3.7
+      - igrafx-mining-sdk==2.31.5
+      - networkx==3.2.1
+      - pydruid==0.6.6
+      - python-dotenv==1.0.1
+      - requests==2.31.0
+      - sqlalchemy==2.0.29
+      - toml==0.10.2
+      - typing-extensions==4.11.0
+      - urllib3==2.2.1

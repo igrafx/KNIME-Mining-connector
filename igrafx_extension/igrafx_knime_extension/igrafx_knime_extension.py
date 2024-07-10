@@ -5,6 +5,7 @@ import tempfile
 import requests as req
 import xml.etree.ElementTree as ET
 import pandas as pd
+from requests.auth import HTTPBasicAuth
 import xml.dom.minidom
 
 LOGGER = logging.getLogger(__name__)
@@ -829,6 +830,9 @@ class iGrafxSAPNode:
         authorization = self.authorization
         auth_cookie = self.auth_cookie
 
+        # username = "api_tester"
+        # password = "DeceSoft2023"
+
         payload = {}
         headers = {
             'X-CSRF-TOKEN': 'fetch',
@@ -837,9 +841,20 @@ class iGrafxSAPNode:
         }
 
         response = req.request("GET", sap_api_url, headers=headers, data=payload, verify=False)
+        # session = req.Session()
+        # session.auth = ("api_tester", "DeceSoft2023")
+        # auth = session.post("https://ns3080305.ip-145-239-0.eu:44302/sap/bc/dsfp2/rest_api/PROCESS", verify=False)
+        # print(f"auth: {auth}")
+        # res = req.post('https://ns3080305.ip-145-239-0.eu:44302/sap/bc/dsfp2/rest_api/PROCESS', auth=HTTPBasicAuth('api_tester', 'DeceSoft2023'), verify=False)
+        # print(f"res: {res}")
+
+        print(headers)
+        print(response)
 
         # Access the CSRF token from the response's headers
         csrf_token = response.headers.get('x-csrf-token')
+        print(f"CSRF Token: {csrf_token}\n")
+
         cookie = "SAP_SESSIONID_ER6_800=" + response.cookies.get('SAP_SESSIONID_ER6_800') + "; path=/"
 
         # Print the CSRF token and the Cookie
@@ -1008,6 +1023,7 @@ class iGrafxSAPNode:
 
         # The response of the Post request:
         response = req.request("POST", sap_api_url, headers=headers2, data=payload, files=files, verify=False)
+        # response = session.post(sap_api_url, headers=headers2, files=files, verify=False)
 
         print(f"The response is: {response.text}")
 

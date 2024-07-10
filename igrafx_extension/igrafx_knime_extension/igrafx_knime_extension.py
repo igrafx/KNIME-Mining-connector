@@ -5,7 +5,6 @@ import tempfile
 import requests as req
 import xml.etree.ElementTree as ET
 import pandas as pd
-from requests.auth import HTTPBasicAuth
 import xml.dom.minidom
 
 LOGGER = logging.getLogger(__name__)

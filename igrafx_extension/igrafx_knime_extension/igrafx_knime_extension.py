@@ -840,6 +840,8 @@ class iGrafxSAPNode:
         auth_response = session.post(url=sap_api_url, verify=False)
         print(f"Auth Response: {auth_response.status_code} {auth_response.reason}")
         response = session.get(url=sap_api_url, headers=headers, verify=False)
+        #should return authentication  token then use token to call routes
+        #https://stackoverflow.com/questions/44020439/session-auth-in-python
 
         print(headers)
         print(response)

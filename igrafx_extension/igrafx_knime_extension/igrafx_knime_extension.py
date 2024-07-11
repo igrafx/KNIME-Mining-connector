@@ -814,8 +814,8 @@ class iGrafxSAPNode:
     start_date = knext.StringParameter("Start Date", "The date from when you want to retrieve information.",)
     end_date = knext.StringParameter("End Date", "The date until when you want to retrieve information.")
     sap_api_url = knext.StringParameter("SAP API URL", "The URL of the SAP API to be used for data fetching.")
-    # authorization = knext.StringParameter("Authorization", "The authorization token to be used for authentication.")
-    # auth_cookie = knext.StringParameter("Cookie", "The cookie to be used for authentication.")
+    auth_username = knext.StringParameter("Authorization Username", "The authorization username to be used for authentication.")
+    auth_pwd = knext.StringParameter("Authorization Password", "The authorization password to be used for authentication.")
 
     def configure(self, configure_context):
         # Set warning during configuration
@@ -826,29 +826,20 @@ class iGrafxSAPNode:
         start_date = self.start_date
         end_date = self.end_date
         sap_api_url = self.sap_api_url
-        # authorization = self.authorization
-        # auth_cookie = self.auth_cookie
+        auth_username = self.auth_username
+        auth_pwd = self.auth_pwd
 
-        # username = "api_tester"
-        # password = "DeceSoft2023"
-
-        payload = {}
         headers = {
             'X-CSRF-TOKEN': 'fetch',
-            # 'Authorization': authorization,
-            # 'Cookie': auth_cookie
         }
 
         session = req.Session()
         print(session)
-        session.auth = ("api_tester", "DeceSoft2023!")
+        session.auth = (auth_username, auth_pwd)
         print(session.auth)
-        auth_response = session.post("https://ns3080305.ip-145-239-0.eu:44302/sap/bc/dsfp2/rest_api/PROCESS", verify=False)
+        auth_response = session.post(url=sap_api_url, verify=False)
         print(f"Auth Response: {auth_response.status_code} {auth_response.reason}")
-        # response = req.request("GET", sap_api_url, headers=headers, data=payload, verify=False)
-        response = session.get("https://ns3080305.ip-145-239-0.eu:44302/sap/bc/dsfp2/rest_api/PROCESS", headers=headers, verify=False)
-        # res = req.post('https://ns3080305.ip-145-239-0.eu:44302/sap/bc/dsfp2/rest_api/PROCESS', auth=HTTPBasicAuth('api_tester', 'DeceSoft2023'), verify=False)
-        # print(f"res: {res}")
+        response = session.get(url=sap_api_url, headers=headers, verify=False)
 
         print(headers)
         print(response)
@@ -857,10 +848,7 @@ class iGrafxSAPNode:
         csrf_token = response.headers.get('x-csrf-token')
         print(f"CSRF Token: {csrf_token}\n")
 
-        # cookie = "SAP_SESSIONID_ER6_800=" + response.cookies.get('SAP_SESSIONID_ER6_800') + "; path=/"
-
         # Print the CSRF token and the Cookie
-        # print(f"CSRF Token: {csrf_token}\nCookie: {cookie}")
         print(response)
 
         # Create the root element of the selection XML
@@ -1020,11 +1008,9 @@ class iGrafxSAPNode:
         }
         headers2 = {
             'X-CSRF-TOKEN': csrf_token,
-            # 'Cookie': cookie
         }
 
         # The response of the Post request:
-        # response = req.request("POST", sap_api_url, headers=headers2, data=payload, files=files, verify=False)
         response = session.post(sap_api_url, headers=headers2, files=files, verify=False)
 
         print(f"The response is: {response.text}")

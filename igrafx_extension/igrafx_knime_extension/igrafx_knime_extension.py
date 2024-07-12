@@ -697,7 +697,9 @@ class iGrafxProjectDataNode:
         df = df.rename(columns=column_name_mapping_infos)
 
         # Check and replace the column name if it matches the pattern "case_+databasecolumnname"
-        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)" if col.startswith("case_") and col[5:] in column_name_mapping_infos else col, inplace=True)
+        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)" if col.startswith("case_") and col[
+                                                                                                                    5:] in column_name_mapping_infos else col,
+                  inplace=True)
 
         # Filter columns based on the condition
         columns_to_keep = [col for col in df.columns if all(keyword not in col for keyword in
@@ -785,6 +787,7 @@ class iGrafxProjectDataNode:
             # Return input data as output
             return input_data
 
+
 @knext.node(name="iGrafx SAP Data Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",
             category=igx_category)
 @knext.output_table(name="SAP Table",
@@ -792,26 +795,28 @@ class iGrafxProjectDataNode:
 class iGrafxSAPNode:
     """Node to fetch SAP data from the iGrafx Mining platform.
 
-    The iGrafx SAP Data Fetcher node allows users to fetch detailed information about specific
-    SAP data. Users can provide the parameters such as the SAP API URL, the authorization token and the cookie, which will be used to connect to the SAP API and retrieve the data.
-    Additionally, users can specify the Start Date and End Date to filter the data within the specified
-    date range.
-    This node can then directly be connected to other iGrafx nodes for further processing and uploading to the iGrafx platform.
+    The iGrafx SAP Data Fetcher node allows users to fetch detailed information about specific SAP data. Users can
+    provide the parameters such as the SAP API URL, the authorization token and the cookie, which will be used to
+    connect to the SAP API and retrieve the data. Additionally, users can specify the Start Date and End Date to
+    filter the data within the specified date range. This node can then directly be connected to other iGrafx nodes
+    for further processing and uploading to the iGrafx platform.
 
     Key Features:
 
     - **Data Processing**: The node processes the data by cleaning, filtering, and converting it into a table format.
-    - **CSRF Token Handling**: Automatically handles CSRF token fetching and cookie management for API authentication.
-    - **XML Generation**: Automatically generates the necessary XML payloads for selection and description to interact with the SAP API, eliminating the need to manually input XML files.
+    - **CSRF Token Handling**: Automatically handles CSRF token fetching and cookie management for API
+    authentication. - **XML Generation**: Automatically generates the necessary XML payloads for selection and
+    description to interact with the SAP API, eliminating the need to manually input XML files.
 
-    This node returns a table containing the fetched data. This table is retrieved in XML format, then cleaned and converted into a structured table.
-    It facilitates easy data processing and uploading to the iGrafx platform by using the other nodes.
+    This node returns a table containing the fetched data. This table is retrieved in XML format, then cleaned and
+    converted into a structured table. It facilitates easy data processing and uploading to the iGrafx platform by
+    using the other nodes.
 
     Please contact us in order to get access to the SAP extension.
 
     """
 
-    start_date = knext.StringParameter("Start Date", "The date from when you want to retrieve information.",)
+    start_date = knext.StringParameter("Start Date", "The date from when you want to retrieve information.", )
     end_date = knext.StringParameter("End Date", "The date until when you want to retrieve information.")
     sap_api_url = knext.StringParameter("SAP API URL", "The URL of the SAP API to be used for data fetching.")
     authorization = knext.StringParameter("Authorization", "The authorization token to be used for authentication.")

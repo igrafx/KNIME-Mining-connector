@@ -22,7 +22,8 @@ igx_category = knext.category(
             icon_path="icons/igx_logo.png",
             category=igx_category)
 @knext.input_table(name="Input Table",
-                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+                   description="A Table Input that allows users to provide or feed data (CSV or other)"
+                               " into the node.")
 @knext.output_table(name="Output Table",
                     description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxAPINode:

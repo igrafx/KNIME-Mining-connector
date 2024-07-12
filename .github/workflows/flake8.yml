@@ -1,4 +1,4 @@
-name: Pylint
+name: Flake8 Linter
 
 on: [push, pull_request]
 
@@ -14,10 +14,10 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Pylint
+    - name: Install Flake8
       run: |
         python -m pip install --upgrade pip
         pip install flake8
-    - name: Analysing the code with pylint
+    - name: Analysing the code with flake8
       run: |
         flake8 . --count --statistics --ignore=F841 --max-complexity=12 --max-line-length=122

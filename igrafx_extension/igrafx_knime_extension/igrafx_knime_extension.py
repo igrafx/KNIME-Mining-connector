@@ -1,11 +1,10 @@
 import logging
+import xml.etree.ElementTree as ET
+import tempfile
 import knime.extension as knext
 import igrafx_mining_sdk as igx
-import tempfile
 import requests as req
-import xml.etree.ElementTree as ET
 import pandas as pd
-import xml.dom.minidom
 
 LOGGER = logging.getLogger(__name__)
 
@@ -23,7 +22,8 @@ igx_category = knext.category(
             icon_path="icons/igx_logo.png",
             category=igx_category)
 @knext.input_table(name="Input Table",
-                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+                   description="A Table Input that allows users to provide or feed data (CSV or other)"
+                               " into the node.")
 @knext.output_table(name="Output Table",
                     description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxAPINode:
@@ -52,10 +52,14 @@ class iGrafxAPINode:
     """
 
     # Define parameters for iGrafx Mining API connection
-    workgroup_id = knext.StringParameter("Workgroup ID", "The ID of the workgroup You are working with.")
-    workgroup_key = knext.StringParameter("Workgroup Key", "The Private Key of the workgroup you are working with.")
-    api_url = knext.StringParameter("API URL", "The URL of the iGrafx Mining API platform you are using.")
-    auth_url = knext.StringParameter("Authentication URL", "The authentication URL of the iGrafx Mining platform.")
+    workgroup_id = knext.StringParameter("Workgroup ID",
+                                         "The ID of the workgroup You are working with.")
+    workgroup_key = knext.StringParameter("Workgroup Key",
+                                          "The Private Key of the workgroup you are working with.")
+    api_url = knext.StringParameter("API URL",
+                                    "The URL of the iGrafx Mining API platform you are using.")
+    auth_url = knext.StringParameter("Authentication URL",
+                                     "The authentication URL of the iGrafx Mining platform.")
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration
@@ -499,7 +503,8 @@ class iGrafxProjectVariantNode:
     """
     # Define parameters to get project variants
     given_project_id = knext.StringParameter("Project ID",
-                                             "The ID of the project for which you want to get the variant information.")
+                                             "The ID of the project for which you want to get "
+                                             "the variant information.")
     page_index = knext.IntParameter("Page Index",
                                     "The page index for pagination.", )
     limit = knext.IntParameter("Limit",
@@ -572,7 +577,8 @@ class iGrafxCompletedCasesNode:
     """
     # Define parameters to get project variants
     given_project_id = knext.StringParameter("Project ID",
-                                             "The ID of the project you want to retrieve completed cases for.")
+                                             "The ID of the project you want to retrieve completed"
+                                             " cases for.")
     page_index = knext.IntParameter("Page Index",
                                     "The page index for pagination.", )
     limit = knext.IntParameter("Limit",
@@ -697,7 +703,8 @@ class iGrafxProjectDataNode:
         df = df.rename(columns=column_name_mapping_infos)
 
         # Check and replace the column name if it matches the pattern "case_+databasecolumnname"
-        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)" if col.startswith("case_") and col[5:] in column_name_mapping_infos else col, inplace=True)
+        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)"
+                  if col.startswith("case_") and col[5:] in column_name_mapping_infos else col, inplace=True)
 
         # Filter columns based on the condition
         columns_to_keep = [col for col in df.columns if all(keyword not in col for keyword in
@@ -716,7 +723,8 @@ class iGrafxProjectDataNode:
     @knext.node(name="iGrafx Mining Column Mapping Fetcher", node_type=knext.NodeType.SOURCE,
                 icon_path="icons/igx_logo.png", category=igx_category)
     @knext.input_table(name="Input Table",
-                       description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+                       description="A Table Input that allows users to provide or feed data (CSV or other) into the "
+                                   "node.")
     @knext.output_table(name="Output Table",
                         description="A Table Output that provides data (CSV or other) out of the node.")
     class iGrafxColumnMappingFetcherNode:
@@ -732,8 +740,8 @@ class iGrafxProjectDataNode:
         1. Column Mapping Details: Fetches column mapping information for the specified project.
         It returns the Name, Aggregation, Index, among others, for each column.
 
-        2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data
-        retrieval and interaction with iGrafx Mining resources.
+        2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient
+        data retrieval and interaction with iGrafx Mining resources.
 
         3. Dynamic Configuration: Allows users to dynamically provide the Project ID as a parameter or use a predefined
         ID from the flow variables.
@@ -745,7 +753,8 @@ class iGrafxProjectDataNode:
 
         # Define the project ID for the project you want to retrieve column mapping
         given_project_id = knext.StringParameter("Project ID",
-                                                 "The ID of the project for which you want to retrieve column mapping.")
+                                                 "The ID of the project for which "
+                                                 "you want to retrieve column mapping.")
 
         def configure(self, configure_context, input_schema):
             # Set warning during configuration
@@ -785,6 +794,7 @@ class iGrafxProjectDataNode:
             # Return input data as output
             return input_data
 
+
 @knext.node(name="iGrafx SAP Data Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",
             category=igx_category)
 @knext.output_table(name="SAP Table",
@@ -792,30 +802,37 @@ class iGrafxProjectDataNode:
 class iGrafxSAPNode:
     """Node to fetch SAP data from the iGrafx Mining platform.
 
-    The iGrafx SAP Data Fetcher node allows users to fetch detailed information about specific
-    SAP data. Users can provide the parameters such as the SAP API URL, the authorization token and the cookie, which will be used to connect to the SAP API and retrieve the data.
-    Additionally, users can specify the Start Date and End Date to filter the data within the specified
-    date range.
-    This node can then directly be connected to other iGrafx nodes for further processing and uploading to the iGrafx platform.
+    The iGrafx SAP Data Fetcher node allows users to fetch detailed information about specific SAP data. Users can
+    provide the parameters such as the SAP API URL, the authorization token and the cookie, which will be used to
+    connect to the SAP API and retrieve the data. Additionally, users can specify the Start Date and End Date to
+    filter the data within the specified date range. This node can then directly be connected to other iGrafx nodes
+    for further processing and uploading to the iGrafx platform.
 
     Key Features:
 
     - **Data Processing**: The node processes the data by cleaning, filtering, and converting it into a table format.
-    - **CSRF Token Handling**: Automatically handles CSRF token fetching and cookie management for API authentication.
-    - **XML Generation**: Automatically generates the necessary XML payloads for selection and description to interact with the SAP API, eliminating the need to manually input XML files.
+    - **CSRF Token Handling**: Automatically handles CSRF token fetching and cookie management for API
+    authentication. - **XML Generation**: Automatically generates the necessary XML payloads for selection and
+    description to interact with the SAP API, eliminating the need to manually input XML files.
 
-    This node returns a table containing the fetched data. This table is retrieved in XML format, then cleaned and converted into a structured table.
-    It facilitates easy data processing and uploading to the iGrafx platform by using the other nodes.
+    This node returns a table containing the fetched data. This table is retrieved in XML format, then cleaned and
+    converted into a structured table. It facilitates easy data processing and uploading to the iGrafx platform by
+    using the other nodes.
 
     Please contact us in order to get access to the SAP extension.
 
     """
 
-    start_date = knext.StringParameter("Start Date", "The date from when you want to retrieve information.",)
-    end_date = knext.StringParameter("End Date", "The date until when you want to retrieve information.")
-    sap_api_url = knext.StringParameter("SAP API URL", "The URL of the SAP API to be used for data fetching.")
-    authorization = knext.StringParameter("Authorization", "The authorization token to be used for authentication.")
-    auth_cookie = knext.StringParameter("Cookie", "The cookie to be used for authentication.")
+    start_date = knext.StringParameter("Start Date",
+                                       "The date from when you want to retrieve information.", )
+    end_date = knext.StringParameter("End Date",
+                                     "The date until when you want to retrieve information.")
+    sap_api_url = knext.StringParameter("SAP API URL",
+                                        "The URL of the SAP API to be used for data fetching.")
+    authorization = knext.StringParameter("Authorization",
+                                          "The authorization token to be used for authentication.")
+    auth_cookie = knext.StringParameter("Cookie",
+                                        "The cookie to be used for authentication.")
 
     def configure(self, configure_context):
         # Set warning during configuration

@@ -704,7 +704,7 @@ class iGrafxProjectDataNode:
 
         # Check and replace the column name if it matches the pattern "case_+databasecolumnname"
         df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)"
-                  if col.startswith("case_") and col[5:] in column_name_mapping_infos else col, inplace=True)
+        if col.startswith("case_") and col[5:] in column_name_mapping_infos else col, inplace=True)
 
         # Filter columns based on the condition
         columns_to_keep = [col for col in df.columns if all(keyword not in col for keyword in
@@ -793,6 +793,87 @@ class iGrafxProjectDataNode:
 
             # Return input data as output
             return input_data
+
+
+@knext.node(name="iGrafx Mining Project Files Info Fetcher", node_type=knext.NodeType.SOURCE,
+            icon_path="icons/igx_logo.png", category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
+class iGrafxProfectFilesInfoNode:
+    """
+    Node to fetch the files information from the iGrafx Mining API for a specific project.
+
+    The iGrafx Mining Project Files Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve
+    metadata information for all files in a specified project such as the status, number of files,
+    creation date and more.
+    By providing the Project ID, a page index, a limit and a sort order this node establishes a
+    connection with the iGrafx API and fetches details about the files.
+
+    Key Features:
+
+    1. Project File Details: Fetches metadata information, including file names, statuses, creation dates, and
+    ingestion statuses for the specified project.
+
+    2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data
+    retrieval and interaction with iGrafx Mining resources.
+
+    3. Dynamic Configuration: Allows users to dynamically provide the Project ID, page index, limit, and sort order as
+    parameters or use predefined values from the flow variables.
+
+    The iGrafx Project Files Info Fetcher node facilitates the retrieval of essential file information, providing users
+    with insights into the files associated with a specific project.
+
+    """
+
+    # Define parameters to get project files info
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project for which you want to get "
+                                             "the variant information.")
+    page_index = knext.IntParameter("Page Index",
+                                    "The page index for pagination.", )
+    limit = knext.IntParameter("Limit",
+                               "The maximum number of items to return per page.")
+    sort_order = knext.StringParameter("Sort Order",
+                                       "The order in which to sort the results (ASC or DESC).",
+                                       default_value="ASC")
+
+    def configure(self, configure_context, input_schema):
+        # Set warning during configuration
+        configure_context.set_warning("Getting Project Files Information")
+
+    def execute(self, exec_context, input_data):
+        # Fetch project variants using the provided parameters
+        page_index_value = self.page_index
+        limit_value = self.limit
+        sort_order = self.sort_order
+
+        # Get Workgroup object from the previous node
+        wg = igx.Workgroup(
+            exec_context.flow_variables["wg_id"],
+            exec_context.flow_variables["wg_key"],
+            exec_context.flow_variables["api_url"],
+            exec_context.flow_variables["auth_url"]
+        )
+
+        # Retrieve project ID from flow variables or manually set if provided
+        if not self.given_project_id:
+            if 'new_project_id' not in exec_context.flow_variables:
+                raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
+            else:
+                project_id = exec_context.flow_variables["new_project_id"]
+        else:
+            project_id = self.given_project_id
+            exec_context.flow_variables["new_project_id"] = project_id
+
+        my_project = wg.project_from_id(project_id)
+        files_info = my_project.get_project_files_metadata(page_index=page_index_value, limit=limit_value,
+                                                           sort_order=sort_order)  # returns a json
+        exec_context.flow_variables["project_files_info"] = str(files_info)
+
+        # Return input data as output
+        return input_data
 
 
 @knext.node(name="iGrafx SAP Data Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",

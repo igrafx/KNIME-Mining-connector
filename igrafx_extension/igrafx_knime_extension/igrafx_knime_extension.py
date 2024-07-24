@@ -703,8 +703,8 @@ class iGrafxProjectDataNode:
         df = df.rename(columns=column_name_mapping_infos)
 
         # Check and replace the column name if it matches the pattern "case_+databasecolumnname"
-        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)" if col.startswith("case_")
-                                                    and col[5:] in column_name_mapping_infos else col, inplace=True)
+        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)" if col.startswith("case_") and
+                                                            col[5:] in column_name_mapping_infos else col, inplace=True)
 
         # Filter columns based on the condition
         columns_to_keep = [col for col in df.columns if all(keyword not in col for keyword in

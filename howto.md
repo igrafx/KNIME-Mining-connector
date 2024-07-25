@@ -28,12 +28,16 @@ To maximize the benefits of this extension, ensure you have an active iGrafx acc
 9. [The iGrafx Mining Project Variant Fetcher Node](#the-igrafx-mining-project-variant-fetcher-node)
 10. [The iGrafx Mining Project Mapping Info Fetcher Node](#the-igrafx-mining-project-mapping-info-fetcher-node)
 11. [The iGrafx Mining Project Deletion Node](#the-igrafx-mining-project-deletion-node)
-12. [The iGrafx Mining Extension Example](#the-igrafx-mining-extension-example)
-13. [Using the iGrafx Mining Knime Extension as a developer](#using-the-igrafx-mining-knime-extension-as-a-developer)
-14. [Requirements](#requirements)
-15. [Getting Started](#getting-started)
-16. [Using the iGrafx Knime Extension locally](#using-the-igrafx-knime-extension-locally)
-17. [Further Documentation](#further-documentation)
+12. [The iGrafx Mining Column Mapping Fetcher Node](#the-igrafx-mining-column-mapping-fetcher-node)
+13. [The iGrafx SAP Data fetcher](#using-the-igrafx-sap-data-fetcher)
+14. [The iGrafx Mining Project Files Info Fetcher Node](#the-igrafx-mining-project-files-info-fetcher-node)
+15. [The iGrafx Mining File Info Fetcher Node](#the-igrafx-mining-file-info-fetcher-node)
+16. [The iGrafx Mining Extension Example](#the-igrafx-mining-extension-example)
+17. [Using the iGrafx Mining Knime Extension as a developer](#using-the-igrafx-mining-knime-extension-as-a-developer)
+18. [Requirements](#requirements)
+19. [Getting Started](#getting-started)
+20. [Using the iGrafx Knime Extension locally](#using-the-igrafx-knime-extension-locally)
+21. [Further Documentation](#further-documentation)
 
 ## Installing the iGrafx Extension
 To install the **iGrafx Extension** on Knime as a user, open Knime. 
@@ -425,6 +429,76 @@ This node returns a table called **SAP Table**, which can then be connected to o
 It has no inputs as all information is either generated within the node or given as parameter by the user.
 
 There are no flow variables for this node, simply the **SAP Table** output.
+
+## The iGrafx Mining Project Files Info Fetcher Node
+
+The iGrafx Mining Project Files Info Fetcher node is a node that allows users to retrieve metadata information for all files in a specified project.
+By specifying the Project ID, Page Index, Limit and Sort Order users can establish a connection with the iGrafx API and retrieve details about project files,
+such as names, statuses, creation dates, and ingestion statuses.
+
+To use the **iGrafx Mining Project Files Info Fetcher** node, follow these steps:
+
+1. Double-click the **iGrafx Mining Project Files Info Fetcher** node.
+2. Set the **Project ID** of the project for which you want to get file information.
+3. Set the **Page Index** for pagination.
+4. Set the **Limit**, representing the maximum number of items to return per page.
+5. Set the **Sort Order** (ASC or DESC) to determine the order of the results.
+
+This node takes a table as input, allowing users to provide or feed data (CSV or other) into the node.
+It then outputs a table, providing data (CSV or other) out of the node.
+
+The following **flow variables** are available for this node:
+
+| Flow variable     |                        Meaning                         |        Description |
+|:------------------|:------------------------------------------------------:|-------------------:|
+| auth_url          |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url           |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key            | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id             |     The ID of the workgroup you are working with.      |       Workgroup ID |
+| new_project_id    |          The ID of the project.                        |       Project ID   |
+| project_files_info| Information about the files in the project             | Project Files Info |
+
+When the node is successfully executed, it retrieves and returns metadata information for all files in the specified project under the flow variable `project_files_info`. This includes details such as:
+
+- File ID
+- File name
+- File status
+- Creation date
+- Ingestion status
+
+## The iGrafx Mining File Info Fetcher Node
+
+The iGrafx Mining File Info Fetcher node is a node that allows users to retrieve metadata information for a specific file in a specified project.
+By specifying the Project ID and File ID, users can establish a connection with the iGrafx API and retrieve details about a specific file,
+such as its name, status, creation date, and ingestion status.
+
+To use the **iGrafx Mining File Info Fetcher** node, follow these steps:
+
+1. Double-click the **iGrafx Mining File Info Fetcher** node.
+2. Set the **Project ID** of the project for which you want to get file information.
+3. Set the **File ID** of the file for which you want to get information.
+
+This node takes a table as input, allowing users to provide or feed data (CSV or other) into the node.
+It then outputs a table, providing data (CSV or other) out of the node.
+
+The following **flow variables** are available for this node:
+
+| Flow variable       |                        Meaning                         |        Description |
+|:--------------------|:------------------------------------------------------:|-------------------:|
+| auth_url            |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url             |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key              | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id               |     The ID of the workgroup you are working with.      |       Workgroup ID |
+| new_project_id      |          The ID of the project.                        |       Project ID   |
+| specific_file_info  | Information about the specific file in the project     | Specific File Info |
+
+When the node is successfully executed, it retrieves and returns metadata information for the specified file in the project under the flow variable `specific_file_info`. This includes details such as:
+
+- File ID
+- File name
+- File status
+- Creation date
+- Ingestion status
 
 ## The iGrafx Mining Extension Example
 

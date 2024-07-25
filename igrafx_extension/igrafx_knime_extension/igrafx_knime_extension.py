@@ -844,7 +844,7 @@ class iGrafxProfectFilesInfoNode:
         configure_context.set_warning("Getting Project Files Information")
 
     def execute(self, exec_context, input_data):
-        # Fetch project variants using the provided parameters
+        # Fetch project files info using the provided parameters
         page_index_value = self.page_index
         limit_value = self.limit
         sort_order = self.sort_order
@@ -871,6 +871,77 @@ class iGrafxProfectFilesInfoNode:
         files_info = my_project.get_project_files_metadata(page_index=page_index_value, limit=limit_value,
                                                            sort_order=sort_order)  # returns a json
         exec_context.flow_variables["project_files_info"] = str(files_info)
+
+        # Return input data as output
+        return input_data
+
+@knext.node(name="iGrafx Mining File Info Fetcher", node_type=knext.NodeType.SOURCE,
+            icon_path="icons/igx_logo.png", category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
+class iGrafxFileInfoNode:
+    """
+    Node to fetch file information from the iGrafx Mining API for a specific file in a project.
+
+    The iGrafx Mining File Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve metadata
+    information such as the satus, its ID and more for a specific file in a specified project .
+    By providing the Project ID and File ID, this node
+    establishes a connection with the iGrafx API and fetches details about the file.
+
+    Key Features:
+
+    1. Specific File Details: Fetches metadata information, including file name, statuses, creation date, and
+    ingestion status for the specified file.
+
+    2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data
+    retrieval and interaction with iGrafx Mining resources.
+
+    3. Dynamic Configuration: Allows users to dynamically provide the Project ID and File ID as parameters or use
+    predefined values from the flow variables.
+
+    The iGrafx File Info Fetcher node facilitates the retrieval of essential file information, providing users with
+    insights into the specific file associated with a project.
+
+    """
+
+    # Define parameters to get project files info
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project for which you want to get "
+                                             "the variant information.")
+    file_id = knext.StringParameter("File ID",
+                                    "The ID of the file for which you want to get information.", )
+
+    def configure(self, configure_context, input_schema):
+        # Set warning during configuration
+        configure_context.set_warning("Getting Project Files Information")
+
+    def execute(self, exec_context, input_data):
+        # Fetch project variants using the provided parameters
+        file_id = self.file_id
+
+        # Get Workgroup object from the previous node
+        wg = igx.Workgroup(
+            exec_context.flow_variables["wg_id"],
+            exec_context.flow_variables["wg_key"],
+            exec_context.flow_variables["api_url"],
+            exec_context.flow_variables["auth_url"]
+        )
+
+        # Retrieve project ID from flow variables or manually set if provided
+        if not self.given_project_id:
+            if 'new_project_id' not in exec_context.flow_variables:
+                raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
+            else:
+                project_id = exec_context.flow_variables["new_project_id"]
+        else:
+            project_id = self.given_project_id
+            exec_context.flow_variables["new_project_id"] = project_id
+
+        my_project = wg.project_from_id(project_id)
+        file_info = my_project.get_file_metadata(file_id)  # returns a json
+        exec_context.flow_variables["specific_file_info"] = str(file_info)
 
         # Return input data as output
         return input_data

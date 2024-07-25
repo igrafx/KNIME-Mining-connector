@@ -874,6 +874,8 @@ class iGrafxProfectFilesInfoNode:
 
         # Return input data as output
         return input_data
+
+
 @knext.node(name="iGrafx Mining File Info Fetcher", node_type=knext.NodeType.SOURCE,
             icon_path="icons/igx_logo.png", category=igx_category)
 @knext.input_table(name="Input Table",

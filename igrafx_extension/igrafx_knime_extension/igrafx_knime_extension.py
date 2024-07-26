@@ -793,7 +793,9 @@ class iGrafxSAPNode:
     """Node to fetch SAP data from the iGrafx Mining platform.
 
     The iGrafx SAP Data Fetcher node allows users to fetch detailed information about specific
-    SAP data. Users can provide the parameters such as the SAP API URL, the authorization token and the cookie, which will be used to connect to the SAP API and retrieve the data.
+    SAP data.
+    Users can provide the parameters such as the SAP API URL and the authorization username and password,
+    which will be used to connect to the SAP API and retrieve the data.
     Additionally, users can specify the Start Date and End Date to filter the data within the specified
     date range.
     This node can then directly be connected to other iGrafx nodes for further processing and uploading to the iGrafx platform.
@@ -834,23 +836,16 @@ class iGrafxSAPNode:
         }
 
         session = req.Session()
-        print(session)
         session.auth = (auth_username, auth_pwd)
         print(session.auth)
-        auth_response = session.post(url=sap_api_url, verify=False)
-        print(f"Auth Response: {auth_response.status_code} {auth_response.reason}")
-        response = session.get(url=sap_api_url, headers=headers, verify=False)
-        #should return authentication  token then use token to call routes
-        #https://stackoverflow.com/questions/44020439/session-auth-in-python
 
-        print(headers)
-        print(response)
+        response = session.get(url=sap_api_url, headers=headers, verify=False)
 
         # Access the CSRF token from the response's headers
         csrf_token = response.headers.get('x-csrf-token')
         print(f"CSRF Token: {csrf_token}\n")
 
-        # Print the CSRF token and the Cookie
+        # Print the CSRF token
         print(response)
 
         # Create the root element of the selection XML
@@ -1003,7 +998,6 @@ class iGrafxSAPNode:
         # Selection and Description XML have been generated
 
         # Send the XMls to the SAP API and retrieve the response:
-        payload = {}
         files = {
             'selection': ('selection.xml', selection_xml, 'application/xml'),
             'description': ('description.xml', description_xml, 'application/xml')
@@ -1030,6 +1024,8 @@ class iGrafxSAPNode:
         # Find all XML elements with the tag name 'Case' that are children of the 'Cases'
         case_elements = root.findall('Cases/Case')
 
+        data_list = []
+
         # Iterate over Case elements
         for case_element in case_elements:
             case_id = case_element.attrib['id']
@@ -1050,12 +1046,16 @@ class iGrafxSAPNode:
                 # Check if there are any Event elements
                 if not event_elements:
                     # Append a row without Event information
-                    df = df.append({
+                    data_list.append({
                         'Case ID': case_id,
                         'Entity ID': entity_id,
                         'Entity Name': entity_name,
-                        'Document ID': document_id
-                    }, ignore_index=True)
+                        'Document ID': document_id,
+                        'Task Name': "",
+                        'Event Type': "",
+                        'Timestamp': ""
+                    })
+
 
                 # Iterate over Event elements
                 for event_element in event_elements:
@@ -1065,14 +1065,21 @@ class iGrafxSAPNode:
                     task_name = f"{event_type} {entity_name}"
 
                     # Append a new row to the DataFrame
-                    df = df.append({'Case ID': case_id,
-                                    'Entity ID': entity_id,
-                                    'Entity Name': entity_name,
-                                    'Document ID': document_id,
-                                    }, ignore_index=True)
-                    df['Task Name'] = task_name
-                    df['Event Type'] = event_type
-                    df['Timestamp'] = event_ts
+                    data_list.append({
+                        'Case ID': case_id,
+                        'Entity ID': entity_id,
+                        'Entity Name': entity_name,
+                        'Document ID': document_id,
+                        'Task Name': task_name,
+                        'Event Type': event_type,
+                        'Timestamp': event_ts
+                    })
+
+        df = pd.DataFrame(data_list)
+
+        # Drop empty columns
+        df.replace('', pd.NA, inplace=True)
+        df.dropna(axis=1, how='all', inplace=True)
 
         if 'Timestamp' in df.columns:
             # Execute the line only if 'Timestamp' column exists

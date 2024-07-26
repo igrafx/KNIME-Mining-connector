@@ -416,7 +416,7 @@ This data is then cleaned and processed before being converted to a Table to be 
 Please note that at present, the node only handles Order to Cash processes.
 
 To use the node double-click on it.
-Enter the **SAP API URL**, the **authorization token** and the **cookie** to connect to the SAP API. Doing that allows the node to do the necessary requests to retrieve the desired data.
+Enter the **SAP API URL** and  the **authorization username and password** to connect to the SAP API. Doing that allows the node to do the necessary requests to retrieve the desired data.
 Then, enter the **Start and End dates**. The node will return Case IDs that fall within these dates.
 
 Please contact us at [support@igrafx.com](mailto:support@igrafx.com) for assistance with using the SAP extension.

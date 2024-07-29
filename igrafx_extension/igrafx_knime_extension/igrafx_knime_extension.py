@@ -796,17 +796,20 @@ class iGrafxSAPNode:
     SAP data.
     Users can provide the parameters such as the SAP API URL and the authorization username and password,
     which will be used to connect to the SAP API and retrieve the data.
-    Additionally, users can specify the Start Date and End Date to filter the data within the specified
+    Additionally, users must specify the Start Date and End Date to filter the data within the specified
     date range.
-    This node can then directly be connected to other iGrafx nodes for further processing and uploading to the iGrafx platform.
+    This node can then directly be connected to other iGrafx nodes for further processing
+    and uploading to the iGrafx platform.
 
     Key Features:
 
+    - **CSRF Token Handling**: Automatically handles CSRF token fetching for API authentication.
+    - **XML Generation**: Automatically generates the necessary XML payloads for selection and description
+     to interact with the SAP API, eliminating the need to manually input XML files.
     - **Data Processing**: The node processes the data by cleaning, filtering, and converting it into a table format.
-    - **CSRF Token Handling**: Automatically handles CSRF token fetching and cookie management for API authentication.
-    - **XML Generation**: Automatically generates the necessary XML payloads for selection and description to interact with the SAP API, eliminating the need to manually input XML files.
 
-    This node returns a table containing the fetched data. This table is retrieved in XML format, then cleaned and converted into a structured table.
+    This node returns a table containing the fetched data. This table is retrieved in XML format,
+    then cleaned and converted into a structured table.
     It facilitates easy data processing and uploading to the iGrafx platform by using the other nodes.
 
     Please contact us in order to get access to the SAP extension.
@@ -837,15 +840,13 @@ class iGrafxSAPNode:
 
         session = req.Session()
         session.auth = (auth_username, auth_pwd)
-        print(session.auth)
-
         response = session.get(url=sap_api_url, headers=headers, verify=False)
 
         # Access the CSRF token from the response's headers
         csrf_token = response.headers.get('x-csrf-token')
         print(f"CSRF Token: {csrf_token}\n")
 
-        # Print the CSRF token
+        # Print the Respons
         print(response)
 
         # Create the root element of the selection XML
@@ -1085,6 +1086,11 @@ class iGrafxSAPNode:
             # Execute the line only if 'Timestamp' column exists
             df['Timestamp'] = df['Timestamp'].str.replace(" CET", "")
             # df = df.loc[(df['Timestamp'] >= start_date) & (df['Timestamp'] <= end_date)]
+
+        exec_context.flow_variables["csrf_token"] = csrf_token
+        exec_context.flow_variables["end_date"] = self.end_date
+        exec_context.flow_variables["start_date"] = self.start_date
+        exec_context.flow_variables["sap_api_url"] = self.sap_api_url
 
         knime_df = knext.Table.from_pandas(df)
 

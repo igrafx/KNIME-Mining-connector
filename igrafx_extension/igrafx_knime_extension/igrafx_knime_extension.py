@@ -1087,11 +1087,6 @@ class iGrafxSAPNode:
             df['Timestamp'] = df['Timestamp'].str.replace(" CET", "")
             # df = df.loc[(df['Timestamp'] >= start_date) & (df['Timestamp'] <= end_date)]
 
-        exec_context.flow_variables["csrf_token"] = csrf_token
-        exec_context.flow_variables["end_date"] = self.end_date
-        exec_context.flow_variables["start_date"] = self.start_date
-        exec_context.flow_variables["sap_api_url"] = self.sap_api_url
-
         knime_df = knext.Table.from_pandas(df)
 
         return knime_df

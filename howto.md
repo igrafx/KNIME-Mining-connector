@@ -423,16 +423,9 @@ The node does not take any inputs. All necessary information is either generated
 
 The node provides a single output, the **SAP Table**. This table can be connected to other iGrafx nodes for uploading to the iGrafx Mining Platform for further analysis.
 
-The **flow variables** of this node are:
+No **flow variables** are returned with this node.
 
-| Flow variable |                Meaning                | Description |
-|:--------------|:-------------------------------------:|------------:|
-| sap_api_url   |        The URL of the SAP API.        | SAP API URL |
-| csrf_token    | The CSRF token for SAP API requests.  |  CSRF Token | 
-| start_date    |  The start date for data retrieval.   |  Start Date |
-| end_date      |   The end date for data retrieval.    |    End Date |
-
-When the node is successfully executed it will return the `SAP Table` and the respective flow variables.
+When the node is successfully executed it will return the `SAP Table`.
 
 For assistance with using the SAP extension, please contact us at [support@igrafx.com](mailto:support@igrafx.com).
 

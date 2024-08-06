@@ -412,26 +412,30 @@ Here are the **flow variables** of this node:
 When the node is successfully executed, it will return the `column_mapping` of the given project. 
 
 Note that when retrieved, the column mapping can be reused to add files.
-
+ 
 
 ## Using the iGrafx SAP Data fetcher
 
-The iGrafx SAP Data Fetcher Node is a node that allows you to retrieve data from an SAP API. 
-The node generates a Selection and Description XML, which are then used in a POST request to retrieve the desired data.
-This data is then cleaned and processed before being converted to a Table to be used.
+The **iGrafx SAP Data Fetcher Node** allows users to retrieve data from an SAP API. It generates Selection and Description XML files, which are then used in a POST request to fetch the desired data. This data is subsequently cleaned, processed, and converted into a table for further use.
 
-Please note that at present, the node only handles Order to Cash processes.
+**Note**: The node currently handles only Order to Cash processes.
 
-To use the node double-click on it.
-Enter the **SAP API URL**, the **authorization token** and the **cookie** to connect to the SAP API. Doing that allows the node to do the necessary requests to retrieve the desired data.
-Then, enter the **Start and End dates**. The node will return Case IDs that fall within these dates.
+To use the node :
 
-Please contact us at [support@igrafx.com](mailto:support@igrafx.com) for assistance with using the SAP extension.
+1. Double-click the **iGrafx SAP Data Fetcher** node. 
+2. Specify the **Start Date** and **End Date**. The node will return Case IDs that fall within these dates. 
+3. Enter the **SAP API URL**, **authorization username**, and **password** to connect to the SAP API. This enables the node to make the necessary requests to retrieve the data.
 
-This node returns a table called **SAP Table**, which can then be connected to other iGrafx nodes to upload it to the iGrafx Mining Platform for further analysis.
-It has no inputs as all information is either generated within the node or given as parameter by the user.
+The node does not take any inputs. All necessary information is either generated within the node or provided by the user through parameters.
 
-There are no flow variables for this node, simply the **SAP Table** output.
+The node provides a single output, the **SAP Table**. This table can be connected to other iGrafx nodes for uploading to the iGrafx Mining Platform for further analysis.
+
+No **flow variables** are returned with this node.
+
+When the node is successfully executed it will return the `SAP Table`.
+
+For assistance with using the SAP extension, please contact us at [support@igrafx.com](mailto:support@igrafx.com).
+
 
 ## The iGrafx Mining Project Files Info Fetcher Node
 
@@ -491,14 +495,14 @@ These tables can then be reused for further processing.
 
 The following **flow variables** are available for this node:
 
-| Flow variable               |                        Meaning                         |        Description |
-|:----------------------------|:------------------------------------------------------:|-------------------:|
-| auth_url                    |     The authentication URL of the iGrafx platform.     | Authentication URL |
-| api_url                     |   The URL of the iGrafx API platform you are using.    |            API URL | 
-| wg_key                      | The Private Key of the workgroup you are working with. |      Workgroup Key |
-| wg_id                       |     The ID of the workgroup you are working with.      |       Workgroup ID |
-| new_project_id              |          The ID of the project.                        |       Project ID   |
-| uploaded_files_info         | Information on the uploaded file(s) such as the ID, name or status | Uploaded files Information |
+| Flow variable               |                               Meaning                               |                Description |
+|:----------------------------|:-------------------------------------------------------------------:|---------------------------:|
+| auth_url                    |           The authentication URL of the iGrafx platform.            |         Authentication URL |
+| api_url                     |          The URL of the iGrafx API platform you are using.          |                    API URL | 
+| wg_key                      |       The Private Key of the workgroup you are working with.        |              Workgroup Key |
+| wg_id                       |            The ID of the workgroup you are working with.            |               Workgroup ID |
+| new_project_id              |                       The ID of the project.                        |                 Project ID |
+| uploaded_files_info         | Information on the uploaded file(s) such as the ID, name or status  | Uploaded files Information |
 
 When the node is successfully executed, it retrieves and returns metadata information for the specified file in the project in the Table ``File Info Table``. 
 This includes details such as:

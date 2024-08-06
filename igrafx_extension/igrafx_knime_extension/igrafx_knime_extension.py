@@ -1017,11 +1017,16 @@ class iGrafxSAPNode:
 
     """
 
-    start_date = knext.StringParameter("Start Date", "The date from when you want to retrieve information.",)
-    end_date = knext.StringParameter("End Date", "The date until when you want to retrieve information.")
-    sap_api_url = knext.StringParameter("SAP API URL", "The URL of the SAP API to be used for data fetching.")
-    auth_username = knext.StringParameter("Authorization Username", "The authorization username to be used for authentication.")
-    auth_pwd = knext.StringParameter("Authorization Password", "The authorization password to be used for authentication.")
+    start_date = knext.StringParameter("Start Date",
+                                       "The date from when you want to retrieve information.",)
+    end_date = knext.StringParameter("End Date",
+                                     "The date until when you want to retrieve information.")
+    sap_api_url = knext.StringParameter("SAP API URL",
+                                        "The URL of the SAP API to be used for data fetching.")
+    auth_username = knext.StringParameter("Authorization Username",
+                                          "The authorization username to be used for authentication.")
+    auth_pwd = knext.StringParameter("Authorization Password",
+                                     "The authorization password to be used for authentication.")
 
     def configure(self, configure_context):
         # Set warning during configuration
@@ -1257,7 +1262,6 @@ class iGrafxSAPNode:
                         'Event Type': "",
                         'Timestamp': ""
                     })
-
 
                 # Iterate over Event elements
                 for event_element in event_elements:

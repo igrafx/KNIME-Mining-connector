@@ -259,16 +259,19 @@ This node takes a table as input and outputs a table.
 
 Here are the **flow variables** of this node:
 
-| Flow variable         |                             Meaning                             |              Description |
-|:----------------------|:---------------------------------------------------------------:|-------------------------:|
-| auth_url              |         The authentication URL of the iGrafx platform.          |       Authentication URL |
-| api_url               |        The URL of the iGrafx API platform you are using.        |                  API URL | 
-| wg_key                |     The Private Key of the workgroup you are working with.      |            Workgroup Key |
-| wg_id                 |          The ID of the workgroup You are working with.          |             Workgroup ID |
-| new_project_id        |              The ID of the newly created project.               |           New Project ID |
-| column_mapping_exists | A boolean indicating whether ot not the column mapping exists.  |    Column Mapping Status |
-| chunk_size            |             The number of rows to process at a time             | Number of Rows per Chunk |
+| Flow variable                 |                              Meaning                               |                Description |
+|:------------------------------|:------------------------------------------------------------------:|---------------------------:|
+| auth_url                      |           The authentication URL of the iGrafx platform.           |         Authentication URL |
+| api_url                       |         The URL of the iGrafx API platform you are using.          |                    API URL | 
+| wg_key                        |       The Private Key of the workgroup you are working with.       |              Workgroup Key |
+| wg_id                         |           The ID of the workgroup You are working with.            |               Workgroup ID |
+| new_project_id                |                The ID of the newly created project.                |             New Project ID |
+| column_mapping_exists         |   A boolean indicating whether ot not the column mapping exists.   |      Column Mapping Status |
+| chunk_size                    |              The number of rows to process at a time               |   Number of Rows per Chunk |
+| uploaded_files_info           | Information on the uploaded file(s) such as the ID, name or status | Uploaded files Information |
 
+With the ``uploaded_files_info`` flow variable, you will be able to access information about the added file.
+If several files are added then their information will also be returned in the list.
 
 ## The iGrafx Mining Project Data Node
 
@@ -472,33 +475,40 @@ The iGrafx Mining File Info Fetcher node is a node that allows users to retrieve
 By specifying the Project ID and File ID, users can establish a connection with the iGrafx API and retrieve details about a specific file,
 such as its name, status, creation date, and ingestion status.
 
+Note that neither the Project ID nor File ID *have* to be specified. They can be retrieved from other nodes,
+for instance the **iGrafx Mining File Upload Node**, by simply connecting them.
+
 To use the **iGrafx Mining File Info Fetcher** node, follow these steps:
 
 1. Double-click the **iGrafx Mining File Info Fetcher** node.
-2. Set the **Project ID** of the project for which you want to get file information.
-3. Set the **File ID** of the file for which you want to get information.
+2. Set the **Project ID** of the project for which you want to get file information.(Optional)
+3. Set the **File ID** of the file for which you want to get information.(Optional)
 
 This node takes a table as input, allowing users to provide or feed data (CSV or other) into the node.
-It then outputs a table, providing data (CSV or other) out of the node.
+It then outputs 2 tables. One providing the original data (CSV or other) out of the node.
+And the other, named **File Info Table**, providing a table containing the file IDs and their respective information.
+These tables can then be reused for further processing.
 
 The following **flow variables** are available for this node:
 
-| Flow variable       |                        Meaning                         |        Description |
-|:--------------------|:------------------------------------------------------:|-------------------:|
-| auth_url            |     The authentication URL of the iGrafx platform.     | Authentication URL |
-| api_url             |   The URL of the iGrafx API platform you are using.    |            API URL | 
-| wg_key              | The Private Key of the workgroup you are working with. |      Workgroup Key |
-| wg_id               |     The ID of the workgroup you are working with.      |       Workgroup ID |
-| new_project_id      |          The ID of the project.                        |       Project ID   |
-| specific_file_info  | Information about the specific file in the project     | Specific File Info |
+| Flow variable               |                        Meaning                         |        Description |
+|:----------------------------|:------------------------------------------------------:|-------------------:|
+| auth_url                    |     The authentication URL of the iGrafx platform.     | Authentication URL |
+| api_url                     |   The URL of the iGrafx API platform you are using.    |            API URL | 
+| wg_key                      | The Private Key of the workgroup you are working with. |      Workgroup Key |
+| wg_id                       |     The ID of the workgroup you are working with.      |       Workgroup ID |
+| new_project_id              |          The ID of the project.                        |       Project ID   |
+| uploaded_files_info         | Information on the uploaded file(s) such as the ID, name or status | Uploaded files Information |
 
-When the node is successfully executed, it retrieves and returns metadata information for the specified file in the project under the flow variable `specific_file_info`. This includes details such as:
+When the node is successfully executed, it retrieves and returns metadata information for the specified file in the project in the Table ``File Info Table``. 
+This includes details such as:
 
 - File ID
 - File name
 - File status
 - Creation date
 - Ingestion status
+- And more...
 
 ## The iGrafx Mining Extension Example
 

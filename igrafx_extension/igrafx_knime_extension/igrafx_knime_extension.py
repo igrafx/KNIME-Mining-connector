@@ -1,6 +1,7 @@
 import logging
 import xml.etree.ElementTree as ET
 import tempfile
+import json
 import knime.extension as knext
 import igrafx_mining_sdk as igx
 import requests as req
@@ -250,6 +251,8 @@ class iGrafxFileUploadNode:
     - Workgroup Object Connectivity: Establishes a secure connection to the iGrafx Mining API by utilizing
     the Workgroup Object, ensuring authentication and access permissions.
 
+    - Ability to upload a zip file: Allows users to upload a zip file to the iGrafx Mining platform.
+
     This node empowers users to seamlessly integrate file upload functionalities into their KNIME workflows,
     enabling efficient data transfer and synchronization with the iGrafx Mining platform. By leveraging this node,
     users can ensure the accurate and secure uploading of files while
@@ -312,6 +315,9 @@ class iGrafxFileUploadNode:
 
         my_project.add_column_mapping(file_structure, column_mapping)
 
+        # List to store info about each uploaded file
+        uploaded_files_info = []
+
         # Process each chunk and upload the corresponding file
         for i in range(0, len(df), chunk_size):
             # Convert the chunk DataFrame to a CSV string
@@ -328,12 +334,18 @@ class iGrafxFileUploadNode:
                 csv_file.write(csv_data)
 
             # Add the file
-            my_project.add_file(temp_csv_file_path)
+            file_info = my_project.add_file(temp_csv_file_path)
+            uploaded_files_info.append(file_info)
+
+            print(file_info)
 
             # Make sure the temp file is closed to be deleted
             temp_csv_file.close()
 
+        # Serialize the info about uploaded files to a JSON string
+        uploaded_files_info_json = json.dumps(uploaded_files_info)
         exec_context.flow_variables["chunk_size"] = chunk_size
+        exec_context.flow_variables["uploaded_files_info"] = uploaded_files_info_json
 
         # Return input data as output
         return input_data
@@ -882,12 +894,14 @@ class iGrafxProfectFilesInfoNode:
                    description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
 @knext.output_table(name="Output Table",
                     description="A Table Output that provides data (CSV or other) out of the node.")
+@knext.output_table(name="File Info Table",
+                    description="A Table Output that provides information about the file.")
 class iGrafxFileInfoNode:
     """
     Node to fetch file information from the iGrafx Mining API for a specific file in a project.
 
     The iGrafx Mining File Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve metadata
-    information such as the satus, its ID and more for a specific file in a specified project .
+    information such as the status, its ID and more for a specific file in a specified project .
     By providing the Project ID and File ID, this node
     establishes a connection with the iGrafx API and fetches details about the file.
 
@@ -940,12 +954,38 @@ class iGrafxFileInfoNode:
             project_id = self.given_project_id
             exec_context.flow_variables["new_project_id"] = project_id
 
-        my_project = wg.project_from_id(project_id)
-        file_info = my_project.get_file_metadata(file_id)  # returns a json
-        exec_context.flow_variables["specific_file_info"] = str(file_info)
+        # Retrieve file ID from parameter or flow variables
+        if not self.file_id:
+            if 'uploaded_files_info' not in exec_context.flow_variables:
+                raise ValueError("No file ID was given as a parameter or fetched from flow variables.")
+            else:
+                file_id_list_json = exec_context.flow_variables["uploaded_files_info"]
+                file_id_list = json.loads(file_id_list_json)
+        else:
+            file_id_list = [{"id": self.file_id}]
+            exec_context.flow_variables["uploaded_files_info"] = json.dumps(file_id_list)
 
+        my_project = wg.project_from_id(project_id)
+
+        # Fetch metadata for each file ID and store in flow variables
+        file_metadata_list = []
+        for file_info in file_id_list:
+            file_id = file_info["id"]
+            file_metadata = my_project.get_file_metadata(file_id)  # returns a json
+            if 'id' in file_metadata:
+                del file_metadata['id']
+            file_metadata_list.append({"file_id": file_id, "metadata": json.dumps(file_metadata)})
+
+        # Convert the list of dictionaries to a pandas DataFrame
+        metadata_df = pd.DataFrame(file_metadata_list)
+
+        # Rename columns for clarity
+        metadata_df.rename(columns={'file_id': 'File ID', 'metadata': 'Information'}, inplace=True)
+
+        # Convert the DataFrame to a KNIME table and return it
+        knime_table = knext.Table.from_pandas(metadata_df)
         # Return input data as output
-        return input_data
+        return input_data, knime_table
 
 
 @knext.node(name="iGrafx SAP Data Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",

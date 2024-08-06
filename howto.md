@@ -501,7 +501,7 @@ The following **flow variables** are available for this node:
 | api_url                     |          The URL of the iGrafx API platform you are using.          |                    API URL | 
 | wg_key                      |       The Private Key of the workgroup you are working with.        |              Workgroup Key |
 | wg_id                       |            The ID of the workgroup you are working with.            |               Workgroup ID |
-| new_project_id              |                       The ID of the project.                        |             Project ID     |
+| new_project_id              |                       The ID of the project.                        |                 Project ID |
 | uploaded_files_info         | Information on the uploaded file(s) such as the ID, name or status  | Uploaded files Information |
 
 When the node is successfully executed, it retrieves and returns metadata information for the specified file in the project in the Table ``File Info Table``. 

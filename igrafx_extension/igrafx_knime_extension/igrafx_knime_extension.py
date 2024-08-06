@@ -337,8 +337,6 @@ class iGrafxFileUploadNode:
             file_info = my_project.add_file(temp_csv_file_path)
             uploaded_files_info.append(file_info)
 
-            print(file_info)
-
             # Make sure the temp file is closed to be deleted
             temp_csv_file.close()
 

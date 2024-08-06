@@ -1,9 +1,10 @@
 import logging
+import xml.etree.ElementTree as ET
+import tempfile
+import json
 import knime.extension as knext
 import igrafx_mining_sdk as igx
-import tempfile
 import requests as req
-import xml.etree.ElementTree as ET
 import pandas as pd
 import xml.dom.minidom
 
@@ -23,7 +24,8 @@ igx_category = knext.category(
             icon_path="icons/igx_logo.png",
             category=igx_category)
 @knext.input_table(name="Input Table",
-                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+                   description="A Table Input that allows users to provide or feed data (CSV or other)"
+                               " into the node.")
 @knext.output_table(name="Output Table",
                     description="A Table Output that provides data (CSV or other) out of the node.")
 class iGrafxAPINode:
@@ -52,10 +54,14 @@ class iGrafxAPINode:
     """
 
     # Define parameters for iGrafx Mining API connection
-    workgroup_id = knext.StringParameter("Workgroup ID", "The ID of the workgroup You are working with.")
-    workgroup_key = knext.StringParameter("Workgroup Key", "The Private Key of the workgroup you are working with.")
-    api_url = knext.StringParameter("API URL", "The URL of the iGrafx Mining API platform you are using.")
-    auth_url = knext.StringParameter("Authentication URL", "The authentication URL of the iGrafx Mining platform.")
+    workgroup_id = knext.StringParameter("Workgroup ID",
+                                         "The ID of the workgroup You are working with.")
+    workgroup_key = knext.StringParameter("Workgroup Key",
+                                          "The Private Key of the workgroup you are working with.")
+    api_url = knext.StringParameter("API URL",
+                                    "The URL of the iGrafx Mining API platform you are using.")
+    auth_url = knext.StringParameter("Authentication URL",
+                                     "The authentication URL of the iGrafx Mining platform.")
 
     def configure(self, configure_context, input_schema):
         # Set warning during configuration
@@ -246,6 +252,8 @@ class iGrafxFileUploadNode:
     - Workgroup Object Connectivity: Establishes a secure connection to the iGrafx Mining API by utilizing
     the Workgroup Object, ensuring authentication and access permissions.
 
+    - Ability to upload a zip file: Allows users to upload a zip file to the iGrafx Mining platform.
+
     This node empowers users to seamlessly integrate file upload functionalities into their KNIME workflows,
     enabling efficient data transfer and synchronization with the iGrafx Mining platform. By leveraging this node,
     users can ensure the accurate and secure uploading of files while
@@ -308,6 +316,9 @@ class iGrafxFileUploadNode:
 
         my_project.add_column_mapping(file_structure, column_mapping)
 
+        # List to store info about each uploaded file
+        uploaded_files_info = []
+
         # Process each chunk and upload the corresponding file
         for i in range(0, len(df), chunk_size):
             # Convert the chunk DataFrame to a CSV string
@@ -324,12 +335,16 @@ class iGrafxFileUploadNode:
                 csv_file.write(csv_data)
 
             # Add the file
-            my_project.add_file(temp_csv_file_path)
+            file_info = my_project.add_file(temp_csv_file_path)
+            uploaded_files_info.append(file_info)
 
             # Make sure the temp file is closed to be deleted
             temp_csv_file.close()
 
+        # Serialize the info about uploaded files to a JSON string
+        uploaded_files_info_json = json.dumps(uploaded_files_info)
         exec_context.flow_variables["chunk_size"] = chunk_size
+        exec_context.flow_variables["uploaded_files_info"] = uploaded_files_info_json
 
         # Return input data as output
         return input_data
@@ -499,7 +514,8 @@ class iGrafxProjectVariantNode:
     """
     # Define parameters to get project variants
     given_project_id = knext.StringParameter("Project ID",
-                                             "The ID of the project for which you want to get the variant information.")
+                                             "The ID of the project for which you want to get "
+                                             "the variant information.")
     page_index = knext.IntParameter("Page Index",
                                     "The page index for pagination.", )
     limit = knext.IntParameter("Limit",
@@ -572,7 +588,8 @@ class iGrafxCompletedCasesNode:
     """
     # Define parameters to get project variants
     given_project_id = knext.StringParameter("Project ID",
-                                             "The ID of the project you want to retrieve completed cases for.")
+                                             "The ID of the project you want to retrieve completed"
+                                             " cases for.")
     page_index = knext.IntParameter("Page Index",
                                     "The page index for pagination.", )
     limit = knext.IntParameter("Limit",
@@ -697,7 +714,8 @@ class iGrafxProjectDataNode:
         df = df.rename(columns=column_name_mapping_infos)
 
         # Check and replace the column name if it matches the pattern "case_+databasecolumnname"
-        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)" if col.startswith("case_") and col[5:] in column_name_mapping_infos else col, inplace=True)
+        df.rename(columns=lambda col: f"{column_name_mapping_infos[col[5:]]} (case)"
+                  if col.startswith("case_") and col[5:] in column_name_mapping_infos else col, inplace=True)
 
         # Filter columns based on the condition
         columns_to_keep = [col for col in df.columns if all(keyword not in col for keyword in
@@ -716,7 +734,8 @@ class iGrafxProjectDataNode:
     @knext.node(name="iGrafx Mining Column Mapping Fetcher", node_type=knext.NodeType.SOURCE,
                 icon_path="icons/igx_logo.png", category=igx_category)
     @knext.input_table(name="Input Table",
-                       description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+                       description="A Table Input that allows users to provide or feed data (CSV or other) into the "
+                                   "node.")
     @knext.output_table(name="Output Table",
                         description="A Table Output that provides data (CSV or other) out of the node.")
     class iGrafxColumnMappingFetcherNode:
@@ -732,8 +751,8 @@ class iGrafxProjectDataNode:
         1. Column Mapping Details: Fetches column mapping information for the specified project.
         It returns the Name, Aggregation, Index, among others, for each column.
 
-        2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data
-        retrieval and interaction with iGrafx Mining resources.
+        2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient
+        data retrieval and interaction with iGrafx Mining resources.
 
         3. Dynamic Configuration: Allows users to dynamically provide the Project ID as a parameter or use a predefined
         ID from the flow variables.
@@ -745,7 +764,8 @@ class iGrafxProjectDataNode:
 
         # Define the project ID for the project you want to retrieve column mapping
         given_project_id = knext.StringParameter("Project ID",
-                                                 "The ID of the project for which you want to retrieve column mapping.")
+                                                 "The ID of the project for which "
+                                                 "you want to retrieve column mapping.")
 
         def configure(self, configure_context, input_schema):
             # Set warning during configuration
@@ -784,6 +804,188 @@ class iGrafxProjectDataNode:
 
             # Return input data as output
             return input_data
+
+
+@knext.node(name="iGrafx Mining Project Files Info Fetcher", node_type=knext.NodeType.SOURCE,
+            icon_path="icons/igx_logo.png", category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
+class iGrafxProfectFilesInfoNode:
+    """
+    Node to fetch the files information from the iGrafx Mining API for a specific project.
+
+    The iGrafx Mining Project Files Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve
+    metadata information for all files in a specified project such as the status, number of files,
+    creation date and more.
+    By providing the Project ID, a page index, a limit and a sort order this node establishes a
+    connection with the iGrafx API and fetches details about the files.
+
+    Key Features:
+
+    1. Project File Details: Fetches metadata information, including file names, statuses, creation dates, and
+    ingestion statuses for the specified project.
+
+    2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data
+    retrieval and interaction with iGrafx Mining resources.
+
+    3. Dynamic Configuration: Allows users to dynamically provide the Project ID, page index, limit, and sort order as
+    parameters or use predefined values from the flow variables.
+
+    The iGrafx Project Files Info Fetcher node facilitates the retrieval of essential file information, providing users
+    with insights into the files associated with a specific project.
+
+    """
+
+    # Define parameters to get project files info
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project for which you want to get "
+                                             "the variant information.")
+    page_index = knext.IntParameter("Page Index",
+                                    "The page index for pagination.", )
+    limit = knext.IntParameter("Limit",
+                               "The maximum number of items to return per page.")
+    sort_order = knext.StringParameter("Sort Order",
+                                       "The order in which to sort the results (ASC or DESC).",
+                                       default_value="ASC")
+
+    def configure(self, configure_context, input_schema):
+        # Set warning during configuration
+        configure_context.set_warning("Getting Project Files Information")
+
+    def execute(self, exec_context, input_data):
+        # Fetch project files info using the provided parameters
+        page_index_value = self.page_index
+        limit_value = self.limit
+        sort_order = self.sort_order
+
+        # Get Workgroup object from the previous node
+        wg = igx.Workgroup(
+            exec_context.flow_variables["wg_id"],
+            exec_context.flow_variables["wg_key"],
+            exec_context.flow_variables["api_url"],
+            exec_context.flow_variables["auth_url"]
+        )
+
+        # Retrieve project ID from flow variables or manually set if provided
+        if not self.given_project_id:
+            if 'new_project_id' not in exec_context.flow_variables:
+                raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
+            else:
+                project_id = exec_context.flow_variables["new_project_id"]
+        else:
+            project_id = self.given_project_id
+            exec_context.flow_variables["new_project_id"] = project_id
+
+        my_project = wg.project_from_id(project_id)
+        files_info = my_project.get_project_files_metadata(page_index=page_index_value, limit=limit_value,
+                                                           sort_order=sort_order)  # returns a json
+        exec_context.flow_variables["project_files_info"] = str(files_info)
+
+        # Return input data as output
+        return input_data
+
+
+@knext.node(name="iGrafx Mining File Info Fetcher", node_type=knext.NodeType.SOURCE,
+            icon_path="icons/igx_logo.png", category=igx_category)
+@knext.input_table(name="Input Table",
+                   description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
+@knext.output_table(name="Output Table",
+                    description="A Table Output that provides data (CSV or other) out of the node.")
+@knext.output_table(name="File Info Table",
+                    description="A Table Output that provides information about the file.")
+class iGrafxFileInfoNode:
+    """
+    Node to fetch file information from the iGrafx Mining API for a specific file in a project.
+
+    The iGrafx Mining File Info Fetcher node connects to the iGrafx Mining API, enabling users to retrieve metadata
+    information such as the status, its ID and more for a specific file in a specified project .
+    By providing the Project ID and File ID, this node
+    establishes a connection with the iGrafx API and fetches details about the file.
+
+    Key Features:
+
+    1. Specific File Details: Fetches metadata information, including file name, statuses, creation date, and
+    ingestion status for the specified file.
+
+    2. Seamless Integration: Integrates iGrafx API capabilities directly into KNIME workflows, allowing efficient data
+    retrieval and interaction with iGrafx Mining resources.
+
+    3. Dynamic Configuration: Allows users to dynamically provide the Project ID and File ID as parameters or use
+    predefined values from the flow variables.
+
+    The iGrafx File Info Fetcher node facilitates the retrieval of essential file information, providing users with
+    insights into the specific file associated with a project.
+
+    """
+
+    # Define parameters to get project files info
+    given_project_id = knext.StringParameter("Project ID",
+                                             "The ID of the project for which you want to get "
+                                             "the variant information.")
+    file_id = knext.StringParameter("File ID",
+                                    "The ID of the file for which you want to get information.", )
+
+    def configure(self, configure_context, input_schema):
+        # Set warning during configuration
+        configure_context.set_warning("Getting Project Files Information")
+
+    def execute(self, exec_context, input_data):
+        # Fetch project variants using the provided parameters
+        file_id = self.file_id
+
+        # Get Workgroup object from the previous node
+        wg = igx.Workgroup(
+            exec_context.flow_variables["wg_id"],
+            exec_context.flow_variables["wg_key"],
+            exec_context.flow_variables["api_url"],
+            exec_context.flow_variables["auth_url"]
+        )
+
+        # Retrieve project ID from flow variables or manually set if provided
+        if not self.given_project_id:
+            if 'new_project_id' not in exec_context.flow_variables:
+                raise ValueError("No project ID was given as a parameter or fetched from flow variables.")
+            else:
+                project_id = exec_context.flow_variables["new_project_id"]
+        else:
+            project_id = self.given_project_id
+            exec_context.flow_variables["new_project_id"] = project_id
+
+        # Retrieve file ID from parameter or flow variables
+        if not self.file_id:
+            if 'uploaded_files_info' not in exec_context.flow_variables:
+                raise ValueError("No file ID was given as a parameter or fetched from flow variables.")
+            else:
+                file_id_list_json = exec_context.flow_variables["uploaded_files_info"]
+                file_id_list = json.loads(file_id_list_json)
+        else:
+            file_id_list = [{"id": self.file_id}]
+            exec_context.flow_variables["uploaded_files_info"] = json.dumps(file_id_list)
+
+        my_project = wg.project_from_id(project_id)
+
+        # Fetch metadata for each file ID and store in flow variables
+        file_metadata_list = []
+        for file_info in file_id_list:
+            file_id = file_info["id"]
+            file_metadata = my_project.get_file_metadata(file_id)  # returns a json
+            if 'id' in file_metadata:
+                del file_metadata['id']
+            file_metadata_list.append({"file_id": file_id, "metadata": json.dumps(file_metadata)})
+
+        # Convert the list of dictionaries to a pandas DataFrame
+        metadata_df = pd.DataFrame(file_metadata_list)
+
+        # Rename columns for clarity
+        metadata_df.rename(columns={'file_id': 'File ID', 'metadata': 'Information'}, inplace=True)
+
+        # Convert the DataFrame to a KNIME table and return it
+        knime_table = knext.Table.from_pandas(metadata_df)
+        # Return input data as output
+        return input_data, knime_table
+
 
 @knext.node(name="iGrafx SAP Data Fetcher", node_type=knext.NodeType.SOURCE, icon_path="icons/igx_logo.png",
             category=igx_category)

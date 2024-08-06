@@ -6,7 +6,6 @@ import knime.extension as knext
 import igrafx_mining_sdk as igx
 import requests as req
 import pandas as pd
-import xml.dom.minidom
 
 LOGGER = logging.getLogger(__name__)
 

@@ -993,37 +993,40 @@ class iGrafxFileInfoNode:
 class iGrafxSAPNode:
     """Node to fetch SAP data from the iGrafx Mining platform.
 
-    The iGrafx SAP Data Fetcher node allows users to fetch detailed information about specific SAP data. Users can
-    provide the parameters such as the SAP API URL, the authorization token and the cookie, which will be used to
-    connect to the SAP API and retrieve the data. Additionally, users can specify the Start Date and End Date to
-    filter the data within the specified date range. This node can then directly be connected to other iGrafx nodes
-    for further processing and uploading to the iGrafx platform.
+    The iGrafx SAP Data Fetcher node allows users to fetch detailed information about specific
+    SAP data.
+    Users can provide the parameters such as the SAP API URL and the authorization username and password,
+    which will be used to connect to the SAP API and retrieve the data.
+    Additionally, users must specify the Start Date and End Date to filter the data within the specified
+    date range.
+    This node can then directly be connected to other iGrafx nodes for further processing
+    and uploading to the iGrafx platform.
 
     Key Features:
 
+    - **CSRF Token Handling**: Automatically handles CSRF token fetching for API authentication.
+    - **XML Generation**: Automatically generates the necessary XML payloads for selection and description
+     to interact with the SAP API, eliminating the need to manually input XML files.
     - **Data Processing**: The node processes the data by cleaning, filtering, and converting it into a table format.
-    - **CSRF Token Handling**: Automatically handles CSRF token fetching and cookie management for API
-    authentication. - **XML Generation**: Automatically generates the necessary XML payloads for selection and
-    description to interact with the SAP API, eliminating the need to manually input XML files.
 
-    This node returns a table containing the fetched data. This table is retrieved in XML format, then cleaned and
-    converted into a structured table. It facilitates easy data processing and uploading to the iGrafx platform by
-    using the other nodes.
+    This node returns a table containing the fetched data. This table is retrieved in XML format,
+    then cleaned and converted into a structured table.
+    It facilitates easy data processing and uploading to the iGrafx platform by using the other nodes.
 
     Please contact us in order to get access to the SAP extension.
 
     """
 
     start_date = knext.StringParameter("Start Date",
-                                       "The date from when you want to retrieve information.", )
+                                       "The date from when you want to retrieve information.",)
     end_date = knext.StringParameter("End Date",
                                      "The date until when you want to retrieve information.")
     sap_api_url = knext.StringParameter("SAP API URL",
                                         "The URL of the SAP API to be used for data fetching.")
-    authorization = knext.StringParameter("Authorization",
-                                          "The authorization token to be used for authentication.")
-    auth_cookie = knext.StringParameter("Cookie",
-                                        "The cookie to be used for authentication.")
+    auth_username = knext.StringParameter("Authorization Username",
+                                          "The authorization username to be used for authentication.")
+    auth_pwd = knext.StringParameter("Authorization Password",
+                                     "The authorization password to be used for authentication.")
 
     def configure(self, configure_context):
         # Set warning during configuration
@@ -1034,24 +1037,22 @@ class iGrafxSAPNode:
         start_date = self.start_date
         end_date = self.end_date
         sap_api_url = self.sap_api_url
-        authorization = self.authorization
-        auth_cookie = self.auth_cookie
+        auth_username = self.auth_username
+        auth_pwd = self.auth_pwd
 
-        payload = {}
         headers = {
             'X-CSRF-TOKEN': 'fetch',
-            'Authorization': authorization,
-            'Cookie': auth_cookie
         }
 
-        response = req.request("GET", sap_api_url, headers=headers, data=payload, verify=False)
+        session = req.Session()
+        session.auth = (auth_username, auth_pwd)
+        response = session.get(url=sap_api_url, headers=headers, verify=False)
 
         # Access the CSRF token from the response's headers
         csrf_token = response.headers.get('x-csrf-token')
-        cookie = "SAP_SESSIONID_ER6_800=" + response.cookies.get('SAP_SESSIONID_ER6_800') + "; path=/"
+        print(f"CSRF Token: {csrf_token}\n")
 
-        # Print the CSRF token and the Cookie
-        print(f"CSRF Token: {csrf_token}\nCookie: {cookie}")
+        # Print the Respons
         print(response)
 
         # Create the root element of the selection XML
@@ -1204,18 +1205,16 @@ class iGrafxSAPNode:
         # Selection and Description XML have been generated
 
         # Send the XMls to the SAP API and retrieve the response:
-        payload = {}
         files = {
             'selection': ('selection.xml', selection_xml, 'application/xml'),
             'description': ('description.xml', description_xml, 'application/xml')
         }
         headers2 = {
             'X-CSRF-TOKEN': csrf_token,
-            'Cookie': cookie
         }
 
         # The response of the Post request:
-        response = req.request("POST", sap_api_url, headers=headers2, data=payload, files=files, verify=False)
+        response = session.post(sap_api_url, headers=headers2, files=files, verify=False)
 
         print(f"The response is: {response.text}")
 
@@ -1231,6 +1230,8 @@ class iGrafxSAPNode:
 
         # Find all XML elements with the tag name 'Case' that are children of the 'Cases'
         case_elements = root.findall('Cases/Case')
+
+        data_list = []
 
         # Iterate over Case elements
         for case_element in case_elements:
@@ -1252,12 +1253,15 @@ class iGrafxSAPNode:
                 # Check if there are any Event elements
                 if not event_elements:
                     # Append a row without Event information
-                    df = df.append({
+                    data_list.append({
                         'Case ID': case_id,
                         'Entity ID': entity_id,
                         'Entity Name': entity_name,
-                        'Document ID': document_id
-                    }, ignore_index=True)
+                        'Document ID': document_id,
+                        'Task Name': "",
+                        'Event Type': "",
+                        'Timestamp': ""
+                    })
 
                 # Iterate over Event elements
                 for event_element in event_elements:
@@ -1267,14 +1271,21 @@ class iGrafxSAPNode:
                     task_name = f"{event_type} {entity_name}"
 
                     # Append a new row to the DataFrame
-                    df = df.append({'Case ID': case_id,
-                                    'Entity ID': entity_id,
-                                    'Entity Name': entity_name,
-                                    'Document ID': document_id,
-                                    }, ignore_index=True)
-                    df['Task Name'] = task_name
-                    df['Event Type'] = event_type
-                    df['Timestamp'] = event_ts
+                    data_list.append({
+                        'Case ID': case_id,
+                        'Entity ID': entity_id,
+                        'Entity Name': entity_name,
+                        'Document ID': document_id,
+                        'Task Name': task_name,
+                        'Event Type': event_type,
+                        'Timestamp': event_ts
+                    })
+
+        df = pd.DataFrame(data_list)
+
+        # Drop empty columns
+        df.replace('', pd.NA, inplace=True)
+        df.dropna(axis=1, how='all', inplace=True)
 
         if 'Timestamp' in df.columns:
             # Execute the line only if 'Timestamp' column exists

@@ -18,6 +18,8 @@ Welcome to the **iGrafx KNIME Mining Extension** – an open-source application 
 
 Powered by the [iGrafx P360 Live Mining SDK](https://github.com/igrafx/mining-python-sdk) and rooted in Python, this connector simplifies the data transfer process, eliminating complexity and enhancing your workflow.
 
+Extensions are provided "as is" without any support from iGrafx. iGrafx may, in its sole discretion, choose to provide support for an extension.
+
 ### Key Features:
 
 - **Effortless Integration**: Easily incorporate this connector into your Knime environment to streamline data transfer to the iGrafx platform.

@@ -94,4 +94,4 @@ dependencies:
       - toml==0.10.2
       - typing-extensions==4.8.0
       - urllib3==2.2.1
-      - igrafx-mining-sdk==2.31.5
+      - igrafx-mining-sdk==2.33.2

@@ -41,6 +41,12 @@ jobs:
           name: knime-extension-build
           path: release/**
 
+      - name: Zip KNIME release folder
+        run: |
+          cd release
+          zip -r ../knime-extension-release.zip .
+          cd ..
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:

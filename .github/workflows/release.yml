@@ -1,0 +1,56 @@
+name: iGrafx Mining Knime Extension Build and Release
+
+on:
+  push:
+    tags:
+      - '*'   # Trigger on any tag
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Pixi
+        run: |
+          curl -fsSL https://pixi.sh/install.sh | bash
+          echo "$HOME/.pixi/bin" >> $GITHUB_PATH
+
+# Cache pixi so it doesn't need to be reinstalled on every run
+      - name: Cache Pixi
+        uses: actions/cache@v4
+        with:
+          path: ~/.pixi
+          key: ${{ runner.os }}-pixi-${{ hashFiles('pixi.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pixi-
+
+      - name: Build KNIME extension
+        run: |
+          pixi run build ./release --version ${{ github.ref_name }}
+
+      # Check if the release folder exists so the job fails early if the build didn't output anything
+      - name: Check release folder
+        run: test -d release || (echo "Release folder not found!" && exit 1)
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: knime-extension-build
+          path: release/**
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          make_latest: true
+          generate_release_notes: true
+          files: |
+            release/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -81,7 +81,7 @@ jobs:
           git rm -rf . || true
 
           # copy new build (unzipped release contents)
-          cp -r ../release/* ./
+          cp -r release/* ./
 
           git add .
           git commit -m "Unzipped build for tag $GITHUB_REF_NAME"

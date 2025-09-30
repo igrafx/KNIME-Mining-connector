@@ -47,6 +47,9 @@ jobs:
           zip -r ../knime-extension-release.zip .
           cd ..
 
+      - name: Verify release archive exists
+        run: ls -lh knime-extension-release.zip
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:

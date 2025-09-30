@@ -63,3 +63,26 @@ jobs:
             knime-extension-release.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push unzipped build to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # fetch and switch/create build branch
+          git fetch origin
+          if git show-ref --quiet refs/heads/build; then
+            git checkout build
+          else
+            git checkout --orphan build
+            rm -rf .
+          fi
+
+          # clean and copy new build (unzipped release contents)
+          rm -rf ./*
+          cp -r ../release/* ./
+
+          git add .
+          git commit -m "Unzipped build for tag $GITHUB_REF_NAME"
+          git push origin build --force
+

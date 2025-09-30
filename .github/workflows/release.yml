@@ -75,11 +75,12 @@ jobs:
             git checkout build
           else
             git checkout --orphan build
-            rm -rf .
           fi
 
-          # clean and copy new build (unzipped release contents)
-          rm -rf ./*
+          # clean existing files in branch
+          git rm -rf . || true
+
+          # copy new build (unzipped release contents)
           cp -r ../release/* ./
 
           git add .

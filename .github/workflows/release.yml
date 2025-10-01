@@ -66,11 +66,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: List release contents
+        run: ls -R ./release
+
       - name: Deploy release folder to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/knime-extension
+          publish_dir: ./release
           publish_branch: gh-pages
           destination_dir: ${{ github.ref_name }}
           allow_empty_commit: true

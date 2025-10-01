@@ -73,6 +73,7 @@ jobs:
           destination_dir: ${{ github.ref_name }}
           allow_empty_commit: true
           force_orphan: true
+          enable_jekyll: false
 #      - name: Push unzipped build to branch
 #        run: |
 #          git config user.name "github-actions[bot]"

@@ -20,8 +20,8 @@ format = { cmd = "ruff format ." }
 
 [target.win-64.dependencies]
 python = ">=3.10.0, <3.12.1"
-urllib3 = "2.2.1.*"
-requests = "2.31.0.*"
+urllib3 = "2.5.0.*"
+requests = "2.32.5*"
 ca-certificates = "2024.2.2.*"
 libflang = "5.0.0.*"
 ucrt = "10.0.22621.0.*"
@@ -43,8 +43,8 @@ aws-checksums = "0.1.17.*"
 aws-crt-cpp = "0.23.1.*"
 aws-sdk-cpp = "1.11.156.*"
 ca-certificates = "2023.11.17.*"
-urllib3 = "2.2.1.*"
-requests = "2.31.0.*"
+urllib3 = "2.5.0.*"
+requests = "2.32.5.*"
 networkx= ">=3.0.0, <3.3.0"
 
 [target.osx-64.dependencies]
@@ -63,14 +63,14 @@ aws-crt-cpp = "0.23.1.*"
 aws-sdk-cpp = "1.11.156.*"
 ca-certificates = "2023.11.17.*"
 libcxx = ">=18"
-urllib3 = "2.2.1.*"
-requests = "2.31.0.*"
+urllib3 = "2.5.0.*"
+requests = "2.32.5.*"
 networkx= ">=3.0.0, <3.3.0"
 
 [target.osx-arm64.dependencies]
 python = ">=3.10.0, <3.12.1"
-urllib3 = "2.2.1.*"
-requests = "2.31.0.*"
+urllib3 = "2.5.0.*"
+requests = "2.32.5.*"
 networkx= ">=3.0.0, <3.3.0"
 
 [pypi-dependencies]
@@ -105,6 +105,6 @@ knime-extension = "*"
 knime-python-base = "*"
 pixi-pycharm = ">=0.0.8,<0.0.9"
 py4j = ">=0.10.9.9,<0.11"
-pydruid = "0.6.6.*"
+pydruid = "0.6.9.*"
 
 

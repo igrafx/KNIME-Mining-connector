@@ -1,0 +1,112 @@
+name: iGrafx Mining Knime Extension Build and Release
+
+on:
+  push:
+    tags:
+      - '*'   # Trigger on any tag
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+#          persist-credentials: false
+
+      - name: Ensure origin remote exists
+        run: |
+          if git remote | grep -q '^origin$'; then
+            git remote remove origin
+          fi
+          git remote add origin https://github.com/igrafx/KNIME-Mining-connector.git
+
+      - name: Set up Pixi
+        run: |
+          curl -fsSL https://pixi.sh/install.sh | bash
+          echo "$HOME/.pixi/bin" >> $GITHUB_PATH
+
+# Cache pixi so it doesn't need to be reinstalled on every run
+      - name: Cache Pixi
+        uses: actions/cache@v4
+        with:
+          path: ~/.pixi
+          key: ${{ runner.os }}-pixi-${{ hashFiles('pixi.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pixi-
+
+      - name: Build KNIME extension
+        run: |
+          pixi run build ./release
+
+      # Check if the release folder exists so the job fails early if the build didn't output anything
+      - name: Check release folder
+        run: test -d release || (echo "Release folder not found!" && exit 1)
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: knime-extension-build
+          path: release/**
+
+      - name: Zip KNIME release folder
+        run: |
+          cd release
+          zip -r ../knime-extension-release.zip .
+          cd ..
+
+      - name: Verify release archive exists
+        run: ls -lh knime-extension-release.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          make_latest: true
+          generate_release_notes: true
+          files: |
+            knime-extension-release.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List release contents
+        run: ls -R ./release
+
+      - name: Deploy release folder to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/knime-extension
+          publish_branch: gh-pages
+          destination_dir: ${{ github.ref_name }}
+          allow_empty_commit: true
+          force_orphan: true
+          enable_jekyll: false
+#      - name: Push unzipped build to branch
+#        run: |
+#          git config user.name "github-actions[bot]"
+#          git config user.email "github-actions[bot]@users.noreply.github.com"
+#
+#          # fetch and switch/create build branch
+#          git fetch origin
+#          if git show-ref --quiet refs/heads/build; then
+#            git checkout build
+#          else
+#            git checkout --orphan build
+#          fi
+#
+#          # clean existing files in branch
+#          git rm -rf . || true
+#
+#          # copy new build (unzipped release contents)
+#          cp -r release/* ./
+#
+#          git add .
+#          git commit -m "Unzipped build for tag $GITHUB_REF_NAME"
+#          git push origin build --force
+

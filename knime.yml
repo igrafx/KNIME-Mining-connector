@@ -1,0 +1,18 @@
+# This is the configuration file for your KNIME extension.
+# It is used to define the extension's metadata and configuration.
+
+# Extension metadata
+name: igrafx_extension # Will be concatenated with the group_id to an ID
+group_id: org.igx
+description: The iGrafx Mining Knime Extension # Human readable bundle name / description
+long_description: The iGrafx Mining Knime Extension contains nodes to upload data to the iGrafx platform.
+version: 1.4.0 # Version of this Python node extension
+
+# legal information
+author: iGrafx
+vendor: iGrafx LLC
+license_file: LICENSE.TXT # Best practice: put your LICENSE.TXT next to the knime.yml; otherwise you would need to change to path/to/LICENSE.txt
+
+# Python settings
+pixi_toml_path: pixi.toml # This is necessary for bundling, but not needed during development
+extension_module: ./src/igrafx_knime_extension # The .py Python module containing the nodes of your extension

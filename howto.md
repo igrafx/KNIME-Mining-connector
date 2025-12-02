@@ -44,13 +44,13 @@ To install the **iGrafx Extension** on Knime as a user, open Knime.
 
 Click on the **settings** icon in the top right of the window.
 
-![settings_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/settings_icon.png)
+![settings_icon](/icons/settings_icon.png)
 
 Then, click on the **arrow** next to the **Install/Update** section.
 
 Go to the **Available Software sites** section and click the add button.
 
-![Available_Software](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/available_software_5.2.png)
+![Available_Software](/icons/available_software_5.2.png)
 
 In the window that pops up, make sure the information are as follows:
 
@@ -61,34 +61,34 @@ Copy and paste the location in the respective input.
 
 **5.2 is the latest Knime version and the build will work with that version.**
 
-![location2](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/location3.png)
+![location2](/icons/location3.png)
 
 Click on **Add**, the **Apply and Close**.
 
 Please note that if you wish for Knime to automatically look for updates of your extensions,
 go to the **Automatic update** section and check the following:
 
-![update](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/auto_update.png)
+![update](/icons/auto_update.png)
 
 
 
 Go to the top right, you will find a small *i* icon . 
 
-![info_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/info_icon.png)
+![info_icon](/icons/info_icon.png)
 
 Click on it then scroll down to **Install Extensions**. Then, click on the **Install Extensions** button.
 
-![install_extensions_button](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/install_extensions_button.png)
+![install_extensions_button](/icons/install_extensions_button.png)
 
 A **window** will pop up. In the search bar, you can search for **iGrafx**. 
 Tick the box of the corresponding extension and click on **Finish**.
 It may take some time to install.
 
-![igx_extension](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_extension.png)
+![igx_extension](/icons/igx_extension.png)
 
 Another window will pop up during the installation, asking if you trust the extension:
 
-![Trust_window](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/trusted.png)
+![Trust_window](/icons/trusted.png)
 
 Tick the **Always trust all content** box. Then, on the next window that pops up, click on **Yes I accept the risk**.
 You can now click on **Trust Selected**. Wait for the installation to finish.
@@ -99,7 +99,7 @@ You can now restart Knime.
 After reopening Knime, you can go to the **Node Repository** and type **iGrafx** in the search bar.
 Then, click on **More Advanced Nodes**. The iGrafx nodes should be there.
 
-![nodes_repo](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/node_repo.png)
+![nodes_repo](/icons/node_repo.png)
 
 **For macOS users** please install **XCode**. If it is not installed this will cause issues with the extension, and you will not be able to use the extension.
 Please run ``sudo xcodebuild -license`` from within a Terminal window to review and agree to the **Xcode and Apple SDKs license**.
@@ -125,7 +125,7 @@ If it is yellow, it means it is configured.
 
 Each node has flow variables which are produced when it is executed. To see them, go to the **flow variable** tab
 
-![flow_variable](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/flow_variable.png)
+![flow_variable](/icons/flow_variable.png)
 
 In the next sections of this document, each node will be thoroughly explained.
 
@@ -136,7 +136,7 @@ Note that this node is **mandatory** as it allows you to establish a connection 
 
 To use this node, double-click on it. The following window will pop up.
 
-![component_parameters](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_connection_config.png)
+![component_parameters](/icons/igx_connection_config.png)
 
 You then have to fill in your **Workgroup ID** and **Secret Key**, **Authentication URL** and **API URL**. To get this information, open up the **Process Explorer 360**, and go to your workgroup settings. In the settings page, go to the **Public API** tab. There, you should see your workgroup's ID and secret key. These are the values that will be used by the SDK to log in to the iGrafx P360 Live Mining API.
 
@@ -248,7 +248,7 @@ More information about File Structures, Columns and column mappings can be found
 
 You must also input your **Project ID**. It can be found in the URL, when you are in the project. Or you can get it with the Project Creator node output.
 
-![url-projectID](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/url-projectID.png)
+![url-projectID](/icons/url-projectID.png)
 
 Finally, the **number of rows in each sent chunk** must be set (chunk size). 
 This means that for every file that is sent, it will be cut in the chunk size value, processed and sent to the platform.
@@ -520,7 +520,7 @@ Go to Knime and import the workflow called ``igrafx_extension_example.knwf``.
 
 When the workflow is imported, you should see all iGrafx Extension nodes.
 
-![igrafx_workflow](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/igx_wf.png)
+![igrafx_workflow](/icons/igx_wf.png)
 
 To start using them, look for a **File Reader Node**. Please note that you may use other nodes as long as the output is a table.
 Here we use the File Reader Node as an Example.
@@ -586,27 +586,27 @@ You can download Anaconda [here](https://www.anaconda.com/download).
 
 After having downloaded Knime and Anaconda, open Knime. In the top right, you will find a small *i* icon. 
 
-![info_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/info_icon.png)
+![info_icon](/icons/info_icon.png)
 
 Click on it then scroll down to **Install Extensions**. Then, click on the **Install Extensions** button.
 
-![install_extensions_button](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/install_extensions_button.png)
+![install_extensions_button](/icons/install_extensions_button.png)
 
 
 A **window** will pop up. In the search bar, you can search for **Python integration**. Tick the following boxes, corresponding to the necessary extensions and click on **Finish**.
 
-![python_integration_extensions](https://github.com/igrafx/KNIME-Mining-connector/blob/master/images/python__ext_install.png)
+![python_integration_extensions](/icons/python__ext_install.png)
 
 When that is done, configure the KNIME Python Integration. To do so, click on the **settings** icon in the top right of the window.
 
-![settings_icon](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/settings_icon.png)
+![settings_icon](/icons/settings_icon.png)
 
 When clicking on it, you will see a section called **Conda**. 
 Go to that section and browse for your **Conda Installation Directory**. 
 When the correct path is entered, the conda version will appear underneath. The path may look like this: `C:\Users\Your Name\AppData\Local\anaconda3`.
 **Please note that the path to your Anaconda3 may differ depending on how and where you installed it.** 
 
-![conda_path](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/conda_path.png)
+![conda_path](/icons/conda_path.png)
 
 ## Using the iGrafx Knime Extension locally
 ### Cloning the iGrafx KNIME Mining Extension
@@ -719,7 +719,7 @@ Indeed, Python 2 is not used here, so it isn't necessary.
 
 Under `Python environment configuration`, check `Conda`.
 
-![environment configuration](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/python_image_6.png)
+![environment configuration](/icons/python_image_6.png)
 
 Under `Python 3`, select the Knime environment you created above.
 
@@ -727,7 +727,7 @@ It is possible that `Pyarrow` and `Numpy` packages are in conflict.
 That is because the **iGrafx SDK Package** was installed with **pip**.
 If so, to fix this, they must be reinstalled with conda.
 
-![conflicts](https://github.com/igrafx/KNIME-Mining-connector/blob/dev/images/conflicts.png)
+![conflicts](/icons/conflicts.png)
 
 Note that these conflicts can differ, and you should follow the following instructions no matter the package.
 

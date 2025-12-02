@@ -309,7 +309,7 @@ class iGrafxFileUploadNode:
             column_mapping = self.column_dict
             exec_context.flow_variables["column_mapping"] = column_mapping
 
-        file_structure = igx.FileStructure(charset="UTF-8", file_type=igx.FileType.csv)
+        file_structure = igx.FileStructure(charset="UTF-8", file_type=igx.FileType.CSV)
 
         column_mapping = igx.ColumnMapping.from_json(column_mapping)
 

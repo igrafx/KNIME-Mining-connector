@@ -77,7 +77,7 @@ This method uses a release archive downloaded from GitHub.
 
 ### Method 2: Install from the update site URL
 
-This method uses a URL that KNIME checks for updates automatically. It requires that a release has been published and deployed to GitHub Pages.
+This method uses a URL that KNIME checks for updates automatically. The URL always points to the latest release — KNIME will detect new versions and prompt you to update.
 
 1. Open KNIME. Click on the **settings** icon in the top right of the window.
 
@@ -86,11 +86,18 @@ This method uses a URL that KNIME checks for updates automatically. It requires 
 2. Click on the **arrow** next to the **Install/Update** section, then go to **Available Software Sites**.
 3. Click the **Add** button. In the window that pops up, enter the following:
    - **Name:** iGrafx Extension
-   - **Location:** `https://igrafx.github.io/KNIME-Mining-connector/<version>/` (replace `<version>` with the release tag, e.g., `v1.4.0`)
+   - **Location:** `https://igrafx.github.io/KNIME-Mining-connector/`
 4. Click **Add**, then **Apply and Close**.
-5. Follow steps 7–11 from Method 1 above to complete the installation.
+5. Go to **Help > Install New Software**.
+6. In the **Work with** dropdown, select **iGrafx Extension** (the site you just added).
+7. The iGrafx extension should appear in the list — tick the checkbox for it.
+8. Click **Next**, then **Finish**.
+9. A trust dialog will appear. Tick **Always trust all content**, click **Yes I accept the risk**, then **Trust Selected**.
+10. Wait for the installation to finish, then restart KNIME.
 
-> **Note:** If you wish for KNIME to automatically check for updates, go to **Preferences > Install/Update > Automatic Update** and enable automatic update checking.
+> **Note:** If you wish for KNIME to automatically check for updates, go to **File > Preferences > Install/Update > Automatic Update** and enable automatic update checking. KNIME will notify you whenever a new release is published.
+
+> **Important:** The URL always serves the latest release only. If you need a specific older version, use Method 1 (download the zip from the GitHub Releases page).
 
 ### After installation
 

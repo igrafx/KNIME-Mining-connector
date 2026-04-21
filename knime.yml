@@ -6,7 +6,7 @@ name: igrafx_extension # Will be concatenated with the group_id to an ID
 group_id: org.igx
 description: The iGrafx Mining Knime Extension # Human readable bundle name / description
 long_description: The iGrafx Mining Knime Extension contains nodes to upload data to the iGrafx platform.
-version: 1.4.5 # Version of this Python node extension
+version: 1.4.6 # Version of this Python node extension
 
 # legal information
 author: iGrafx

@@ -54,12 +54,16 @@ There are two ways to install the extension.
 
 ### Method 2: Install from the update site URL
 
+This URL always serves the latest release. KNIME can check it periodically to notify you of updates.
+
 1. Open KNIME. Go to **Help > Install New Software**.
 2. Click **Add** and enter:
    - **Name:** iGrafx Extension
-   - **Location:** `https://igrafx.github.io/KNIME-Mining-connector/<version>/` (replace `<version>` with the release tag, e.g., `v1.4.0`)
-3. Select the iGrafx extension from the list and click **Finish**.
+   - **Location:** `https://igrafx.github.io/KNIME-Mining-connector/`
+3. Click **Add**, select the iGrafx extension from the list, and click **Finish**.
 4. Accept the trust dialog, then restart KNIME.
+
+> For a specific older version, use Method 1 instead — only the latest release is available at the update site URL.
 
 After restarting:
 - **Verify install:** Go to **Help > About KNIME > Installation Details > Installed Software** and confirm the iGrafx extension is listed. If it is not, the installation did not complete — try reinstalling.

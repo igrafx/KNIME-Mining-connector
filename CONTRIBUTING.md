@@ -243,7 +243,7 @@ When triggered, the workflow performs the following steps:
 2. **Upload artifacts** : Uploads the build output as a GitHub Actions artifact (available for download from the workflow run page).
 3. **Create a zip** : Compresses the release directory into `knime-extension-release.zip`.
 4. **Create a GitHub Release** : Creates a release on GitHub tagged with the pushed tag, with auto-generated release notes and the zip file attached as a downloadable asset. Users can download this zip and install it in KNIME via **Help > Install New Software > Add > Archive**.
-5. **Deploy to GitHub Pages** : Publishes the p2 repository to the `gh-pages` branch under a directory named after the tag (e.g., `v1.4.0/`). This serves as a KNIME update site URL: `https://igrafx.github.io/KNIME-Mining-connector/<tag>/`. Users can add this URL in KNIME under **Help > Install New Software** to install or update the extension.
+5. **Deploy to GitHub Pages** : Publishes the p2 repository to GitHub Pages at `https://igrafx.github.io/KNIME-Mining-connector/`. This serves as a KNIME update site URL that always points to the latest release. Users can add this URL in KNIME under **Help > Install New Software** to install or update the extension. Note: because the GitHub Pages environment is replaced on each release, only the latest version is available here — older versions remain accessible as zip downloads on the [Releases page](https://github.com/igrafx/KNIME-Mining-connector/releases).
 
 ### How to release a new version
 

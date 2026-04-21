@@ -83,9 +83,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./release
           publish_branch: gh-pages
-          destination_dir: ${{ github.ref_name }}
           allow_empty_commit: true
-          force_orphan: false
+          force_orphan: true
           enable_jekyll: false
 #      - name: Push unzipped build to branch
 #        run: |

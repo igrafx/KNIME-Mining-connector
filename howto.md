@@ -10,7 +10,7 @@ This connector simplifies the data transfer process, eliminating complexity and 
 
 To maximize the benefits of this extension, ensure you have an active iGrafx account. If you don't have one, please contact us to set up your account.
 
-**Please make sure you have the 5.2 version of Knime as the latest release works with that version.**
+**Please make sure you have the 5.5 version of Knime as the latest release works with that version.**
 
 
 ***
@@ -36,68 +36,68 @@ To maximize the benefits of this extension, ensure you have an active iGrafx acc
 17. [Using the iGrafx Mining Knime Extension as a developer](#using-the-igrafx-mining-knime-extension-as-a-developer)
 18. [Requirements](#requirements)
 19. [Getting Started](#getting-started)
-20. [Using the iGrafx Knime Extension locally](#using-the-igrafx-knime-extension-locally)
-21. [Further Documentation](#further-documentation)
+20. [Configuring KNIME for Local Development](#configuring-knime-for-local-development)
+21. [Testing the Extension Locally](#testing-the-extension-locally)
+22. [Updating Dependencies](#updating-dependencies)
+23. [Further Documentation](#further-documentation)
 
 ## Installing the iGrafx Extension
-To install the **iGrafx Extension** on Knime as a user, open Knime. 
 
-Click on the **settings** icon in the top right of the window.
+There are two ways to install the **iGrafx Extension** in KNIME. Choose the method that works best for you.
 
-![settings_icon](/icons/settings_icon.png)
+> **Important for developers:** If you previously configured KNIME for local development (with the `-Dknime.python.extension.config=` line in `knime.ini`), you must comment out or remove that line and restart KNIME before installing from a release. Otherwise KNIME will load the extension twice, causing conflicts or duplicate nodes.
 
-Then, click on the **arrow** next to the **Install/Update** section.
+### Method 1: Install from a downloaded release (Recommended)
 
-Go to the **Available Software sites** section and click the add button.
+This method uses a release archive downloaded from GitHub.
 
-![Available_Software](/icons/available_software_5.2.png)
+1. Go to the [Releases page](https://github.com/igrafx/KNIME-Mining-connector/releases) on GitHub.
+2. Under the latest release, download the **knime-extension-release.zip** file.
+3. Open KNIME. Click on the **settings** icon in the top right of the window.
 
-In the window that pops up, make sure the information are as follows:
+   ![settings_icon](/icons/settings_icon.png)
 
-- Name: iGrafx Extension
-- Location: https://raw.githubusercontent.com/igrafx/KNIME-Mining-connector/master/igrafx_extension/releases
+4. Click on the **arrow** next to the **Install/Update** section, then go to **Available Software Sites**.
+5. Click the **Add** button. In the window that pops up, click **Archive...** and browse to the `knime-extension-release.zip` file you downloaded. Give it a name (e.g., "iGrafx Extension") and click **OK**.
+6. Click **Apply and Close**.
+7. Go to the top right of the KNIME window and click the small *i* icon.
 
-Copy and paste the location in the respective input. 
+   ![info_icon](/icons/info_icon.png)
 
-**5.2 is the latest Knime version and the build will work with that version.**
+8. Scroll down to **Install Extensions** and click the **Install Extensions** button.
 
-![location2](/icons/location3.png)
+   ![install_extensions_button](/icons/install_extensions_button.png)
 
-Click on **Add**, the **Apply and Close**.
+9. In the search bar, type **iGrafx**. Tick the box for the iGrafx extension and click **Finish**.
 
-Please note that if you wish for Knime to automatically look for updates of your extensions,
-go to the **Automatic update** section and check the following:
+   ![igx_extension](/icons/igx_extension.png)
 
-![update](/icons/auto_update.png)
+10. A trust dialog will appear. Tick **Always trust all content**, then click **Yes I accept the risk**, and finally **Trust Selected**.
+11. Wait for the installation to finish, then restart KNIME.
 
+### Method 2: Install from the update site URL
 
+This method uses a URL that KNIME checks for updates automatically. It requires that a release has been published and deployed to GitHub Pages.
 
-Go to the top right, you will find a small *i* icon . 
+1. Open KNIME. Click on the **settings** icon in the top right of the window.
 
-![info_icon](/icons/info_icon.png)
+   ![settings_icon](/icons/settings_icon.png)
 
-Click on it then scroll down to **Install Extensions**. Then, click on the **Install Extensions** button.
+2. Click on the **arrow** next to the **Install/Update** section, then go to **Available Software Sites**.
+3. Click the **Add** button. In the window that pops up, enter the following:
+   - **Name:** iGrafx Extension
+   - **Location:** `https://igrafx.github.io/KNIME-Mining-connector/<version>/` (replace `<version>` with the release tag, e.g., `v1.4.0`)
+4. Click **Add**, then **Apply and Close**.
+5. Follow steps 7–11 from Method 1 above to complete the installation.
 
-![install_extensions_button](/icons/install_extensions_button.png)
+> **Note:** If you wish for KNIME to automatically check for updates, go to **Preferences > Install/Update > Automatic Update** and enable automatic update checking.
 
-A **window** will pop up. In the search bar, you can search for **iGrafx**. 
-Tick the box of the corresponding extension and click on **Finish**.
-It may take some time to install.
+### After installation
 
-![igx_extension](/icons/igx_extension.png)
+After restarting KNIME:
 
-Another window will pop up during the installation, asking if you trust the extension:
-
-![Trust_window](/icons/trusted.png)
-
-Tick the **Always trust all content** box. Then, on the next window that pops up, click on **Yes I accept the risk**.
-You can now click on **Trust Selected**. Wait for the installation to finish.
-Don't restart the platform just yet.
-
-You can now restart Knime.
-
-After reopening Knime, you can go to the **Node Repository** and type **iGrafx** in the search bar.
-Then, click on **More Advanced Nodes**. The iGrafx nodes should be there.
+1. **Verify the extension is installed:** Go to **Help > About KNIME Analytics Platform > Installation Details > Installed Software**. The iGrafx extension should be listed there. If it is not, the installation did not complete successfully — try reinstalling.
+2. **Verify the nodes are available:** Go to the **Node Repository** panel and type **iGrafx** in the search bar. The iGrafx nodes should appear. If they don't, click on **More Advanced Nodes** to expand the results.
 
 ![nodes_repo](/icons/node_repo.png)
 
@@ -564,264 +564,177 @@ Once all connected nodes are green, the execution is done.
 
 
 ## Using the iGrafx Mining Knime Extension as a developer
-If you are a developer and wish to contribute to the project, please follow the steps below, as they are relatively different from the ones a client would follow.
 
+If you are a developer and wish to contribute to the project, please follow the steps below. The development workflow uses [Pixi](https://pixi.sh) for environment management, which handles all Python dependencies including the iGrafx SDK automatically.
 
 ## Requirements
 
-Note that the iGrafx P360 Live Mining SDK is also required and that its installation is explained further in the document.
+Before getting started, make sure you have the following installed:
 
-### Download Knime
+- **KNIME Analytics Platform 5.5+** — [Download here](https://www.knime.com/downloads)
+- **Pixi** — the package manager used for this project. [Install Pixi](https://pixi.sh)
+- **Git** — [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-This extension works with Knime. Please Download Knime to be able to use it.
-You can find the download link [here](https://www.knime.com/downloads).
+Additionally, you must install the **KNIME Python Extension Development (Labs)** plugin in KNIME:
 
-### Download Anaconda
+1. Open KNIME and go to **Help > Install New Software**
+2. In the "Work with" dropdown, select **KNIME Analytics Platform 5.5 Update Site**
+3. Search for **"Python Extension Development"**
+4. Install **KNIME Python Extension Development (Labs)**
+5. Restart KNIME
 
-To be able to use Python in Knime, Anaconda must be installed, otherwise Python nodes will not be accessible, and it will be impossible to use the iGrafx Knime Mining Connector.
+## Getting Started
 
-You can download Anaconda [here](https://www.anaconda.com/download).
+### Cloning the Repository
 
-## Getting started
+Open a terminal and clone the repository:
 
-After having downloaded Knime and Anaconda, open Knime. In the top right, you will find a small *i* icon. 
-
-![info_icon](/icons/info_icon.png)
-
-Click on it then scroll down to **Install Extensions**. Then, click on the **Install Extensions** button.
-
-![install_extensions_button](/icons/install_extensions_button.png)
-
-
-A **window** will pop up. In the search bar, you can search for **Python integration**. Tick the following boxes, corresponding to the necessary extensions and click on **Finish**.
-
-![python_integration_extensions](/icons/python__ext_install.png)
-
-When that is done, configure the KNIME Python Integration. To do so, click on the **settings** icon in the top right of the window.
-
-![settings_icon](/icons/settings_icon.png)
-
-When clicking on it, you will see a section called **Conda**. 
-Go to that section and browse for your **Conda Installation Directory**. 
-When the correct path is entered, the conda version will appear underneath. The path may look like this: `C:\Users\Your Name\AppData\Local\anaconda3`.
-**Please note that the path to your Anaconda3 may differ depending on how and where you installed it.** 
-
-![conda_path](/icons/conda_path.png)
-
-## Using the iGrafx Knime Extension locally
-### Cloning the iGrafx KNIME Mining Extension
-You are going to need the ``git`` command for this section. 
-If you do not have git, please follow the instructions [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
-
-
-Once everything is Python is integrated in Knime, the first thing to do is to clone the repository.
-To do so create a new folder. Open a terminal and type the following command:
-```shell
-cd C:\Users\Your\Path\to\New\folder 
-```
-After having executed the command, do the following command.
 ```shell
 git clone https://github.com/igrafx/KNIME-Mining-connector.git
+cd KNIME-Mining-connector
 ```
 
-Doing this will clone the iGrafx KNIME Mining Connector GitHub repository to the new folder you have created. This simply means that the project was copied from GitHub to your new folder. 
+### Installing the Environment
 
-### Checking the Project Structure
+Run the following command to create the Python environment with all dependencies (including the iGrafx SDK, knime-extension, and knime-python-base):
 
-In the ``igrafx_extension`` folder, you should see the following file structure:
-
-.
-
-├── igrafx_knime_extension
-
-│   ├── icons
-
-│   │   └── icon.png
-
-│   │   └── igx_logo.png
-
-│   │── knime.yml
-
-│   │── LICENSE.TXT
-
-│   └── igrafx_knime_extension.py
-
-├── config.yml
-
-├── my_conda_env.yml
-
-├── iGrafx_Extension_Example.knwf
-
-└── README.md
-
-Please make sure the structure you have matches the one above.
-
-The ``igrafx_knime_extension`` will be your new extension. In it, you will find several elements:
-
- - The ``icons`` folder contain the node icons.
- - The ``knime.yml``, which contains important metadata about your extension, such as the name, the version, the licence, etc...
- - The ``igrafx_knime_extension.py``, which contains Python definitions of the nodes of the extension.
- - The ``config.yml``, just outside the folder, which contains the information that binds the extension and the corresponding conda/Python environment with KNIME Analytics Platform.
-
-### Creating a new Conda Python environment
-We need to **create an environment** containing the [knime-python-base meta package](https://anaconda.org/knime/knime-python-base)
-and the node development API [knime-extension](https://anaconda.org/knime/knime-extension).
-
-To do this, open **Anaconda prompt** and copy the following command:
 ```shell
-conda create -n <Your Environment Name> python=3.10.11 knime-python-base=5.2 knime-extension=5.2 -c knime -c conda-forge
+pixi install
 ```
-Python 3.10 is the minimum requirement to be able to use the iGrafx SDK.
 
-If you would like to install the packages into an environment that already exists you can run the following command from within that environment:
-````shell
-conda install knime-python-base=5.2 knime-extension=5.2 -c knime -c conda-forge
-````
-Please note that you must append both the ``knime`` and ``conda-forge`` channels to the commands to install the ``mandatory packages``.
-To install ``additional packages``, for your specific use case, it is better to use the ``conda-forge`` channel.
-````shell
-conda install -c conda-forge <additional_pkg_name>
-````
+This creates the environment at `.pixi/envs/default`. All dependencies are defined in `pixi.toml` and locked in `pixi.lock`.
 
-### Adding the iGrafx SDK package to the Conda environment
-We must now install the SDK package so that we are able to communicate with the platform.
-Please note that the SDK version must match the platform version to ensure that all functionalities will work.
+### Project Structure
 
-To do so, open **Anaconda prompt**.
+After cloning, the repository has the following structure:
 
-When the terminal is opened, enter the following command:
-```bash
-conda activate <Your Environment Name>
 ```
-Doing this will activate the environment you created above, and you will then be able to install the package.
-Finally, you can install **the latest** the iGrafx SDK with the following command:
-```bash
-pip install igrafx-mining-sdk
+.
+├── knime.yml                     # Extension metadata (name, version, module path)
+├── pixi.toml                     # Python environment and dependency definitions
+├── pixi.lock                     # Locked dependency versions
+├── config.yml                    # Binds the extension to KNIME (local dev only)
+├── LICENSE.TXT
+├── README.md
+├── howto.md
+├── src/
+│   └── igrafx_knime_extension.py # Python definitions of all extension nodes
+├── icons/                        # Node icons
+├── .github/workflows/            # CI/CD workflows (release, linting)
+└── .pixi/envs/default/           # Python environment (created by pixi install)
 ```
-This command will install the SDK and all the required dependencies. 
-To avoid issues and conflicts please make sure to download the latest version of the SDK.
 
-If you need to install a specific version of the SDK, use the following command:
-  ```shell
-  pip install igrafx-mining-sdk==<Your Version>
-  ```
-For instance:
-  ```shell
-  pip install igrafx-mining-sdk==2.31.4
-  ```
-You can go to the [PyPi page](https://pypi.org/project/igrafx-mining-sdk/2.25.0/) of the SDK to check the different versions. You can also to the SDK's [GitHub page](https://github.com/igrafx/mining-python-sdk) if you need additional information about the SDK.
+Key files:
+- **`knime.yml`** — extension metadata (name, group ID, version, module path)
+- **`pixi.toml`** — all conda and PyPI dependencies, including the iGrafx SDK version
+- **`config.yml`** — maps the extension to its Python environment for local KNIME development
+- **`src/igrafx_knime_extension.py`** — the Python module containing all node definitions
 
-### Setting up the Conda Environment in Knime
-This section is to set up the Conda environment in Knime.
+## Configuring KNIME for Local Development
 
-Open Knime and go to the `Settings`. Go to the `Python` tab. Make sure you are in the `Python` tab and not the ``Python (Legacy)`` tab.
-Indeed, Python 2 is not used here, so it isn't necessary.
+### Editing config.yml
 
-Under `Python environment configuration`, check `Conda`.
+Open `config.yml` and update the paths to match your local setup:
 
-![environment configuration](/icons/python_image_6.png)
+```yaml
+org.igx.igrafx_extension:
+  src: C:/Users/<YourName>/Path/to/KNIME-Mining-connector
+  conda_env_path: C:/Users/<YourName>/Path/to/KNIME-Mining-connector/.pixi/envs/default
+  debug_mode: true
+  python_path:
+    - C:/Users/<YourName>/Path/to/KNIME-Mining-connector/src
+```
 
-Under `Python 3`, select the Knime environment you created above.
+- **`src`** — path to the repository root (where `knime.yml` is located)
+- **`conda_env_path`** — path to the pixi environment at `.pixi/envs/default`
+- **`debug_mode`** — set to `true` during development so that changes to `execute` and `configure` methods are reflected immediately without restarting KNIME
+- **`python_path`** — path to the `src` directory containing the extension module
 
-It is possible that `Pyarrow` and `Numpy` packages are in conflict. 
-That is because the **iGrafx SDK Package** was installed with **pip**.
-If so, to fix this, they must be reinstalled with conda.
+**Please use forward slashes `/` in all paths, including on Windows.**
 
-![conflicts](/icons/conflicts.png)
+### Registering with KNIME
 
-Note that these conflicts can differ, and you should follow the following instructions no matter the package.
+You need to tell KNIME where your `config.yml` is located. There are two methods:
 
-First, check the version of both packages with the following commands. If you are on MACOS or Linux, replace `findstr` with `grep`:
-````shell
-conda list | findstr pyarrow
-````
+**Method 1 (Automated):**
 
-````shell
-conda list | findstr numpy
-````
+```shell
+pixi run register-debug-in-knime
+```
 
-They will return you something like this, respectively:
-````shell
-pyarrow                   9.0.0           py39hca4e8af_45_cpu    conda-forge
-````
+This locates your KNIME installation, backs up `knime.ini`, and appends the config path automatically.
 
-````shell
-numpy                     1.21.6           py39h6331f09_0    conda-forge
-````
+**Method 2 (Manual):**
 
-The problematic packages will not have `conda-forge` written, but they will have something else.
+Edit the `knime.ini` file in your KNIME installation directory and append the following line at the end:
 
-Then reinstall the packages with the following commands using the versions that were found with the commands above:
-````shell
-conda install -c conda-forge numpy=<Version that was found>
-````
-````shell
-conda install -c conda-forge pyarrow=<Version that was found>
-````
-For instance: 
-````shell
-conda install -c conda-forge numpy=1.21.6 
-````
-````shell
-conda install -c conda-forge pyarrow=9.0.0
-````
-If there are other packages that are problematic, **use the same commands but change the name of the package**.
+```
+-Dknime.python.extension.config=C:/Users/<YourName>/Path/to/KNIME-Mining-connector/config.yml
+```
 
-Afterward, restart Knime. Go to the **Python Tab** in **Settings**.
-Reselect the correct environment. If the Python Version is shown, the environment has been set successfully!
+The `knime.ini` file is located at:
+- **Windows/Linux:** `<knime-installation-directory>/knime.ini`
+- **macOS:** right-click the KNIME application in Finder, select **Show Package Contents**, then navigate to **Contents/Eclipse/knime.ini**
 
-### Editing the necessary files
-Some paths in certain files need modifying so that Knime can detect the Python extension locally.
+The file can be edited with any plain text editor (Notepad, TextEdit, gedit, etc.).
 
-First, open the `config.yml` file. it looks like this:
-````yaml
-org.igx.igrafx_extension: # {group_id}.{name} from the knime.yml
-  src: C:/Users/Path/to/igrafx_extension/igrafx_knime_extension # Path to folder containing the extension files
-  conda_env_path:  C:/Users/Path/to/anaconda/python/environment # Path to the Python environment to use
-  debug_mode: false # Optional line, if set to true, it will always use the latest changes of execute/configure, when that method is used within the KNIME Analytics Platform
-````
+## Testing the Extension Locally
 
-Replace the `src` field as to specify the path to the `igrafx_knime_extension` folder.
-For instance, it could look like ``C:/Users/iGrafx/igrafx_extension/igrafx_knime_extension``.
+1. **Restart KNIME** after configuring `config.yml` and `knime.ini`.
+2. In the **Node Repository** panel on the left, search for **"iGrafx"**. The iGrafx nodes should appear.
+3. Drag nodes into a workflow to test them.
 
-**Please double-check the paths as the most common errors stem from incorrect paths.**
+### Debug Mode
 
-Similarly, the ``conda_env_path`` field should specify the path to the conda/Python environment created earlier.
-To get this path, run the following command in your Terminal/Anaconda Prompt,
-and copy the path displayed next to the appropriate environment.
-````shell
-conda env list
-````
-The ``debug_mode`` is an optional field, which, if set to ``true``, 
-will tell **KNIME Analytics Platform** to use the latest changes in the Python node code.
+With `debug_mode: true` in `config.yml`:
+- Changes to `execute` and `configure` methods in `igrafx_knime_extension.py` are reflected **immediately** when re-executing a node — no KNIME restart needed.
+- Other changes (adding new nodes, modifying node descriptions) **require a KNIME restart**.
 
-Furthermore, we need to let Knime know where the ``config.yml`` is in order to allow it to use our extension
-and its Python environment. 
-To do this, you need to edit the ``knime.ini`` of your Knime Platform installation,
-which is located at ``<path-to-Knime>/knime.ini``.
+### Checking Logs
 
-Append the following line to the end, 
-and modify it to have the correct path to the ``config.yml``:
-````shell
--Dknime.python.extension.config=<path/to/your/config.yml>
-````
+If something isn't working, check the KNIME log for errors:
+- Go to **View > Open KNIME Log**
+- Look for Python-related errors or stack traces
 
-**Please note that the forward slash ``/`` has to be used on all OS, including Windows.**
+### Common Issues
 
-**On macOS**,  to locate ``knime.ini``, open **Finder** and navigate to your
-installed Applications. Next, **right-click** the KNIME application, select **Show
-Package Contents** in the menu, and navigate to **Contents → Eclipse**.
+| Problem | Cause | Fix |
+|---------|-------|-----|
+| "Missing node extensions" dialog on workflow load | **KNIME Python Extension Development (Labs)** plugin not installed | Install it via **Help > Install New Software** |
+| Nodes don't appear in Node Repository | `config.yml` paths are incorrect or `knime.ini` is missing the config line | Double-check all paths use forward slashes and point to the correct directories |
+| Python import errors in KNIME log | Environment not set up correctly | Run `pixi install` and verify with `pixi run python -c "import igrafx_mining_sdk"` |
+| Project path added as a "Software Site" error | Repository path was added under **Install/Update > Available Software Sites** instead of via `knime.ini` | Remove it from Available Software Sites; use the `knime.ini` config line instead |
 
-The ``knime.ini`` file can be edited with any plaintext editor, such as **Notepad** (Windows),
-**TextEdit** (macOS) or **gedit** (Linux).
+## Updating Dependencies
 
+The project includes a Claude Code skill to automate dependency updates. It checks the latest SDK version on PyPI, verifies compatibility with the KNIME environment, and validates the changes.
 
-You can now relaunch Knime. If you type ``iGrafx`` in the node Repository, you should find the iGrafx nodes. 
+To use it:
 
+1. Open a terminal in the repository root and launch Claude Code:
+   ```shell
+   claude
+   ```
+2. Run the skill:
+   ```
+   /update-dependencies
+   ```
 
-Congratulations! The extension has been installed locally. You can now use the iGrafx nodes.
+To update dependencies manually:
 
+1. Check the latest SDK version on [PyPI](https://pypi.org/project/igrafx-mining-sdk/).
+2. Update the version constraints in `pixi.toml` (both `[pypi-dependencies]` and `[dependencies]` sections).
+3. Regenerate the lockfile and install:
+   ```shell
+   pixi lock
+   pixi install
+   ```
+4. Verify the SDK loads correctly:
+   ```shell
+   pixi run python -c "import igrafx_mining_sdk; print(igrafx_mining_sdk.__version__)"
+   ```
 
+> **Important:** `knime-python-base` (a conda package on the KNIME channel) hard-pins transitive dependencies like `pandas` to exact versions. Any SDK update must have dependency ranges that accept these pinned versions. If the latest SDK version is incompatible, the SDK must relax its constraints before it can be used here.
 
 ## Further Documentation
 

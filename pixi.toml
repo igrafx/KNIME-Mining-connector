@@ -1,6 +1,6 @@
 [workspace]
 name = "igrafx-knime-extension"
-version = "1.4.0"
+version = "1.4.1"
 authors = ["iGrafx <support@igrafx.com>"]
 description = "iGrafx Mining Knime Extension."
 license = "MIT"
@@ -19,69 +19,35 @@ format = { cmd = "ruff format ." }
 # ======================
 
 [target.win-64.dependencies]
-python = ">=3.10.0, <3.12.1"
-urllib3 = "2.5.0.*"
-requests = "2.32.5*"
+python = ">=3.11.0, <3.12.1"
 ca-certificates = "2024.2.2.*"
 libflang = "5.0.0.*"
 ucrt = "10.0.22621.0.*"
-networkx= ">=3.0.0, <3.3.0"
+networkx= ">=3.3.0, <3.6.1"
 
 
 [target.linux-64.dependencies]
-aws-c-auth = "0.7.4.*"
-aws-c-cal = "0.6.2.*"
-aws-c-common = "0.9.3.*"
-aws-c-compression = "0.2.17.*"
-aws-c-event-stream = "0.3.2.*"
-aws-c-http = "0.7.13.*"
-aws-c-io = "0.13.32.*"
-aws-c-mqtt = "0.9.6.*"
-aws-c-s3 = "0.3.17.*"
-aws-c-sdkutils = "0.1.12.*"
-aws-checksums = "0.1.17.*"
-aws-crt-cpp = "0.23.1.*"
-aws-sdk-cpp = "1.11.156.*"
 ca-certificates = "2023.11.17.*"
-urllib3 = "2.5.0.*"
-requests = "2.32.5.*"
-networkx= ">=3.0.0, <3.3.0"
+networkx= ">=3.3.0, <3.6.1"
 
 [target.osx-64.dependencies]
-aws-c-auth = "0.7.4.*"
-aws-c-cal = "0.6.2.*"
-aws-c-common = "0.9.3.*"
-aws-c-compression = "0.2.17.*"
-aws-c-event-stream = "0.3.2.*"
-aws-c-http = "0.7.13.*"
-aws-c-io = "0.13.32.*"
-aws-c-mqtt = "0.9.6.*"
-aws-c-s3 = "0.3.17.*"
-aws-c-sdkutils = "0.1.12.*"
-aws-checksums = "0.1.17.*"
-aws-crt-cpp = "0.23.1.*"
-aws-sdk-cpp = "1.11.156.*"
 ca-certificates = "2023.11.17.*"
 libcxx = ">=18"
-urllib3 = "2.5.0.*"
-requests = "2.32.5.*"
-networkx= ">=3.0.0, <3.3.0"
+networkx= ">=3.3.0, <3.6.1"
 
 [target.osx-arm64.dependencies]
-python = ">=3.10.0, <3.12.1"
-urllib3 = "2.5.0.*"
-requests = "2.32.5.*"
-networkx= ">=3.0.0, <3.3.0"
+python = ">=3.11.0, <3.12.1"
+networkx= ">=3.3.0, <3.6.1"
 
 [pypi-dependencies]
-certifi = ">=2023.11.17,<2026.0.0"
+certifi = ">=2023.11.17,<2027.0.0"
 charset-normalizer = ">=3.3.2,<4.0.0"
 greenlet = ">=3.0.3,<4.0.0"
 idna = ">=3.7,<4.0"
-igrafx-mining-sdk = ">=2.36.1,<3.0.0"
-networkx = ">=3.2.1,<4.0.0"
-python-dotenv = ">=1.0.1,<2.0.0"
-sqlalchemy = ">=2.0.29,<3.0.0"
+igrafx-mining-sdk = ">=2.38.1,<3.0.0"
+networkx = ">=3.3.0,<3.6.1"
+python-dotenv = ">=1.2.2,<2.0.0"
+sqlalchemy = ">=2.0.48,<3.0.0"
 toml = ">=0.10.2,<1.0.0"
 typing-extensions = ">=4.11.0,<5.0.0"
 
@@ -89,7 +55,7 @@ typing-extensions = ">=4.11.0,<5.0.0"
 pixi-pycharm = "*"
 
 [feature.build.dependencies]
-python = ">=3.10.0, <3.12.1"
+python = ">=3.11.0, <3.12.1"
 knime-extension-bundling = "5.5.*"
 
 [feature.build.tasks]
@@ -99,12 +65,15 @@ build = { args = [{ "arg" = "dest", "default" = "./local-update-site" }], cmd = 
 build = {features = ["build"], no-default-feature = true}
 
 [dependencies]
-python = ">=3.10.0, <3.12.1"
+python = ">=3.11.0, <3.12.1"
 knime-extension-bundling = "5.5.0.*"
 knime-extension = "*"
 knime-python-base = "*"
 pixi-pycharm = ">=0.0.8,<0.0.9"
 py4j = ">=0.10.9.9,<0.11"
+pandas = ">=2.0.3,<2.1.0"
 pydruid = "0.6.9.*"
+requests = "2.32.5.*"
+urllib3 = "2.5.0.*"
 
 

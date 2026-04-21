@@ -1,4 +1,17 @@
-.idea
-igrafx_extension/igrafx_knime_extension/__pycache__/*.pyc
+# IDE
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
 .DS_Store
-igrafx_extension/igrafx_knime_extension/__pycache__
+
+# Pixi environment
+.pixi/
+
+# Build output
+release/
+local-update-site/

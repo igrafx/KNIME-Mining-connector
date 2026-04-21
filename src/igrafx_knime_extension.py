@@ -309,7 +309,7 @@ class iGrafxFileUploadNode:
             column_mapping = self.column_dict
             exec_context.flow_variables["column_mapping"] = column_mapping
 
-        file_structure = igx.FileStructure(charset="UTF-8", file_type=igx.FileType.csv)
+        file_structure = igx.FileStructure(charset="UTF-8", file_type=igx.FileType.CSV)
 
         column_mapping = igx.ColumnMapping.from_json(column_mapping)
 
@@ -811,7 +811,7 @@ class iGrafxProjectDataNode:
                    description="A Table Input that allows users to provide or feed data (CSV or other) into the node.")
 @knext.output_table(name="Output Table",
                     description="A Table Output that provides data (CSV or other) out of the node.")
-class iGrafxProfectFilesInfoNode:
+class iGrafxProjectFilesInfoNode:
     """
     Node to fetch the files information from the iGrafx Mining API for a specific project.
 

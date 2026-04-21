@@ -27,6 +27,8 @@ and give an overall better experience to all parties involved. We appreciate you
 - [Improving The Documentation](#improving-the-documentation)
 - [Styleguides](#styleguides)
 - [Git Commit Guidelines](#git-commit-guidelines)
+- [Release Pipeline](#release-pipeline)
+- [Updating Dependencies](#updating-dependencies)
 - [License](#license)
 
 ## How Can I Contribute?
@@ -226,6 +228,94 @@ Please keep them in mind when making contributions to this project.
 - You can install a [plugin for JetBrains](https://plugins.jetbrains.com/plugin/14046-commitlint-conventional-commit) to
   help to write commit messages.
 - BREAKING CHANGE is only used from public API.
+
+## Release Pipeline
+
+This project uses a GitHub Actions workflow (`.github/workflows/release.yml`) to automate building and publishing the KNIME extension. Understanding how it works will help you release new versions correctly.
+
+### How it works
+
+The pipeline is triggered when a **git tag** is pushed to the repository. Any tag name will trigger it.
+
+When triggered, the workflow performs the following steps:
+
+1. **Build** : Runs `pixi run build ./release` to package the KNIME extension into a p2 repository in the `./release` directory.
+2. **Upload artifacts** : Uploads the build output as a GitHub Actions artifact (available for download from the workflow run page).
+3. **Create a zip** : Compresses the release directory into `knime-extension-release.zip`.
+4. **Create a GitHub Release** : Creates a release on GitHub tagged with the pushed tag, with auto-generated release notes and the zip file attached as a downloadable asset. Users can download this zip and install it in KNIME via **Help > Install New Software > Add > Archive**.
+5. **Deploy to GitHub Pages** : Publishes the p2 repository to the `gh-pages` branch under a directory named after the tag (e.g., `v1.4.0/`). This serves as a KNIME update site URL: `https://igrafx.github.io/KNIME-Mining-connector/<tag>/`. Users can add this URL in KNIME under **Help > Install New Software** to install or update the extension.
+
+### How to release a new version
+
+1. Update the version number in `knime.yml`.
+2. Commit your changes and merge to the target branch.
+3. Create and push a tag:
+   ```bash
+   git tag v1.4.0
+   git push origin v1.4.0
+   ```
+4. The workflow runs automatically. Monitor it under the **Actions** tab on GitHub.
+5. Once complete, verify:
+   - The [Releases page](https://github.com/igrafx/KNIME-Mining-connector/releases) has the new release with the zip attached.
+   - The [GitHub Pages site](https://igrafx.github.io/KNIME-Mining-connector/) has the new version directory.
+
+### Testing a release locally
+
+Before publishing a release, you can build and test the extension zip locally:
+
+1. Build the extension:
+   ```bash
+   pixi run build ./release
+   ```
+2. **Disable local dev mode** — if you have the following line in your `knime.ini`, comment it out or remove it before testing. Otherwise KNIME will load the extension twice (once from the dev config, once from the zip), which can cause conflicts or duplicate nodes:
+   ```
+   #-Dknime.python.extension.config=C:/Users/<YourName>/Path/to/config.yml
+   ```
+3. Restart KNIME.
+4. Go to **Help > Install New Software**, click **Add > Archive...**, and browse to the `./release` folder's zip (or use **Add > Local** and point to the `./release` folder directly).
+5. Select the iGrafx extension and click **Finish**. Restart KNIME.
+6. Verify the install succeeded:
+   - Go to **Help > About KNIME Analytics Platform > Installation Details > Installed Software** — the iGrafx extension should be listed. If it is not, the installation did not complete — try reinstalling.
+   - Search for "iGrafx" in the Node Repository to verify all nodes load correctly.
+
+> **Note:** When you want to return to local development, uncomment the `-Dknime.python.extension.config=` line in `knime.ini` and uninstall the packaged extension to avoid duplicates.
+
+### Other CI workflows
+
+- **`flake8.yml`** — Runs the flake8 linter on every push and pull request to check code style.
+- **`stale.yml`** — Automatically labels inactive issues and pull requests as stale (runs daily).
+- **`greetings.yml`** — Posts a welcome message to first-time contributors on issues and pull requests.
+
+## Updating Dependencies
+
+This project includes a Claude Code skill to automate dependency updates. It checks the latest SDK version on PyPI, verifies compatibility with the KNIME environment constraints, and validates the changes.
+
+To use it:
+
+1. Open a terminal in the repository root and launch Claude Code:
+   ```bash
+   claude
+   ```
+2. Run the skill:
+   ```
+   /update-dependencies
+   ```
+
+To update dependencies manually:
+
+1. Check the latest SDK version on [PyPI](https://pypi.org/project/igrafx-mining-sdk/).
+2. Update the version constraints in `pixi.toml` (both `[pypi-dependencies]` and `[dependencies]` sections).
+3. Regenerate the lockfile and install:
+   ```bash
+   pixi lock
+   pixi install
+   ```
+4. Verify the SDK loads correctly:
+   ```bash
+   pixi run python -c "import igrafx_mining_sdk; print(igrafx_mining_sdk.__version__)"
+   ```
+
+> **Important:** `knime-python-base` (a conda package on the KNIME channel) hard-pins transitive dependencies like `pandas` to exact versions. Any SDK update must have dependency ranges that accept these pinned versions. If the latest SDK is incompatible, the SDK must relax its constraints before it can be used here.
 
 ## License
 

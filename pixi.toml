@@ -1,6 +1,6 @@
 [workspace]
 name = "igrafx-knime-extension"
-version = "1.4.4"
+version = "1.4.5"
 authors = ["iGrafx <support@igrafx.com>"]
 description = "iGrafx Mining Knime Extension."
 license = "MIT"
